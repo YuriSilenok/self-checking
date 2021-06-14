@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+    <script language="JavaScript" type="text/javascript" src={{url_for('static', filename='js/registration.js')}}></script>
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="surname">Ваша фамилия</label>
+                    <input type="text" class="form-control" id="surname" placeholder="Введите Вашу фамилию" required="required">
+                </div>
+                <div class="form-group">
+                    <label for="name">Ваше имя</label>
+                    <input type="text" class="form-control" id="name"placeholder="Введите Ваше имя" required="required">
+                </div>
+                <div class="form-group">
+                    <label for="middle_name">Адрес электронной почты</label>
+                    <input type="text" class="form-control" id="middle_name" placeholder="Введите Ваше отчество">
+                </div>
+                <div class="form-group">
+                    <label for="email">Адрес электронной почты</label>
+                    <input type="email" class="form-control" id="email" aria-describedby="email_help" placeholder="Введите адрес электнно почты" required="required">
+                    <small id="email_help" class="from-text text-muted">Мы никогда никому не передадим вашу электронную почту.</small>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Пароль</label>
+                    <input type="password" class="form-control" id="password1" placeholder="Введите пароль" required="required">
+                </div>
+                <div class="form-group">
+                    <label for="password2">Повторите пароль</label>
+                    <input type="password" class="form-control" id="password2" placeholder="Повторите пароль" required="required">
+                </div>
+                <div class="form-group">
+			        <label class="form-check-label"><input type="checkbox" required="required"> Я подверждаю что меня принудили зарегистрироваться здесь</label>
+		        </div>
+                <div class="form-group">
+                    <button disabled="True" type="submit" id="btn_reg" class="btn btn-primary btn-lg">Зарегистрироваться</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
