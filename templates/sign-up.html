@@ -8,30 +8,29 @@
 {% block body %}
 <div class="container">
     <div class="row">
-
         <div class="col-lg-4"></div>
         <div class="col-lg-4">
             <form method="POST">
                 <div class="form-group">
                     <label for="surname">Ваша фамилия</label>
-                    <input type="text" class="form-control" id="surname" placeholder="Введите Вашу фамилию" required="required">
+                    <input type="text" class="form-control" id="surname" name="surname" placeholder="Введите Вашу фамилию" required="required">
                 </div>
                 <div class="form-group">
                     <label for="name">Ваше имя</label>
-                    <input type="text" class="form-control" id="name"placeholder="Введите Ваше имя" required="required">
+                    <input type="text" class="form-control" id="name" name="name"  placeholder="Введите Ваше имя" required="required">
                 </div>
                 <div class="form-group">
                     <label for="middle_name">Адрес электронной почты</label>
-                    <input type="text" class="form-control" id="middle_name" placeholder="Введите Ваше отчество">
+                    <input type="text" class="form-control" id="middle_name" name="middle_name"  placeholder="Введите Ваше отчество">
                 </div>
                 <div class="form-group">
                     <label for="email">Адрес электронной почты</label>
-                    <input type="email" class="form-control" id="email" aria-describedby="email_help" placeholder="Введите адрес электнно почты" required="required">
+                    <input type="email" class="form-control" id="email" name="email"  aria-describedby="email_help" placeholder="Введите адрес электнно почты" required="required">
                     <small id="email_help" class="from-text text-muted">Мы никогда никому не передадим вашу электронную почту.</small>
                 </div>
                 <div class="form-group">
                     <label for="password1">Пароль</label>
-                    <input type="password" class="form-control" id="password1" placeholder="Введите пароль" required="required">
+                    <input type="password" class="form-control" id="password1" name="password" placeholder="Введите пароль" required="required">
                 </div>
                 <div class="form-group">
                     <label for="password2">Повторите пароль</label>

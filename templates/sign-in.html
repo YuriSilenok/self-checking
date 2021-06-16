@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="email">Адрес электронной почты</label>
+                    <input type="email" class="form-control" id="email" name="email"  aria-describedby="email_help" placeholder="Введите адрес электнно почты" required="required">
+                    <small id="email_help" class="from-text text-muted">Мы никогда никому не передадим вашу электронную почту.</small>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Пароль</label>
+                    <input type="password" class="form-control" id="password1" name="password" placeholder="Введите пароль" required="required">
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="btn_reg" class="btn btn-primary btn-lg">Авторизоваться</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
