@@ -23,14 +23,16 @@ def login_is_required(function):
     return wrapper
 
 
-@app.route('/index.html')
+@app.route('/logout.html')
+def logout():
+    session.pop('user_id')
+    session.pop('user_name')
+    return redirect('sign-in.html')
+
+
 @app.route('/')
 @login_is_required
 def index():
-    if 'command' in request.args:
-        if request['command'] == 'logout':
-            session.pop('user_id')
-            session.pop('user_name')
     return render_template('index.html')
 
 
@@ -43,7 +45,7 @@ def sign_in():
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
                     session['user_id'] = user.id
                     session['user_name'] = user.name
-                    return redirect('index.html')
+                    return redirect('/')
                 else:
                     return redirect('sign-in.html?mess=Пароль не верный')
             else:
@@ -62,7 +64,7 @@ def sign_up():
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
                     session['user_id'] = user.id
                     session['user_name'] = user.name
-                    return redirect('index.html')
+                    return redirect('/')
                 return redirect('sign-up.html?mess=Уже зарегистрирован')
             db.session.add(
                 User(
@@ -74,13 +76,15 @@ def sign_up():
                 )
             )
             db.session.commit()
-            return redirect('index.html')
+            return redirect('/')
         except Exception as ex:
             return redirect(f'sign-up.html?mess={str(ex)}')
     return render_template('sign-up.html')
 
 
 class User(db.Model):
+    __tablename__ = 'user'
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(64), nullable=False)
@@ -91,6 +95,67 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.id}>'
+
+
+class Discipline(db.Model):
+    __tablename__ = 'discipline'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+
+    def __repr__(self):
+        return f'<Discipline {self.id}>'
+
+
+class Theme(db.Model):
+    __tablename__ = 'theme'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'))
+
+    discipline = db.relationship("Discipline")
+
+    def __repr__(self):
+        return f'<Theme {self.id}>'
+
+
+class Task(db.Model):
+    __tablename__ = 'task'
+
+    id = db.Column(db.Integer, primary_key=True)
+    theme_id = db.Column(db.Integer, db.ForeignKey('theme.id'))
+
+    theme = db.relationship("Theme")
+
+    def __repr__(self):
+        return f'<Task {self.id}>'
+
+
+class DisciplineStatus(db.Model):
+    __tablename__ = 'discipline_status'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(10), nullable=False)
+
+    def __repr__(self):
+        return f'<Discipline status {self.id}>'
+
+
+class UserDiscipline(db.Model):
+    __tablename__ = 'user_discipline'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'))
+    discipline_status_id = db.Column(db.Integer, db.ForeignKey('discipline_status.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship("User")
+    discipline = db.relationship("Discipline")
+    discipline_status = db.relationship("DisciplineStatus")
+
+    def __repr__(self):
+        return f'<User_Discipline {self.user_id} {self.discipline_id}>'
 
 
 if __name__ == '__main__':
