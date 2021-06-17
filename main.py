@@ -16,27 +16,39 @@ db = SQLAlchemy(app)
 def login_is_required(function):
     def wrapper(*args, **kwargs):
         if "user_id" not in session:
-            return redirect('sign-in.html')
+            return redirect('sign-in')
         else:
             return function()
 
     return wrapper
 
 
-@app.route('/logout.html')
+@app.route('/logout')
 def logout():
     session.pop('user_id')
     session.pop('user_name')
-    return redirect('sign-in.html')
+    return redirect('sign-in')
 
 
-@app.route('/')
+@app.route('/', endpoint='index')
 @login_is_required
 def index():
     return render_template('index.html')
 
 
-@app.route('/sign-in.html', methods=['POST', 'GET'])
+@app.route('/my-works', endpoint='my_works')
+@login_is_required
+def my_works():
+    return render_template('my-works.html')
+
+
+@app.route('/to-do', endpoint='to_do')
+@login_is_required
+def to_do():
+    return render_template('to-do.html')
+
+
+@app.route('/sign-in', methods=['POST', 'GET'])
 def sign_in():
     if request.method == 'POST':
         try:
@@ -47,15 +59,15 @@ def sign_in():
                     session['user_name'] = user.name
                     return redirect('/')
                 else:
-                    return redirect('sign-in.html?mess=Пароль не верный')
+                    return redirect('sign-in?mess=Пароль не верный')
             else:
-                return redirect('sign-up.html?mess=Нет такого пользователя')
+                return redirect('sign-up?mess=Нет такого пользователя')
         except Exception as ex:
-            return redirect(f'sign-in.html?mess={str(ex)}')
+            return redirect(f'sign-in?mess={str(ex)}')
     return render_template('sign-in.html')
 
 
-@app.route('/sign-up.html', methods=['POST', 'GET'])
+@app.route('/sign-up', methods=['POST', 'GET'])
 def sign_up():
     if request.method == 'POST':
         try:
@@ -65,7 +77,7 @@ def sign_up():
                     session['user_id'] = user.id
                     session['user_name'] = user.name
                     return redirect('/')
-                return redirect('sign-up.html?mess=Уже зарегистрирован')
+                return redirect('sign-up?mess=Уже зарегистрирован')
             db.session.add(
                 User(
                     email=request.form['email'],
@@ -78,7 +90,7 @@ def sign_up():
             db.session.commit()
             return redirect('/')
         except Exception as ex:
-            return redirect(f'sign-up.html?mess={str(ex)}')
+            return redirect(f'sign-up?mess={str(ex)}')
     return render_template('sign-up.html')
 
 
@@ -112,7 +124,7 @@ class Theme(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
-    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'))
+    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
 
     discipline = db.relationship("Discipline")
 
@@ -124,7 +136,7 @@ class Task(db.Model):
     __tablename__ = 'task'
 
     id = db.Column(db.Integer, primary_key=True)
-    theme_id = db.Column(db.Integer, db.ForeignKey('theme.id'))
+    theme_id = db.Column(db.Integer, db.ForeignKey('theme.id'), nullable=False)
 
     theme = db.relationship("Theme")
 
@@ -136,7 +148,7 @@ class DisciplineStatus(db.Model):
     __tablename__ = 'discipline_status'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(10), nullable=False)
+    name = db.Column(db.String(11), nullable=False)
 
     def __repr__(self):
         return f'<Discipline status {self.id}>'
@@ -145,6 +157,7 @@ class DisciplineStatus(db.Model):
 class UserDiscipline(db.Model):
     __tablename__ = 'user_discipline'
 
+    id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'))
     discipline_status_id = db.Column(db.Integer, db.ForeignKey('discipline_status.id'))
