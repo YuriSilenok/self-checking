@@ -45,7 +45,20 @@ def my_works():
 @app.route('/to-do', endpoint='to_do')
 @login_is_required
 def to_do():
-    return render_template('to-do.html')
+    user_tasks = UserTask.query.filter_by(
+        user_id=session['user_id'],
+        status_id=TaskStatus.query.filter_by(name='Не начата').first().id,
+    ).all()
+    tasks = []
+    for user_task in user_tasks:
+        tasks.append({
+            'name': user_task.task.name,
+            'text': user_task.task.text
+        })
+    return render_template(
+        'to-do.html',
+        tasks=tasks
+    )
 
 
 @app.route('/sign-in', methods=['POST', 'GET'])
@@ -136,6 +149,8 @@ class Task(db.Model):
     __tablename__ = 'task'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+    text = db.Column(db.Text(), nullable=False)
     theme_id = db.Column(db.Integer, db.ForeignKey('theme.id'), nullable=False)
 
     theme = db.relationship("Theme")
@@ -144,28 +159,28 @@ class Task(db.Model):
         return f'<Task {self.id}>'
 
 
-class DisciplineStatus(db.Model):
-    __tablename__ = 'discipline_status'
+class TaskStatus(db.Model):
+    __tablename__ = 'task_status'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(11), nullable=False)
 
     def __repr__(self):
-        return f'<Discipline status {self.id}>'
+        return f'<Task status {self.id}>'
 
 
-class UserDiscipline(db.Model):
-    __tablename__ = 'user_discipline'
+class UserTask(db.Model):
+    __tablename__ = 'user_task'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'))
-    discipline_status_id = db.Column(db.Integer, db.ForeignKey('discipline_status.id'))
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
+    status_id = db.Column(db.Integer, db.ForeignKey('task_status.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship("User")
-    discipline = db.relationship("Discipline")
-    discipline_status = db.relationship("DisciplineStatus")
+    task = db.relationship("Task")
+    task_status = db.relationship("TaskStatus")
 
     def __repr__(self):
         return f'<User_Discipline {self.user_id} {self.discipline_id}>'

@@ -1,5 +1,11 @@
 {% extends 'my-works.html' %}
 
 {% block content %}
-Контент
+{% for task in tasks %}
+<div class="row">
+    <div class="col-lg-2">{{ task.name }}</div>
+    <div class="col-lg-10">{{ task.text }}</div>
+</div>
+
+{% endfor %}
 {% endblock %}
