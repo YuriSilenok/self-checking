@@ -159,6 +159,20 @@ class Task(db.Model):
         return f'<Task {self.id}>'
 
 
+class Solving(db.Model):
+    __tablename__ = 'task'
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    text = db.Column(db.Text(), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+
+    task = db.relationship("Task")
+
+    def __repr__(self):
+        return f'<Solving {self.id}>'
+
+
 class TaskStatus(db.Model):
     __tablename__ = 'task_status'
 
