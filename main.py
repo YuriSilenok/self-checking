@@ -1,11 +1,13 @@
-from flask import Flask, render_template, session, redirect, request
+from flask import Flask, render_template, session, redirect, request, url_for, send_file
 from datetime import datetime
 import hashlib
 import os
 
 from flask_sqlalchemy import SQLAlchemy
 
-UPLOAD_FOLDER = os.path.join(os.path.abspath(os.getcwd()), 'files')
+# UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'files')
+# UPLOAD_FOLDER = os.path.join('.', 'files')
+UPLOAD_FOLDER = 'files'
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -22,9 +24,15 @@ def login_is_required(function):
         if "user_id" not in session:
             return redirect('sign-in')
         else:
-            return function()
+            return function(*args, **kwargs)
 
     return wrapper
+
+
+@app.route('/files/<path:filename>', endpoint='files')
+@login_is_required
+def files(filename):
+    return send_file(os.path.join(UPLOAD_FOLDER, filename.replace('/', '\\')), as_attachment=True)
 
 
 @app.route('/logout')
@@ -46,17 +54,51 @@ def my_works():
     return render_template('my-works.html')
 
 
-@app.route('/solving', endpoint='solving', methods=['POST', 'GET'])
+@app.route('/solvings', endpoint='solvings', methods=['POST', 'GET'])
 @login_is_required
-def solving():
+def solvings():
+    task = Task.query.filter_by(id=request.args['task']).first()
+    data = []
     if request.method == 'POST':
         if 'zip' not in request.files:
-            return render_template('solving.html')
-        zip_file = request.filesp['zip']
+            return render_template('solvings.html')
+        zip_file = request.files['zip']
         if zip_file.filename == '':
-            return render_template('solving.html')
-        zip_file.save(os.path.join(UPLOAD_FOLDER,solving), )
-    return render_template('solving.html')
+            return render_template('solvings.html')
+        db.session.add(Solving(
+            file_path='file_path',
+            file_name='file_name',
+            review_count=task.review_count,
+            task_id=task.id
+        ))
+        db.session.commit()
+        solving = Solving.query.filter_by(file_path='file_path', file_name='file_name', task_id=task.id).first()
+        file_path = os.path.join('task', str(task.id), 'solving', str(solving.id))
+        full_file_path = os.path.join(UPLOAD_FOLDER, file_path)
+        solving.file_path = file_path
+        solving.file_name = zip_file.filename
+        db.session.commit()
+        if not os.path.exists(full_file_path):
+            os.makedirs(full_file_path)
+        zip_file.save(os.path.join(full_file_path, zip_file.filename))
+    for solving in Solving.query.filter_by(task_id=task.id).all():
+        solving_row = {
+            'create_at': solving.created_at,
+            'file_path': solving.file_path,
+            'file_name': solving.file_name,
+            'review_count': solving.review_count,
+            'href': url_for(UPLOAD_FOLDER,
+                            filename=os.path.join(solving.file_path, solving.file_name)).replace('%5C', '/'),
+        }
+        solving_comments = []
+        for solving_comment in SolvingComment.query.filter_by(solving_id=solving.id):
+            solving_comments.append({
+                'created_at': solving.created_at,
+                'message': solving_comment.message,
+            })
+        solving_row['solving_comments'] = solving_comments
+        data.append(solving_row)
+    return render_template('solvings.html', data=data)
 
 
 @app.route('/to-do', endpoint='to_do')
@@ -170,7 +212,7 @@ class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
-    review_count = db.Column(db.Byte, nullable=False)
+    review_count = db.Column(db.Integer, nullable=False)
     text = db.Column(db.Text(), nullable=False)
     theme_id = db.Column(db.Integer, db.ForeignKey('theme.id'), nullable=False)
 
@@ -201,12 +243,12 @@ class Solving(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    file_link = db.Column(db.String(256), nullable=False)
-    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=False)
+    file_name = db.Column(db.String(256), nullable=False)
+    file_path = db.Column(db.String(256), nullable=False)
+    review_count = db.Column(db.Integer, nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
 
     task = db.relationship("Task")
-    comment = db.relationship("Comment")
 
     def __repr__(self):
         return f'<Solving {self.id}>'

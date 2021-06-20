@@ -26,11 +26,13 @@ db.session.commit()
 
 db.session.add(Task(
     name="ЛР01",
+    review_count=5,
     text="Что-то нужно сделать",
     theme_id=Discipline.query.filter_by(name='ТРПО').first().id,
 ))
 db.session.add(Task(
     name="ЛР02",
+    review_count=5,
     text="Что-то нужно сделать2",
     theme_id=Discipline.query.filter_by(name='ТРПО').first().id,
 ))
