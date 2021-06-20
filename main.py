@@ -5,12 +5,14 @@ import os
 
 from flask_sqlalchemy import SQLAlchemy
 
+UPLOAD_FOLDER = os.path.join(os.path.abspath(os.getcwd()), 'files')
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.abspath(os.getcwd()), 'files')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 
@@ -48,8 +50,12 @@ def my_works():
 @login_is_required
 def solving():
     if request.method == 'POST':
-        if 'zip' in request.files and '':
-
+        if 'zip' not in request.files:
+            return render_template('solving.html')
+        zip_file = request.filesp['zip']
+        if zip_file.filename == '':
+            return render_template('solving.html')
+        zip_file.save(os.path.join(UPLOAD_FOLDER,solving), )
     return render_template('solving.html')
 
 
