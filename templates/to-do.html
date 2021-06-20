@@ -3,8 +3,13 @@
 {% block content %}
 {% for task in tasks %}
 <div class="row">
-    <div class="col-lg-2">{{ task.name }}</div>
-    <div class="col-lg-10">{{ task.text }}</div>
+    <div class="col-lg-3">{{ task.discipline }}</div>
+    <div class="col-lg-3">{{ task.theme }}</div>
+    <div class="col-lg-3">{{ task.name }}</div>
+    <div class="col-lg-3"><a href="solving?task={{ task.id }}&back=to-do">Загрузить решение</a></div>
+</div>
+<div class="row">
+    <div class="col-lg-12">{{ task.text }}</div>
 </div>
 {% endfor %}
 {% endblock %}

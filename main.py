@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, redirect, request
 from datetime import datetime
 import hashlib
+import os
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -9,6 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.abspath(os.getcwd()), 'files')
 
 db = SQLAlchemy(app)
 
@@ -42,6 +44,15 @@ def my_works():
     return render_template('my-works.html')
 
 
+@app.route('/solving', endpoint='solving', methods=['POST', 'GET'])
+@login_is_required
+def solving():
+    if request.method == 'POST':
+        if 'zip' in request.files and '':
+
+    return render_template('solving.html')
+
+
 @app.route('/to-do', endpoint='to_do')
 @login_is_required
 def to_do():
@@ -52,6 +63,9 @@ def to_do():
     tasks = []
     for user_task in user_tasks:
         tasks.append({
+            'id': user_task.task.id,
+            'discipline': user_task.task.theme.discipline.name,
+            'theme': user_task.task.theme.name,
             'name': user_task.task.name,
             'text': user_task.task.text
         })
@@ -150,6 +164,7 @@ class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
+    review_count = db.Column(db.Byte, nullable=False)
     text = db.Column(db.Text(), nullable=False)
     theme_id = db.Column(db.Integer, db.ForeignKey('theme.id'), nullable=False)
 
@@ -159,15 +174,33 @@ class Task(db.Model):
         return f'<Task {self.id}>'
 
 
-class Solving(db.Model):
-    __tablename__ = 'task'
+class SolvingComment(db.Model):
+    __tablename__ = 'comment'
 
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    text = db.Column(db.Text(), nullable=False)
+    message = db.Column(db.String(256), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    solving_id = db.Column(db.Integer, db.ForeignKey('solving.id'), nullable=False)
+
+    user = db.relationship("User")
+    solving = db.relationship("Solving")
+
+    def __repr__(self):
+        return f'<Comment {self.id}>'
+
+
+class Solving(db.Model):
+    __tablename__ = 'solving'
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    file_link = db.Column(db.String(256), nullable=False)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
 
     task = db.relationship("Task")
+    comment = db.relationship("Comment")
 
     def __repr__(self):
         return f'<Solving {self.id}>'
