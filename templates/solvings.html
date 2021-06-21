@@ -7,15 +7,8 @@
 </form>
 {% for solving in data %}
 <div class="row">
-    <div class="col-lg-2">{{ solving.created_at }}</div>
-    <div class="col-lg-10"><a href="{{ solving.href }}">{{ solving.file_name }}</a></div>
+    <div class="col-lg-3">{{ solving.created_at }}</div>
+    <div class="col-lg-2"><a href="{{ solving.href }}">{{ solving.file_name }}</a></div>
 </div>
-    {% for comment in solving.comments %}
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-2">comment.create_at</div>
-        <div class="col-lg-9">comment.message</div>
-    </div>
-    {% endfor %}
 {% endfor %}
 {% endblock %}

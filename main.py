@@ -54,6 +54,18 @@ def my_works():
     return render_template('my-works.html')
 
 
+@app.route('/horizontal-review', endpoint='horizontal_review')
+@login_is_required
+def horizontal_review():
+    data = []
+    query = db.session.query(Solving, Task)
+    query = query.join(Solving, Solving.task_id == Task.id)
+    query = query.filter_by(Solving.review_count < Task.review_count)
+    for row in query.all():
+        print(row)
+    return render_template('horizontal-review.html', data=data)
+
+
 @app.route('/solvings', endpoint='solvings', methods=['POST', 'GET'])
 @login_is_required
 def solvings():
@@ -83,7 +95,7 @@ def solvings():
         zip_file.save(os.path.join(full_file_path, zip_file.filename))
     for solving in Solving.query.filter_by(task_id=task.id).all():
         solving_row = {
-            'create_at': solving.created_at,
+            'created_at': solving.created_at,
             'file_path': solving.file_path,
             'file_name': solving.file_name,
             'review_count': solving.review_count,
@@ -228,6 +240,7 @@ class SolvingComment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     message = db.Column(db.String(256), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     solving_id = db.Column(db.Integer, db.ForeignKey('solving.id'), nullable=False)
 
