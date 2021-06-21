@@ -49,3 +49,7 @@ db.session.add(UserTask(
     status_id=TaskStatus.query.filter_by(name='Не начата').first().id,
 ))
 db.session.commit()
+
+db.session.add(TaskRequirement(
+
+))

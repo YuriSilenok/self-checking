@@ -54,15 +54,31 @@ def my_works():
     return render_template('my-works.html')
 
 
+@app.route('/review', endpoint='review', methods=['POST', 'GET'])
+@login_is_required
+def review():
+    if request.method == 'GET':
+        if 'solving' in request.args:
+            render_template('solving-review.html')
+
+
 @app.route('/horizontal-review', endpoint='horizontal_review')
 @login_is_required
 def horizontal_review():
     data = []
     query = db.session.query(Solving, Task)
     query = query.join(Solving, Solving.task_id == Task.id)
-    query = query.filter_by(Solving.review_count < Task.review_count)
+    query = query.filter(Solving.review_count < Task.review_count)
     for row in query.all():
-        print(row)
+        solving = row.Solving
+        data.append({
+            'solving_id': solving.id,
+            'solving_file_name': solving.file_name,
+            'solving_created_at': solving.created_at,
+            'solving_review_count': solving.review_count,
+            'task_review_count': solving.task.review_count,
+            'task_name': solving.task.name,
+        })
     return render_template('horizontal-review.html', data=data)
 
 
@@ -80,7 +96,7 @@ def solvings():
         db.session.add(Solving(
             file_path='file_path',
             file_name='file_name',
-            review_count=task.review_count,
+            review_count=0,
             task_id=task.id
         ))
         db.session.commit()
@@ -241,7 +257,6 @@ class SolvingComment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     message = db.Column(db.String(256), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     solving_id = db.Column(db.Integer, db.ForeignKey('solving.id'), nullable=False)
 
     user = db.relationship("User")
@@ -249,6 +264,34 @@ class SolvingComment(db.Model):
 
     def __repr__(self):
         return f'<Comment {self.id}>'
+
+
+class TaskRequirement(db.Model):
+    __tablename__ = 'task_requirement'
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+
+    task = db.relationship("Task")
+
+    def __repr__(self):
+        return f'<TaskRequirement {self.id}>'
+
+
+class TaskRequirementResolutionComment(db.Model):
+    __tablename__ = 'task_requirement_resolution_comment'
+
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(256), nullable=False)
+    task_requirement_id = db.Column(db.Integer, db.ForeignKey('task_requirement.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    user = db.relationship("User")
+    task_requirement = db.relationship("task_requirement")
+
+    def __repr__(self):
+        return f'<TaskRequirementResolutionComment {self.id}>'
 
 
 class Solving(db.Model):

@@ -1,15 +1,11 @@
 {% extends 'my-works.html' %}
 
 {% block content %}
-{% for task in tasks %}
+{% for row in data %}
 <div class="row">
-    <div class="col-lg-3">{{ task.discipline }}</div>
-    <div class="col-lg-3">{{ task.theme }}</div>
-    <div class="col-lg-3">{{ task.name }}</div>
-    <div class="col-lg-3"><a href="solvings?task={{ task.id }}">Загрузить решение</a></div>
-</div>
-<div class="row">
-    <div class="col-lg-12">{{ task.text }}</div>
+    <div class="col-lg-3">{{ row.solving_created_at }}</div>
+    <div class="col-lg-8"><a href="review?solving={{ row.solving_id }}">{{ row.task_name}}</a></div>
+    <div class="col-lg-1">{{ row.solving_review_count }}/{{ row.task_review_count }}</div>
 </div>
 {% endfor %}
 {% endblock %}
