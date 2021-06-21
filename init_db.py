@@ -27,7 +27,7 @@ db.session.commit()
 db.session.add(Task(
     name="ЛР01",
     review_count=5,
-    text="Что-то нужно сделать",
+    text="Составить письмо, где Вы обращаетесь к HR с выражением желания пройти практику в компании",
     theme_id=Discipline.query.filter_by(name='ТРПО').first().id,
 ))
 db.session.add(Task(
@@ -51,7 +51,11 @@ db.session.add(UserTask(
 db.session.commit()
 
 db.session.add(TaskRequirement(
-    text='Требование 1',
+    text='Тело письма должна иметь приветсвие',
+    task_id=Task.query.filter_by(name='ЛР01').first().id,
+))
+db.session.add(TaskRequirement(
+    text='После приветствия должна быть пустая строка',
     task_id=Task.query.filter_by(name='ЛР01').first().id,
 ))
 db.session.commit()

@@ -59,7 +59,7 @@ def my_works():
 def review():
     if request.method == 'GET':
         if 'solving' in request.args:
-            render_template('solving-review.html')
+            return render_template('solving-review.html')
 
 
 @app.route('/horizontal-review', endpoint='horizontal_review')
@@ -132,6 +132,23 @@ def solvings():
 @app.route('/to-do', endpoint='to_do')
 @login_is_required
 def to_do():
+    task_data = {}
+    if 'task' in request.args:
+        task = Task.query.filter_by(id=request.args['task']).first()
+        task_data = {
+            'id': task.id,
+            'discipline': task.theme.discipline.name,
+            'theme': task.theme.name,
+            'name': task.name,
+            'text': task.text,
+        }
+        requirements = []
+        for task_requirement in TaskRequirement.query.filter_by(task_id=request.args['task']).all():
+            requirements.append({
+                'text': task_requirement.text
+            })
+        task_data['requirements'] = requirements
+
     user_tasks = UserTask.query.filter_by(
         user_id=session['user_id'],
         status_id=TaskStatus.query.filter_by(name='Не начата').first().id,
@@ -143,12 +160,8 @@ def to_do():
             'discipline': user_task.task.theme.discipline.name,
             'theme': user_task.task.theme.name,
             'name': user_task.task.name,
-            'text': user_task.task.text
         })
-    return render_template(
-        'to-do.html',
-        tasks=tasks
-    )
+    return render_template('to-do.html', tasks=tasks, task_data=task_data)
 
 
 @app.route('/sign-in', methods=['POST', 'GET'])
@@ -288,7 +301,7 @@ class TaskRequirementResolutionComment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     user = db.relationship("User")
-    task_requirement = db.relationship("task_requirement")
+    task_requirement = db.relationship("TaskRequirement")
 
     def __repr__(self):
         return f'<TaskRequirementResolutionComment {self.id}>'
