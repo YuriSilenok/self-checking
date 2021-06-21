@@ -51,5 +51,7 @@ db.session.add(UserTask(
 db.session.commit()
 
 db.session.add(TaskRequirement(
-
+    text='Требование 1',
+    task_id=Task.query.filter_by(name='ЛР01').first().id,
 ))
+db.session.commit()
