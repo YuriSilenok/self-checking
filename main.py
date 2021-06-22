@@ -51,6 +51,11 @@ def index():
 @app.route('/my-works', endpoint='my_works')
 @login_is_required
 def my_works():
+    data = []
+    Discipline.query
+    data.append({
+        'discipline:
+    })
     return render_template('my-works.html')
 
 
@@ -347,8 +352,29 @@ class UserTask(db.Model):
     task_status = db.relationship("TaskStatus")
 
     def __repr__(self):
-        return f'<User_Discipline {self.user_id} {self.discipline_id}>'
+        return f'<User_Task {self.user_id} {self.task_id}>'
 
+class EducationGroup(db.Model):
+    __tablename__ = 'education_group'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return f'<User_Group {self.user_id} {self.discipline_id}>'
+
+class EducationGroupUser(db.Model):
+    __tablename__ = 'education_group_user'
+
+    id = db.Column(db.Integer, primaty_key=True)
+    education_group_id = db.Column(db.Integer, db.ForeigKey('education_group.id'))
+    user_id = db.Column(db.Integer, db.ForeigKey('user.id'))
+
+    education_group = db.relationship('EducationGroup')
+    user = db.relatioship('User')
+
+    def __repr__(self):
+        return f'<EducationGroup_User {self.education_group_id} {self.user_id}>'
 
 if __name__ == '__main__':
     app.run(debug=True)
