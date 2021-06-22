@@ -51,11 +51,6 @@ def index():
 @app.route('/my-works', endpoint='my_works')
 @login_is_required
 def my_works():
-    data = []
-    Discipline.query
-    data.append({
-        'discipline:
-    })
     return render_template('my-works.html')
 
 
@@ -87,17 +82,17 @@ def horizontal_review():
     return render_template('horizontal-review.html', data=data)
 
 
-@app.route('/solvings', endpoint='solvings', methods=['POST', 'GET'])
+@app.route('/solving', endpoint='solving', methods=['POST', 'GET'])
 @login_is_required
-def solvings():
+def solving():
     task = Task.query.filter_by(id=request.args['task']).first()
     data = []
     if request.method == 'POST':
         if 'zip' not in request.files:
-            return render_template('solvings.html')
+            return render_template('solving.html')
         zip_file = request.files['zip']
         if zip_file.filename == '':
-            return render_template('solvings.html')
+            return render_template('solving.html')
         db.session.add(Solving(
             file_path='file_path',
             file_name='file_name',
@@ -105,28 +100,28 @@ def solvings():
             task_id=task.id
         ))
         db.session.commit()
-        solving = Solving.query.filter_by(file_path='file_path', file_name='file_name', task_id=task.id).first()
-        file_path = os.path.join('task', str(task.id), 'solving', str(solving.id))
+        solving_row = Solving.query.filter_by(file_path='file_path', file_name='file_name', task_id=task.id).first()
+        file_path = os.path.join('task', str(task.id), 'solving', str(solving_row.id))
         full_file_path = os.path.join(UPLOAD_FOLDER, file_path)
-        solving.file_path = file_path
-        solving.file_name = zip_file.filename
+        solving_row.file_path = file_path
+        solving_row.file_name = zip_file.filename
         db.session.commit()
         if not os.path.exists(full_file_path):
             os.makedirs(full_file_path)
         zip_file.save(os.path.join(full_file_path, zip_file.filename))
-    for solving in Solving.query.filter_by(task_id=task.id).all():
+    for solving_row in Solving.query.filter_by(task_id=task.id).all():
         solving_row = {
-            'created_at': solving.created_at,
-            'file_path': solving.file_path,
-            'file_name': solving.file_name,
-            'review_count': solving.review_count,
+            'created_at': solving_row.created_at,
+            'file_path': solving_row.file_path,
+            'file_name': solving_row.file_name,
+            'review_count': solving_row.review_count,
             'href': url_for(UPLOAD_FOLDER,
-                            filename=os.path.join(solving.file_path, solving.file_name)).replace('%5C', '/'),
+                            filename=os.path.join(solving_row.file_path, solving_row.file_name)).replace('%5C', '/'),
         }
         solving_comments = []
-        for solving_comment in SolvingComment.query.filter_by(solving_id=solving.id):
+        for solving_comment in ReviewComment.query.filter_by(solving_id=solving_row.id):
             solving_comments.append({
-                'created_at': solving.created_at,
+                'created_at': solving_row.created_at,
                 'message': solving_comment.message,
             })
         solving_row['solving_comments'] = solving_comments
@@ -148,15 +143,15 @@ def to_do():
             'text': task.text,
         }
         requirements = []
-        for task_requirement in TaskRequirement.query.filter_by(task_id=request.args['task']).all():
+        for task_requirement in Requirement.query.filter_by(task_id=request.args['task']).all():
             requirements.append({
                 'text': task_requirement.text
             })
         task_data['requirements'] = requirements
 
-    user_tasks = UserTask.query.filter_by(
+    user_tasks = StudentTask.query.filter_by(
         user_id=session['user_id'],
-        status_id=TaskStatus.query.filter_by(name='Не начата').first().id,
+        status_id=StudentTask.query.filter_by(name='Не начата').first().id,
     ).all()
     tasks = []
     for user_task in user_tasks:
