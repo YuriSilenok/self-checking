@@ -216,165 +216,216 @@ def sign_up():
 
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'User'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(64), nullable=False)
-    registration_date = db.Column(db.DateTime, default=datetime.utcnow)
-    surname = db.Column(db.String(100), nullable=False)
-    name = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
     middle_name = db.Column(db.String(100))
 
     def __repr__(self):
         return f'<User {self.id}>'
 
 
-class Discipline(db.Model):
-    __tablename__ = 'discipline'
+class Student(db.Model):
+    __tablename__ = 'Student'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-
-    def __repr__(self):
-        return f'<Discipline {self.id}>'
-
-
-class Theme(db.Model):
-    __tablename__ = 'theme'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
-
-    discipline = db.relationship("Discipline")
-
-    def __repr__(self):
-        return f'<Theme {self.id}>'
-
-
-class Task(db.Model):
-    __tablename__ = 'task'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    review_count = db.Column(db.Integer, nullable=False)
-    text = db.Column(db.Text(), nullable=False)
-    theme_id = db.Column(db.Integer, db.ForeignKey('theme.id'), nullable=False)
-
-    theme = db.relationship("Theme")
-
-    def __repr__(self):
-        return f'<Task {self.id}>'
-
-
-class SolvingComment(db.Model):
-    __tablename__ = 'comment'
-
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    message = db.Column(db.String(256), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    solving_id = db.Column(db.Integer, db.ForeignKey('solving.id'), nullable=False)
-
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
     user = db.relationship("User")
-    solving = db.relationship("Solving")
+
+    group_id = db.Column(db.Integer, db.ForeignKey('Group.id'), nullable=False)
+    user = db.relationship("Group")
+
+    student_status_id = db.Column(db.Integer, db.ForeignKey('StudentStatus.id'), nullable=False)
+    student_status = db.relationship("StudentStatus")
 
     def __repr__(self):
-        return f'<Comment {self.id}>'
+        return f'<Student {self.user_id}>'
 
 
-class TaskRequirement(db.Model):
-    __tablename__ = 'task_requirement'
+class Teacher(db.Model):
+    __tablename__ = 'Teacher'
 
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.Text, nullable=False)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
-
-    task = db.relationship("Task")
-
-    def __repr__(self):
-        return f'<TaskRequirement {self.id}>'
-
-
-class TaskRequirementResolutionComment(db.Model):
-    __tablename__ = 'task_requirement_resolution_comment'
-
-    id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.String(256), nullable=False)
-    task_requirement_id = db.Column(db.Integer, db.ForeignKey('task_requirement.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key=True)
     user = db.relationship("User")
-    task_requirement = db.relationship("TaskRequirement")
+
+    departament_id = db.Column(db.Integer, db.ForeignKey('Departament.id'), nullable=False)
+    departament = db.relationship("Departament")
 
     def __repr__(self):
-        return f'<TaskRequirementResolutionComment {self.id}>'
+        return f'<Teacher {self.user_id}>'
+
+
+class StudentTask(db.Model):
+    __tablename__ = 'StudentTask'
+
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTable, default=datetime.utcnow, nullable=False)
+    completed_at = db.Column(db.DateTable, default=datetime.utcnow, nullable=False)
+
+    student_id = db.Column(db.Integer, db.ForeignKey('Student.id'), nullable=False)
+    student = db.relationship('Student')
+
+    task_id = db.Column(db.Integer, db.ForeignKey('Task.id'), nullable=False)
+    task = db.relationship('Task')
+
+    def __perp__(self):
+        return f'<StudentTask {self.id}>'
+
+
+class Group(db.Model):
+    __tablename__ = 'Group'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return f'<Group {self.id}>'
+
+
+class StudentStatus(db.Model):
+    __tablename__ = 'StudentStatus'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return f'<StudentStatus {self.id}>'
+
+
+class Departament(db.Model):
+    __tablename__ = 'Departament'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return f'<Departament {self.id}>'
+
+
+class ReviewStatus(db.Model):
+    __tablename__ = 'ReviewStatus'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return f'<ReviewStatus {self.id}>'
 
 
 class Solving(db.Model):
-    __tablename__ = 'solving'
+    __tablename__ = 'Solving'
 
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     file_name = db.Column(db.String(256), nullable=False)
     file_path = db.Column(db.String(256), nullable=False)
     review_count = db.Column(db.Integer, nullable=False)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
 
-    task = db.relationship("Task")
+    student_task_id = db.Column(db.Integer, db.ForeignKey('StudentTask.id'), nullable=False)
+    student_task = db.relationship("StudentTask")
 
     def __repr__(self):
         return f'<Solving {self.id}>'
 
 
-class TaskStatus(db.Model):
-    __tablename__ = 'task_status'
+class Discipline(db.Model):
+    __tablename__ = 'Discipline'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(11), nullable=False)
+    name = db.Column(db.String(256), nullable=False)
+
+    author_id = db.Column(db.Integer, db.ForeignKey('Teacher.id'), nullable=False)
+    author = db.relationship("Teacher")
+
+    departament_id = db.Column(db.Integer, db.ForeignKey('Departament.id'), nullable=False)
+    departament = db.relationship("Departament")
 
     def __repr__(self):
-        return f'<Task status {self.id}>'
+        return f'<Discipline {self.id}>'
 
 
-class UserTask(db.Model):
-    __tablename__ = 'user_task'
+class Review(db.Model):
+    __tablename__ = 'Review'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
-    status_id = db.Column(db.Integer, db.ForeignKey('task_status.id'))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    name = db.Column(db.String(256), nullable=False)
 
-    user = db.relationship("User")
+    teacher_id = db.Column(db.Integer, db.ForeignKey('Teacher.id'))
+    teacher = db.relationship("Teacher")
+
+    student_id = db.Column(db.Integer, db.ForeignKey('Student.id'))
+    student = db.relationship("Student")
+
+    departament_id = db.Column(db.Integer, db.ForeignKey('ReviewStatus.id'), nullable=False)
+    departament = db.relationship("ReviewStatus")
+
+    solving_id = db.Column(db.Integer, db.ForeignKey('Solving.id'), nullable=False)
+    solving = db.relationship("Solving")
+
+    def __repr__(self):
+        return f'<Review {self.id}>'
+
+
+class Theme(db.Model):
+    __tablename__ = 'Theme'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+
+    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
+    discipline = db.relationship("Discipline")
+
+    def __repr__(self):
+        return f'<Theme {self.id}>'
+
+
+class ReviewComment(db.Model):
+    __tablename__ = 'ReviewComment'
+
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(256), nullable=False)
+
+    review_id = db.Column(db.Integer, db.ForeignKey('Review.id'), nullable=False)
+    review = db.relationship("Review")
+
+    requirement_id = db.Column(db.Integer, db.ForeignKey('Requirement.id'), nullable=False)
+    requirement = db.relationship("Requirement")
+
+    def __repr__(self):
+        return f'<ReviewComment {self.id}>'
+
+
+class Task(db.Model):
+    __tablename__ = 'Task'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+    review_count = db.Column(db.Integer, nullable=False)
+    text = db.Column(db.Text(), nullable=False)
+
+    theme_id = db.Column(db.Integer, db.ForeignKey('Theme.id'), nullable=False)
+    theme = db.relationship("Theme")
+
+    def __repr__(self):
+        return f'<Task {self.id}>'
+
+
+class Requirement(db.Model):
+    __tablename__ = 'Requirement'
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text(), nullable=False)
+
+    task_id = db.Column(db.Integer, db.ForeignKey('Task.id'), nullable=False)
     task = db.relationship("Task")
-    task_status = db.relationship("TaskStatus")
 
     def __repr__(self):
-        return f'<User_Task {self.user_id} {self.task_id}>'
+        return f'<Requirement {self.id}>'
 
-class EducationGroup(db.Model):
-    __tablename__ = 'education_group'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), nullable=False)
-
-    def __repr__(self):
-        return f'<User_Group {self.user_id} {self.discipline_id}>'
-
-class EducationGroupUser(db.Model):
-    __tablename__ = 'education_group_user'
-
-    id = db.Column(db.Integer, primaty_key=True)
-    education_group_id = db.Column(db.Integer, db.ForeigKey('education_group.id'))
-    user_id = db.Column(db.Integer, db.ForeigKey('user.id'))
-
-    education_group = db.relationship('EducationGroup')
-    user = db.relatioship('User')
-
-    def __repr__(self):
-        return f'<EducationGroup_User {self.education_group_id} {self.user_id}>'
 
 if __name__ == '__main__':
     app.run(debug=True)
