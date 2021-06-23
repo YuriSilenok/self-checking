@@ -6,14 +6,12 @@
       <div class="col-lg-3">Дисциплина</div>
       <div class="col-lg-3">Тема</div>
       <div class="col-lg-3">Задача</div>
-      <div class="col-lg-3">Статус</div>
   </div>
   {% for task in tasks %}
   <div class="row">
       <div class="col-lg-3">{{ task.discipline }}</div>
       <div class="col-lg-3">{{ task.theme }}</div>
-      <div class="col-lg-3"><a href="task/{{ task.id }}">{{ task.task }}</a></div>
-      <div class="col-lg-3">{{ task.status }}</div>
+      <div class="col-lg-3"><a href="/student_task/{{ task.id }}">{{ task.task }}</a></div>
   </div>
 {% endfor %}
 </div>

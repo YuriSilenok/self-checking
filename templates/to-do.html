@@ -1,4 +1,4 @@
-{% extends 'my-works.html' %}
+{% extends 'works.html' %}
 
 {% block content %}
 {% if task_data %}
@@ -6,7 +6,7 @@
     <div class="col-lg-3">{{ task_data.discipline }}</div>
     <div class="col-lg-3">{{ task_data.theme }}</div>
     <div class="col-lg-3">{{ task_data.name }}</div>
-    <div class="col-lg-3"><a href="solvings?task={{ task_data.id }}">Загрузить решение</a></div>
+    <div class="col-lg-3"><a href="/solvings?task={{ task_data.id }}">Загрузить решение</a></div>
 </div>
 <div class="row">
     <h4>Задание</h4>
@@ -30,8 +30,8 @@
 <div class="row">
     <div class="col-lg-3">{{ task.discipline }}</div>
     <div class="col-lg-3">{{ task.theme }}</div>
-    <div class="col-lg-3"><a href="to-do?task={{ task.id }}">{{ task.name }}</a></div>
-    <div class="col-lg-3"><a href="solvings?task={{ task.id }}">Загрузить решение</a></div>
+    <div class="col-lg-3"><a href="t/o-do?task={{ task.id }}">{{ task.name }}</a></div>
+    <div class="col-lg-3"><a href="/solvings?task={{ task.id }}">Загрузить решение</a></div>
 </div>
 {% endfor %}
 {% endblock %}

@@ -1,9 +1,9 @@
-{% extends 'my-works.html' %}
+{% extends 'works.html' %}
 
 {% block content %}
 {% for row in data %}
 <div class="row">
-    <div class="col-lg-3"><a href="review?solving={{ row.solving_id }}">{{ row.task_name}}</a></div>
+    <div class="col-lg-3"><a href="/review?solving={{ row.solving_id }}">{{ row.task_name}}</a></div>
     <div class="col-lg-3">{{ row.solving_created_at }}</div>
     <div class="col-lg-3">{{ row.solving_file_name }}</div>
     <div class="col-lg-3">{{ row.solving_review_count }}/{{ row.task_review_count }}</div>

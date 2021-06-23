@@ -1,4 +1,4 @@
-{% extends 'my-works.html' %}
+{% extends 'works.html' %}
 
 {% block content %}
 <form method="post" enctype=multipart/form-data>
@@ -8,7 +8,7 @@
 {% for solving in data %}
 <div class="row">
     <div class="col-lg-3">{{ solving.created_at }}</div>
-    <div class="col-lg-9"><a href="{{ solving.href }}">{{ solving.file_name }}</a></div>
+    <div class="col-lg-9"><a href="/{{ solving.href }}">{{ solving.file_name }}</a></div>
 </div>
 {% endfor %}
 {% endblock %}

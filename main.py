@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, request, url_for, send_file
+from flask import Flask, render_template, session, redirect, request, send_file
 from datetime import datetime
 import hashlib
 import os
@@ -19,10 +19,10 @@ db = SQLAlchemy(app)
 
 def login_is_required(function):
     def wrapper(*args, **kwargs):
-        if "user_id" not in session:
-            return redirect('sign-in')
-        else:
+        if "user_id" in session:
             return function(*args, **kwargs)
+        else:
+            return redirect('sign-in')
 
     return wrapper
 
@@ -33,10 +33,20 @@ def files(filename):
     return send_file(os.path.join(UPLOAD_FOLDER, filename.replace('/', '\\')), as_attachment=True)
 
 
+@app.context_processor
+def get_first_name():
+    def first_name():
+        return session.get('first_name', 'Гость')
+
+    return dict(first_name=first_name)
+
+
 @app.route('/logout')
 def logout():
-    session.pop('user_id')
-    session.pop('user_name')
+    if 'user_id' in session:
+        session.pop('user_id')
+    if 'first_name' in session:
+        session.pop('first_name')
     return redirect('sign-in')
 
 
@@ -46,125 +56,62 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/review', endpoint='review', methods=['POST', 'GET'])
+@app.route('/tasks', endpoint='tasks')
 @login_is_required
-def review():
-    if request.method == 'GET':
-        if 'solving' in request.args:
-            return render_template('solving-review.html')
+def tasks():
+    if Student.query.filter_by(user_id=session['user_id']).all():
+        tasks_ = []
+        for student_task_status in StudentTaskStatus.query.all():
+            for student_task_ in db.session.query(StudentTask).filter((StudentTask.student_id != session['user_id']) & (
+                    StudentTask.student_task_status_id == student_task_status.id)).all():
+                tasks_.append({
+                    'discipline': student_task_.task.theme.discipline.name,
+                    'theme': student_task_.task.theme.name,
+                    'task': student_task_.task.name,
+                    'status': student_task_.student_task_status.name,
+                    'id': student_task_.task.id
+                })
+        return render_template('tasks.html', tasks=tasks_)
 
 
-@app.route('/horizontal-review', endpoint='horizontal_review')
+@app.route('/student_task/<int:id_>', endpoint='student_task', methods=['POST', 'GET'])
 @login_is_required
-def horizontal_review():
-    data = []
-    query = db.session.query(Solving, Task)
-    query = query.join(Solving, Solving.task_id == Task.id)
-    query = query.filter(Solving.review_count < Task.review_count)
-    for row in query.all():
-        solving = row.Solving
-        data.append({
-            'solving_id': solving.id,
-            'solving_file_name': solving.file_name,
-            'solving_created_at': solving.created_at,
-            'solving_review_count': solving.review_count,
-            'task_review_count': solving.task.review_count,
-            'task_name': solving.task.name,
-        })
-    return render_template('horizontal-review.html', data=data)
-
-
-@app.route('/solving', endpoint='solving', methods=['POST', 'GET'])
-@login_is_required
-def solving():
-    task = Task.query.filter_by(id=request.args['task']).first()
-    data = []
+def student_task(id_):
+    student_task_ = StudentTask.query.filter_by(id=id_).first()
     if request.method == 'POST':
-        if 'zip' not in request.files:
-            return render_template('solving.html')
-        zip_file = request.files['zip']
-        if zip_file.filename == '':
-            return render_template('solving.html')
-        db.session.add(Solving(
-            file_path='file_path',
-            file_name='file_name',
-            review_count=0,
-            task_id=task.id
-        ))
-        db.session.commit()
-        solving_row = Solving.query.filter_by(file_path='file_path', file_name='file_name', task_id=task.id).first()
-        file_path = os.path.join('task', str(task.id), 'solving', str(solving_row.id))
-        full_file_path = os.path.join(UPLOAD_FOLDER, file_path)
-        solving_row.file_path = file_path
-        solving_row.file_name = zip_file.filename
-        db.session.commit()
-        if not os.path.exists(full_file_path):
-            os.makedirs(full_file_path)
-        zip_file.save(os.path.join(full_file_path, zip_file.filename))
-    for solving_row in Solving.query.filter_by(task_id=task.id).all():
-        solving_row = {
-            'created_at': solving_row.created_at,
-            'file_path': solving_row.file_path,
-            'file_name': solving_row.file_name,
-            'review_count': solving_row.review_count,
-            'href': url_for(UPLOAD_FOLDER,
-                            filename=os.path.join(solving_row.file_path, solving_row.file_name)).replace('%5C', '/'),
-        }
-        solving_comments = []
-        for solving_comment in ReviewComment.query.filter_by(solving_id=solving_row.id):
-            solving_comments.append({
-                'created_at': solving_row.created_at,
-                'message': solving_comment.message,
-            })
-        solving_row['solving_comments'] = solving_comments
-        data.append(solving_row)
-    return render_template('solvings.html', data=data)
+        if 'zip' in request.files:
+            zip_file = request.files['zip']
+            if zip_file.filename != '':
+                db.session.add(Solving(
+                    file_path='file_path',
+                    file_name='file_name',
+                    review_count=0,
+                    student_task_id=id_,
+                ))
+                db.session.commit()
+                solving_ = Solving.query.filter_by(file_path='file_path', file_name='file_name',
+                                                   student_task_id=id_).first()
+                file_path = os.path.join('task', str(solving_.student_task.task.id), 'solving', str(solving_.id))
+                full_file_path = os.path.join(UPLOAD_FOLDER, file_path)
+                solving_.file_path = file_path
+                solving_.file_name = zip_file.filename
+                student_task_.student_task_status_id = 3
+                db.session.commit()
+                if not os.path.exists(full_file_path):
+                    os.makedirs(full_file_path)
+                zip_file.save(os.path.join(full_file_path, zip_file.filename))
 
-
-@app.route('/to-do', endpoint='to_do')
-@login_is_required
-def to_do():
-    task_data = {}
-    if 'task' in request.args:
-        task = Task.query.filter_by(id=request.args['task']).first()
-        task_data = {
-            'id': task.id,
-            'discipline': task.theme.discipline.name,
-            'theme': task.theme.name,
-            'name': task.name,
-            'text': task.text,
-        }
-        requirements = []
-        for task_requirement in Requirement.query.filter_by(task_id=request.args['task']).all():
-            requirements.append({
-                'text': task_requirement.text
-            })
-        task_data['requirements'] = requirements
-
-    task_reject = task_todo = task_wait = task_done = tasks = []
-    for user_task in StudentTask.query.filter_by(student_id=session['user_id']):
-        tasks.append({
-            'id': user_task.task.id,
-            'discipline': user_task.task.theme.discipline.name,
-            'theme': user_task.task.theme.name,
-            'name': user_task.task.name,
-        })
-
-    return render_template('to-do.html', tasks=tasks, task_data=task_data)
-
-
-@app.route('/task/<int:id_>', endpoint='my_task')
-@login_is_required
-def task(id_):
-    task_ = Task.query.filter_by(id=id_).first()
     task_ = {
-        'id': task_.id,
-        'name': task_.name,
-        'text': task_.text,
-        'count_review': task_.review_count,
+        'id': student_task_.task.id,
+        'name': student_task_.task.name,
+        'text': student_task_.task.text,
+        'count_review': student_task_.task.review_count,
+        'requirement': [],
         'solving': [],
     }
-    student_task_ = StudentTask.query.filter_by(task_id=task_['id']).first()
+
+    for requirement_ in Requirement.query.filter_by(task_id=student_task_.task.id).all():
+        task_['requirement'].append(requirement_.text)
 
     for solving_ in Solving.query.filter_by(student_task_id=student_task_.id).all():
         task_['solving'].append({
@@ -172,25 +119,32 @@ def task(id_):
             'file_path': solving_.file_path,
             'review_count': solving_.review_count,
             'created_at': solving_.created_at,
+            'review': []
         })
+        for review_ in Review.query.filter_by(solving_id=solving_.id).all():
+            task_['solving'][:1].append({
+                'status': review_.review_status.name,
+                'id': review_.id,
+            })
+
     return render_template('task.html', task=task_)
 
 
-@app.route('/my-works', endpoint='my_works')
+@app.route('/works', endpoint='works')
 @login_is_required
-def my_works():
-    tasks = []
+def works():
+    tasks_ = []
     for student_task_status in StudentTaskStatus.query.all():
-        for student_task in StudentTask.query.filter_by(student_id=session['user_id'],
-                                                        student_task_status_id=student_task_status.id).all():
-            tasks.append({
-                'discipline': student_task.task.theme.discipline.name,
-                'theme': student_task.task.theme.name,
-                'task': student_task.task.name,
-                'status': student_task.student_task_status.name,
-                'id': student_task.task.id
+        for student_task_ in StudentTask.query.filter_by(student_id=session['user_id'],
+                                                         student_task_status_id=student_task_status.id).all():
+            tasks_.append({
+                'discipline': student_task_.task.theme.discipline.name,
+                'theme': student_task_.task.theme.name,
+                'task': student_task_.task.name,
+                'status': student_task_.student_task_status.name,
+                'id': student_task_.task.id
             })
-    return render_template('my-works.html', tasks=tasks)
+    return render_template('works.html', tasks=tasks_)
 
 
 @app.route('/sign-in', methods=['POST', 'GET'])
@@ -201,7 +155,7 @@ def sign_in():
             if user:
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
                     session['user_id'] = user.id
-                    session['user_name'] = user.first_name
+                    session['first_name'] = user.first_name
                     return redirect('/')
                 else:
                     return redirect('sign-in?mess=Пароль не верный')
@@ -220,15 +174,15 @@ def sign_up():
             if user:
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
                     session['user_id'] = user.id
-                    session['user_name'] = user.name
+                    session['first_name'] = user.first_name
                     return redirect('/')
                 return redirect('sign-up?mess=Уже зарегистрирован')
             db.session.add(
                 User(
                     email=request.form['email'],
                     password_hash=hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest(),
-                    surname=request.form['surname'],
-                    name=request.form['name'],
+                    last_name=request.form['last_name'],
+                    first_name=request.form['first_name'],
                     middle_name=request.form['middle_name']
                 )
             )
@@ -397,8 +351,8 @@ class Review(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('Student.user_id'))
     student = db.relationship("Student")
 
-    status_id = db.Column(db.Integer, db.ForeignKey('ReviewStatus.id'), nullable=False)
-    status = db.relationship("ReviewStatus")
+    review_status_id = db.Column(db.Integer, db.ForeignKey('ReviewStatus.id'), nullable=False)
+    review_status = db.relationship("ReviewStatus")
 
     solving_id = db.Column(db.Integer, db.ForeignKey('Solving.id'), nullable=False)
     solving = db.relationship("Solving")
