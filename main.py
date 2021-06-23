@@ -5,8 +5,6 @@ import os
 
 from flask_sqlalchemy import SQLAlchemy
 
-# UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'files')
-# UPLOAD_FOLDER = os.path.join('.', 'files')
 UPLOAD_FOLDER = 'files'
 
 app = Flask(__name__)
@@ -46,12 +44,6 @@ def logout():
 @login_is_required
 def index():
     return render_template('index.html')
-
-
-@app.route('/my-works', endpoint='my_works')
-@login_is_required
-def my_works():
-    return render_template('my-works.html')
 
 
 @app.route('/review', endpoint='review', methods=['POST', 'GET'])
@@ -149,19 +141,56 @@ def to_do():
             })
         task_data['requirements'] = requirements
 
-    user_tasks = StudentTask.query.filter_by(
-        user_id=session['user_id'],
-        status_id=StudentTask.query.filter_by(name='Не начата').first().id,
-    ).all()
-    tasks = []
-    for user_task in user_tasks:
+    task_reject = task_todo = task_wait = task_done = tasks = []
+    for user_task in StudentTask.query.filter_by(student_id=session['user_id']):
         tasks.append({
             'id': user_task.task.id,
             'discipline': user_task.task.theme.discipline.name,
             'theme': user_task.task.theme.name,
             'name': user_task.task.name,
         })
+
     return render_template('to-do.html', tasks=tasks, task_data=task_data)
+
+
+@app.route('/task/<int:id_>', endpoint='my_task')
+@login_is_required
+def task(id_):
+    task_ = Task.query.filter_by(id=id_).first()
+    task_ = {
+        'id': task_.id,
+        'name': task_.name,
+        'text': task_.text,
+        'count_review': task_.review_count,
+        'solving': [],
+    }
+    student_task_ = StudentTask.query.filter_by(task_id=task_['id']).first()
+
+    for solving_ in Solving.query.filter_by(student_task_id=student_task_.id).all():
+        task_['solving'].append({
+            'file_name': solving_.file_name,
+            'file_path': solving_.file_path,
+            'review_count': solving_.review_count,
+            'created_at': solving_.created_at,
+        })
+    return render_template('task.html', task=task_)
+
+
+@app.route('/my-works', endpoint='my_works')
+@login_is_required
+def my_works():
+    tasks = []
+    for student_task_status in StudentTaskStatus.query.all():
+        for student_task in StudentTask.query.filter_by(student_id=session['user_id'],
+                                                        student_task_status_id=student_task_status.id).all():
+            tasks.append({
+                'discipline': student_task.task.theme.discipline.name,
+                'theme': student_task.task.theme.name,
+                'task': student_task.task.name,
+                'status': student_task.student_task_status.name,
+                'id': student_task.task.id
+            })
+    return render_template('my-works.html', tasks=tasks)
 
 
 @app.route('/sign-in', methods=['POST', 'GET'])
@@ -172,7 +201,7 @@ def sign_in():
             if user:
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
                     session['user_id'] = user.id
-                    session['user_name'] = user.name
+                    session['user_name'] = user.first_name
                     return redirect('/')
                 else:
                     return redirect('sign-in?mess=Пароль не верный')
@@ -232,7 +261,7 @@ class Student(db.Model):
     user = db.relationship("User")
 
     group_id = db.Column(db.Integer, db.ForeignKey('Group.id'), nullable=False)
-    user = db.relationship("Group")
+    group = db.relationship("Group")
 
     student_status_id = db.Column(db.Integer, db.ForeignKey('StudentStatus.id'), nullable=False)
     student_status = db.relationship("StudentStatus")
@@ -254,20 +283,33 @@ class Teacher(db.Model):
         return f'<Teacher {self.user_id}>'
 
 
+class StudentTaskStatus(db.Model):
+    __tablename__ = 'StudentTaskStatus'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return f'<StudentTaskStatus {self.id}>'
+
+
 class StudentTask(db.Model):
     __tablename__ = 'StudentTask'
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTable, default=datetime.utcnow, nullable=False)
-    completed_at = db.Column(db.DateTable, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    completed_at = db.Column(db.DateTime)
 
-    student_id = db.Column(db.Integer, db.ForeignKey('Student.id'), nullable=False)
+    student_task_status_id = db.Column(db.Integer, db.ForeignKey('StudentTaskStatus.id'), default=1, nullable=False)
+    student_task_status = db.relationship('StudentTaskStatus')
+
+    student_id = db.Column(db.Integer, db.ForeignKey('Student.user_id'), nullable=False)
     student = db.relationship('Student')
 
     task_id = db.Column(db.Integer, db.ForeignKey('Task.id'), nullable=False)
     task = db.relationship('Task')
 
-    def __perp__(self):
+    def __repr__(self):
         return f'<StudentTask {self.id}>'
 
 
@@ -333,7 +375,7 @@ class Discipline(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
 
-    author_id = db.Column(db.Integer, db.ForeignKey('Teacher.id'), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('Teacher.user_id'), nullable=False)
     author = db.relationship("Teacher")
 
     departament_id = db.Column(db.Integer, db.ForeignKey('Departament.id'), nullable=False)
@@ -349,14 +391,14 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
 
-    teacher_id = db.Column(db.Integer, db.ForeignKey('Teacher.id'))
+    teacher_id = db.Column(db.Integer, db.ForeignKey('Teacher.user_id'))
     teacher = db.relationship("Teacher")
 
-    student_id = db.Column(db.Integer, db.ForeignKey('Student.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('Student.user_id'))
     student = db.relationship("Student")
 
-    departament_id = db.Column(db.Integer, db.ForeignKey('ReviewStatus.id'), nullable=False)
-    departament = db.relationship("ReviewStatus")
+    status_id = db.Column(db.Integer, db.ForeignKey('ReviewStatus.id'), nullable=False)
+    status = db.relationship("ReviewStatus")
 
     solving_id = db.Column(db.Integer, db.ForeignKey('Solving.id'), nullable=False)
     solving = db.relationship("Solving")
@@ -371,7 +413,7 @@ class Theme(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
 
-    discipline_id = db.Column(db.Integer, db.ForeignKey('discipline.id'), nullable=False)
+    discipline_id = db.Column(db.Integer, db.ForeignKey('Discipline.id'), nullable=False)
     discipline = db.relationship("Discipline")
 
     def __repr__(self):

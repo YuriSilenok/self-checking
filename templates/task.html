@@ -1,0 +1,14 @@
+{% extends 'index.html' %}
+
+{% block center %}
+<div class="container">
+  <div class="row">
+      <div class="col-lg-4 d-flex justify-content-end">Заголовок задачи</div>
+      <div class="col-lg-8">{{ task.name }}</div>
+  </div>
+  <div class="row">
+      <div class="col-lg-4 d-flex justify-content-end">Необходимое количество положительных проверок</div>
+      <div class="col-lg-8">{{ task.count_review }}</div>
+  </div>
+</div>
+{% endblock %}

@@ -1,15 +1,20 @@
 {% extends 'index.html' %}
 
 {% block center %}
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-  <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-    <li><a href="to-do" class="nav-link px-2 link-dark">Не начаты</a></li>
-    <li><a href="#" class="nav-link px-2 link-dark">Требуют исправления</a></li>
-    <li><a href="horizontal-review" class="nav-link px-2 link-dark">Горизотнальная проверка</a></li>
-    <li><a href="#" class="nav-link px-2 link-dark">Вертикальная проверка</a></li>
-  </ul>
-</header>
 <div class="container">
-  {% block content %}{% endblock %}
+  <div class="row">
+      <div class="col-lg-3">Дисциплина</div>
+      <div class="col-lg-3">Тема</div>
+      <div class="col-lg-3">Задача</div>
+      <div class="col-lg-3">Статус</div>
+  </div>
+  {% for task in tasks %}
+  <div class="row">
+      <div class="col-lg-3">{{ task.discipline }}</div>
+      <div class="col-lg-3">{{ task.theme }}</div>
+      <div class="col-lg-3"><a href="task/{{ task.id }}">{{ task.task }}</a></div>
+      <div class="col-lg-3">{{ task.status }}</div>
+  </div>
+{% endfor %}
 </div>
 {% endblock %}
