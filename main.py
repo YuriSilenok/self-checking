@@ -56,9 +56,9 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/tasks', endpoint='tasks')
+@app.route('/review', endpoint='review')
 @login_is_required
-def tasks():
+def review():
     if Student.query.filter_by(user_id=session['user_id']).all():
         tasks_ = []
         for student_task_status in StudentTaskStatus.query.all():
@@ -71,12 +71,12 @@ def tasks():
                     'status': student_task_.student_task_status.name,
                     'id': student_task_.task.id
                 })
-        return render_template('tasks.html', tasks=tasks_)
+        return render_template('review.html', tasks=tasks_)
 
 
-@app.route('/student_task/<int:id_>', endpoint='student_task', methods=['POST', 'GET'])
+@app.route('/student_task/<int:id_>', endpoint='student_task_id', methods=['POST', 'GET'])
 @login_is_required
-def student_task(id_):
+def student_task_id(id_):
     student_task_ = StudentTask.query.filter_by(id=id_).first()
     if request.method == 'POST':
         if 'zip' in request.files:
@@ -130,9 +130,9 @@ def student_task(id_):
     return render_template('task.html', task=task_)
 
 
-@app.route('/works', endpoint='works')
+@app.route('/student_task', endpoint='student_task')
 @login_is_required
-def works():
+def student_task():
     tasks_ = []
     for student_task_status in StudentTaskStatus.query.all():
         for student_task_ in StudentTask.query.filter_by(student_id=session['user_id'],
@@ -144,7 +144,7 @@ def works():
                 'status': student_task_.student_task_status.name,
                 'id': student_task_.task.id
             })
-    return render_template('works.html', tasks=tasks_)
+    return render_template('student_task.html', tasks=tasks_)
 
 
 @app.route('/sign-in', methods=['POST', 'GET'])
