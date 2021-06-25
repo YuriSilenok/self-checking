@@ -71,9 +71,12 @@ def review_id(id_):
             review.teacher_id = session['user_id']
         if 'student' in session['user_type']:
             review.student_id = session['user_id']
+        # db.session.commit()
+        # review = Review.query.
         for key in request.form:
             if request.form[key]:
                 pass
+
 
     task_ = {
         'name': task__.name,
