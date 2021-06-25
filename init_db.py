@@ -33,7 +33,7 @@ db.session.add(StudentStatus(name='Отчислен'))
 db.session.add(Group(name='11-ИСбо-2а'))
 db.session.add(Student(user_id=2, group_id=1, student_status_id=1))
 db.session.add(Student(user_id=3, group_id=1, student_status_id=1))
-db.session.add(Discipline(name='Технологии разработки программного', author_id=1, departament_id=1))
+db.session.add(Discipline(name='Технологии разработки программного обеспечения', author_id=1, departament_id=1))
 db.session.add(Theme(name='Основные команды git', discipline_id=1))
 db.session.add(
     Task(name='Команды git: status, add, commit, pull, push', text='Просто сделайте это', theme_id=1, review_count=5))
