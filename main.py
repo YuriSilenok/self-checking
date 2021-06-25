@@ -59,23 +59,39 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/review/<int:id_>', endpoint='review_id', methods=['GET', 'POST'])
+@app.route('/solving/<int:id_>', endpoint='solving_id', methods=['GET', 'POST'])
 @login_is_required
-def review_id(id_):
-    task__ = Task.query.filter_by(id=id_).first()
-    requirement__ = Requirement.query.filter_by(task_id=id_).all()
+def solving_id(id_):
+    solving__ = Solving.query.filter_by(id=id_).first()
+    task__ = solving__.student_task.task
+    requirement__ = Requirement.query.filter_by(task_id=task__.id).all()
 
     if request.method == 'POST':
-        review = Review(review_status_id=1)
+        review__ = Review(review_status_id=1, solving_id=id_)
         if 'teacher' in session['user_type']:
-            review.teacher_id = session['user_id']
+            review__.teacher_id = session['user_id']
         if 'student' in session['user_type']:
-            review.student_id = session['user_id']
-        # db.session.commit()
+            review__.student_id = session['user_id']
+        db.session.add(review__)
+        db.session.commit()
         # review = Review.query.
         for key in request.form:
             if request.form[key]:
-                pass
+                review__.review_status_id = 2
+                if 'requirement.' in key:
+                    requirement_id = int(key.replace('requirement.', ''))
+                    review_comment__ = ReviewComment(review_id=review__.id, requirement_id=requirement_id,
+                                                     message=request.form[key])
+                    db.session.add(review_comment__)
+                if 'common' in key:
+                    review__.message = request.form[key]
+        solving__.review_count += 1
+        if review__.review_status_id == 2:
+            solving__.student_task.student_task_status_id = 2
+        elif solving__.review_count >= solving__.student_task.task.review_count:
+            solving__.student_task.student_task_status_id = 4
+        db.session.commit()
+
 
 
     task_ = {
@@ -88,25 +104,25 @@ def review_id(id_):
             'id': requirement_.id,
             'text': requirement_.text,
         })
-    return render_template('review_id.html', task=task_)
+    return render_template('solving_id.html', task=task_)
 
 
-@app.route('/review', endpoint='review')
+@app.route('/solving', endpoint='solving')
 @login_is_required
-def review():
-    if Student.query.filter_by(user_id=session['user_id']).all():
+def solving():
+    if 'student' in session['user_type']:
         tasks_ = []
-        for student_task_status in StudentTaskStatus.query.all():
-            for student_task_ in db.session.query(StudentTask).filter((StudentTask.student_id != session['user_id']) & (
-                    StudentTask.student_task_status_id == student_task_status.id)).all():
-                tasks_.append({
-                    'discipline': student_task_.task.theme.discipline.name,
-                    'theme': student_task_.task.theme.name,
-                    'task': student_task_.task.name,
-                    'status': student_task_.student_task_status.name,
-                    'id': student_task_.task.id
-                })
-        return render_template('review.html', tasks=tasks_)
+        for solving_ in db.session.query(Solving).join(StudentTask, StudentTask.id == Solving.student_task_id).filter(
+                (StudentTask.student_task_status_id == 3) & (
+                        StudentTask.student_id.isnot(session['user_id']))).all():
+            tasks_.append({
+                'discipline': solving_.student_task.task.theme.discipline.name,
+                'theme': solving_.student_task.task.theme.name,
+                'task': solving_.student_task.task.name,
+                'status': solving_.student_task.student_task_status.name,
+                'id': solving_.id
+            })
+        return render_template('solving.html', tasks=tasks_)
 
 
 @app.route('/student_task/<int:id_>', endpoint='student_task_id', methods=['POST', 'GET'])
@@ -192,9 +208,9 @@ def sign_in():
                     session['user_id'] = user.id
                     session['first_name'] = user.first_name
                     session['user_type'] = []
-                    if not Student.query.filter_by(user_id=user.id).all():
+                    if Student.query.filter_by(user_id=user.id).all():
                         session['user_type'].append('student')
-                    if not Teacher.query.filter_by(user_id=user.id).all():
+                    if Teacher.query.filter_by(user_id=user.id).all():
                         session['user_type'].append('teacher')
                     return redirect('/')
                 else:
@@ -234,7 +250,7 @@ def sign_up():
 class User(db.Model):
     __tablename__ = 'User'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(64), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -278,7 +294,7 @@ class Teacher(db.Model):
 class StudentTaskStatus(db.Model):
     __tablename__ = 'StudentTaskStatus'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
@@ -288,7 +304,7 @@ class StudentTaskStatus(db.Model):
 class StudentTask(db.Model):
     __tablename__ = 'StudentTask'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     completed_at = db.Column(db.DateTime)
 
@@ -308,7 +324,7 @@ class StudentTask(db.Model):
 class Group(db.Model):
     __tablename__ = 'Group'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
@@ -318,7 +334,7 @@ class Group(db.Model):
 class StudentStatus(db.Model):
     __tablename__ = 'StudentStatus'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
@@ -328,7 +344,7 @@ class StudentStatus(db.Model):
 class Departament(db.Model):
     __tablename__ = 'Departament'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
@@ -338,7 +354,7 @@ class Departament(db.Model):
 class ReviewStatus(db.Model):
     __tablename__ = 'ReviewStatus'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
@@ -348,7 +364,7 @@ class ReviewStatus(db.Model):
 class Solving(db.Model):
     __tablename__ = 'Solving'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     file_name = db.Column(db.String(256), nullable=False)
     file_path = db.Column(db.String(256), nullable=False)
@@ -364,7 +380,7 @@ class Solving(db.Model):
 class Discipline(db.Model):
     __tablename__ = 'Discipline'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(256), nullable=False)
 
     author_id = db.Column(db.Integer, db.ForeignKey('Teacher.user_id'), nullable=False)
@@ -380,8 +396,7 @@ class Discipline(db.Model):
 class Review(db.Model):
     __tablename__ = 'Review'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     teacher_id = db.Column(db.Integer, db.ForeignKey('Teacher.user_id'))
     teacher = db.relationship("Teacher")
@@ -402,7 +417,7 @@ class Review(db.Model):
 class Theme(db.Model):
     __tablename__ = 'Theme'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(256), nullable=False)
 
     discipline_id = db.Column(db.Integer, db.ForeignKey('Discipline.id'), nullable=False)
@@ -415,7 +430,7 @@ class Theme(db.Model):
 class ReviewComment(db.Model):
     __tablename__ = 'ReviewComment'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     message = db.Column(db.String(256), nullable=False)
 
     review_id = db.Column(db.Integer, db.ForeignKey('Review.id'), nullable=False)
@@ -431,7 +446,7 @@ class ReviewComment(db.Model):
 class Task(db.Model):
     __tablename__ = 'Task'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(256), nullable=False)
     review_count = db.Column(db.Integer, nullable=False)
     text = db.Column(db.Text(), nullable=False)
@@ -446,7 +461,7 @@ class Task(db.Model):
 class Requirement(db.Model):
     __tablename__ = 'Requirement'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     text = db.Column(db.Text(), nullable=False)
 
     task_id = db.Column(db.Integer, db.ForeignKey('Task.id'), nullable=False)
