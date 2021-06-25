@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block center %}
+<div class="container">
+    <div class="row">
+        <h4>Задача</h4>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">Название</div>
+        <div class="col-lg-10">{{ task.name }}</div>
+    </div>
+    <div class="row">
+        <h4>Ход работы</h4>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">{{ task.text}}</div>
+    </div>
+    <div class="row">
+        <h4>Требования</h4>
+    </div>
+    <form method="post">
+        {% for requirement in task.requirement %}
+        <div class="row">
+            <div class="col-lg-6">{{ requirement.text }}</div>
+            <input type="text" class="col-lg-6" name="requirement.{{ requirement.id }}">
+        </div>
+        {% endfor %}
+        <div class="row">
+            <label for="common">Если имеется общее замечание, заполните это поле</label>
+            <input type="text" name="common" id="common">
+        </div>
+        <div class="row">
+            <label for="submit">Заполните только те поля, к которым есть замечания</label>
+            <input class="col-lg-4 offset-lg-4" id="submit" type="submit" value="Отправить">
+        </div>
+    </form>
+</div>
+{% endblock %}

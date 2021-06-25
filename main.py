@@ -47,6 +47,9 @@ def logout():
         session.pop('user_id')
     if 'first_name' in session:
         session.pop('first_name')
+    if 'user_type' in session:
+        session.pop('user_type')
+
     return redirect('sign-in')
 
 
@@ -54,6 +57,35 @@ def logout():
 @login_is_required
 def index():
     return render_template('index.html')
+
+
+@app.route('/review/<int:id_>', endpoint='review_id', methods=['GET', 'POST'])
+@login_is_required
+def review_id(id_):
+    task__ = Task.query.filter_by(id=id_).first()
+    requirement__ = Requirement.query.filter_by(task_id=id_).all()
+
+    if request.method == 'POST':
+        review = Review(review_status_id=1)
+        if 'teacher' in session['user_type']:
+            review.teacher_id = session['user_id']
+        if 'student' in session['user_type']:
+            review.student_id = session['user_id']
+        for key in request.form:
+            if request.form[key]:
+                pass
+
+    task_ = {
+        'name': task__.name,
+        'text': task__.text,
+        'requirement': [],
+    }
+    for requirement_ in requirement__:
+        task_['requirement'].append({
+            'id': requirement_.id,
+            'text': requirement_.text,
+        })
+    return render_template('review_id.html', task=task_)
 
 
 @app.route('/review', endpoint='review')
@@ -156,6 +188,11 @@ def sign_in():
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
                     session['user_id'] = user.id
                     session['first_name'] = user.first_name
+                    session['user_type'] = []
+                    if not Student.query.filter_by(user_id=user.id).all():
+                        session['user_type'].append('student')
+                    if not Teacher.query.filter_by(user_id=user.id).all():
+                        session['user_type'].append('teacher')
                     return redirect('/')
                 else:
                     return redirect('sign-in?mess=Пароль не верный')
@@ -173,9 +210,7 @@ def sign_up():
             user = User.query.filter_by(email=request.form['email']).first()
             if user:
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
-                    session['user_id'] = user.id
-                    session['first_name'] = user.first_name
-                    return redirect('/')
+                    return sign_in()
                 return redirect('sign-up?mess=Уже зарегистрирован')
             db.session.add(
                 User(
