@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+
+{% block center %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">Дисциплина</div>
+        <div class="col-lg-3">Тема</div>
+        <div class="col-lg-3">Задача</div>
+        <div class="col-lg-3">Статус</div>
+    </div>
+    {% for student_task_item in student_task %}
+    <div class="row">
+        <div class="col-lg-3">{{ student_task_item.discipline }}</div>
+        <div class="col-lg-3">{{ student_task_item.theme }}</div>
+        <div class="col-lg-3"><a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a></div>
+        <div class="col-lg-3">{{ student_task_item.status }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -56,6 +56,12 @@ def logout():
     return redirect('sign-in')
 
 
+@app.route('/discipline', endpoint='discipline')
+@login_is_required
+def discipline():
+    return render_template('solving.html')
+
+
 @app.route('/', endpoint='index')
 @login_is_required
 def index():
