@@ -94,8 +94,6 @@ def solving_id(id_):
             solving__.student_task.student_task_status_id = 4
         db.session.commit()
 
-
-
     task_ = {
         'name': task__.name,
         'text': task__.text,
@@ -139,11 +137,10 @@ def solving():
         return render_template('solving.html', tasks=tasks_)
 
 
-
 @app.route('/student_task/<int:id_>', endpoint='student_task_id', methods=['POST', 'GET'])
 @login_is_required
 def student_task_id(id_):
-    student_task_ = StudentTask.query.filter_by(id=id_).first()
+    student_task__ = StudentTask.query.filter_by(id=id_).first()
     if request.method == 'POST':
         if 'zip' in request.files:
             zip_file = request.files['zip']
@@ -161,26 +158,27 @@ def student_task_id(id_):
                 full_file_path = os.path.join(UPLOAD_FOLDER, file_path)
                 solving_.file_path = file_path
                 solving_.file_name = zip_file.filename
-                student_task_.student_task_status_id = 3
+                student_task__.student_task_status_id = 3
                 db.session.commit()
                 if not os.path.exists(full_file_path):
                     os.makedirs(full_file_path)
                 zip_file.save(os.path.join(full_file_path, zip_file.filename))
 
-    task_ = {
-        'id': student_task_.task.id,
-        'name': student_task_.task.name,
-        'text': student_task_.task.text,
-        'count_review': student_task_.task.review_count,
+    student_task_ = {
+        'id': student_task__.task.id,
+        'name': student_task__.task.name,
+        'text': student_task__.task.text,
+        'count_review': student_task__.task.review_count,
+        'load_file': student_task__.student_task_status_id != 5,
         'requirement': [],
         'solving': [],
     }
 
-    for requirement_ in Requirement.query.filter_by(task_id=student_task_.task.id).all():
-        task_['requirement'].append(requirement_.text)
+    for requirement_ in Requirement.query.filter_by(task_id=student_task__.task_id).all():
+        student_task_['requirement'].append(requirement_.text)
 
-    for solving_ in Solving.query.filter_by(student_task_id=student_task_.id).all():
-        task_['solving'].append({
+    for solving_ in Solving.query.filter_by(student_task_id=student_task__.id).all():
+        student_task_['solving'].append({
             'file_name': solving_.file_name,
             'file_path': solving_.file_path,
             'review_count': solving_.review_count,
@@ -188,29 +186,29 @@ def student_task_id(id_):
             'review': []
         })
         for review_ in Review.query.filter_by(solving_id=solving_.id).all():
-            task_['solving'][:1].append({
+            student_task_['solving'][:1].append({
                 'status': review_.review_status.name,
                 'id': review_.id,
             })
 
-    return render_template('task.html', task=task_)
+    return render_template('student_task_id.html', student_task=student_task_)
 
 
 @app.route('/student_task', endpoint='student_task')
 @login_is_required
 def student_task():
-    tasks_ = []
+    student_task_ = []
     for student_task_status in StudentTaskStatus.query.all():
         for student_task_ in StudentTask.query.filter_by(student_id=session['user_id'],
                                                          student_task_status_id=student_task_status.id).all():
-            tasks_.append({
+            student_task_.append({
                 'discipline': student_task_.task.theme.discipline.name,
                 'theme': student_task_.task.theme.name,
                 'task': student_task_.task.name,
                 'status': student_task_.student_task_status.name,
                 'id': student_task_.task.id
             })
-    return render_template('student_task.html', tasks=tasks_)
+    return render_template('student_task.html', student_task=student_task_)
 
 
 @app.route('/sign-in', methods=['POST', 'GET'])
