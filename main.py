@@ -34,11 +34,14 @@ def files(filename):
 
 
 @app.context_processor
-def get_first_name():
+def global_data():
     def first_name():
         return session.get('first_name', 'Гость')
 
-    return dict(first_name=first_name)
+    def user_type():
+        return session.get('user_type', [])
+
+    return dict(first_name=first_name, user_type=user_type)
 
 
 @app.route('/logout')
