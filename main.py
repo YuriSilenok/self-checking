@@ -199,14 +199,14 @@ def student_task_id(id_):
 def student_task():
     student_task_ = []
     for student_task_status in StudentTaskStatus.query.all():
-        for student_task_ in StudentTask.query.filter_by(student_id=session['user_id'],
+        for student_task__ in StudentTask.query.filter_by(student_id=session['user_id'],
                                                          student_task_status_id=student_task_status.id).all():
             student_task_.append({
-                'discipline': student_task_.task.theme.discipline.name,
-                'theme': student_task_.task.theme.name,
-                'task': student_task_.task.name,
-                'status': student_task_.student_task_status.name,
-                'id': student_task_.task.id
+                'discipline': student_task__.task.theme.discipline.name,
+                'theme': student_task__.task.theme.name,
+                'task': student_task__.task.name,
+                'status': student_task__.student_task_status.name,
+                'id': student_task__.task.id
             })
     return render_template('student_task.html', student_task=student_task_)
 
