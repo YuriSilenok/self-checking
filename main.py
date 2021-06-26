@@ -4,6 +4,7 @@ import hashlib
 import os
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 
 UPLOAD_FOLDER = 'files'
 
@@ -121,15 +122,18 @@ def solving_id(id_):
 def solving():
     if 'student' in session['user_type']:
         tasks_ = []
-        for solving_ in db.session.query(Solving).join(StudentTask, StudentTask.id == Solving.student_task_id).filter(
-                (StudentTask.student_task_status_id == 3) & (
-                        StudentTask.student_id.isnot(session['user_id']))).all():
+        query = db.session.query(Solving, func.max(Solving.id).label('id'))
+        query = query.join(StudentTask, StudentTask.id == Solving.student_task_id)
+        query = query.filter(
+            (StudentTask.student_task_status_id == 3) & (StudentTask.student_id.isnot(session['user_id'])))
+        query = query .group_by(Solving.student_task_id)
+        for solving__, _ in query.all():
             tasks_.append({
-                'discipline': solving_.student_task.task.theme.discipline.name,
-                'theme': solving_.student_task.task.theme.name,
-                'task': solving_.student_task.task.name,
-                'status': solving_.student_task.student_task_status.name,
-                'id': solving_.id
+                'discipline': solving__.student_task.task.theme.discipline.name,
+                'theme': solving__.student_task.task.theme.name,
+                'task': solving__.student_task.task.name,
+                'status': solving__.student_task.student_task_status.name,
+                'id': solving__.id
             })
         return render_template('solving.html', tasks=tasks_)
     if 'teacher' in session['user_type']:
@@ -154,19 +158,18 @@ def student_task_id(id_):
         if 'zip' in request.files:
             zip_file = request.files['zip']
             if zip_file.filename != '':
-                db.session.add(Solving(
+                solving__ = Solving(
                     file_path='file_path',
                     file_name='file_name',
                     review_count=0,
                     student_task_id=id_,
-                ))
+                )
+                db.session.add(solving__)
                 db.session.commit()
-                solving_ = Solving.query.filter_by(file_path='file_path', file_name='file_name',
-                                                   student_task_id=id_).first()
-                file_path = os.path.join('task', str(solving_.student_task.task.id), 'solving', str(solving_.id))
+                file_path = os.path.join('task', str(solving__.student_task.task.id), 'solving', str(solving__.id))
                 full_file_path = os.path.join(UPLOAD_FOLDER, file_path)
-                solving_.file_path = file_path
-                solving_.file_name = zip_file.filename
+                solving__.file_path = file_path
+                solving__.file_name = zip_file.filename
                 student_task__.student_task_status_id = 3
                 db.session.commit()
                 if not os.path.exists(full_file_path):
@@ -209,7 +212,7 @@ def student_task():
     student_task_ = []
     for student_task_status in StudentTaskStatus.query.all():
         for student_task__ in StudentTask.query.filter_by(student_id=session['user_id'],
-                                                         student_task_status_id=student_task_status.id).all():
+                                                          student_task_status_id=student_task_status.id).all():
             student_task_.append({
                 'discipline': student_task__.task.theme.discipline.name,
                 'theme': student_task__.task.theme.name,
