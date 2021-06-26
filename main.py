@@ -22,7 +22,7 @@ def login_is_required(function):
         if "user_id" in session:
             return function(*args, **kwargs)
         else:
-            return redirect('sign-in')
+            return redirect('/sign-in')
 
     return wrapper
 
@@ -88,6 +88,8 @@ def solving_id(id_):
         solving__.review_count += 1
         if review__.review_status_id == 2:
             solving__.student_task.student_task_status_id = 2
+        elif 'teacher' in session['user_type']:
+            solving__.student_task.student_task_status_id = 5
         elif solving__.review_count >= solving__.student_task.task.review_count:
             solving__.student_task.student_task_status_id = 4
         db.session.commit()
@@ -123,6 +125,19 @@ def solving():
                 'id': solving_.id
             })
         return render_template('solving.html', tasks=tasks_)
+    if 'teacher' in session['user_type']:
+        tasks_ = []
+        for solving_ in db.session.query(Solving).join(StudentTask, StudentTask.id == Solving.student_task_id).filter(
+                (StudentTask.student_task_status_id == 4)).all():
+            tasks_.append({
+                'discipline': solving_.student_task.task.theme.discipline.name,
+                'theme': solving_.student_task.task.theme.name,
+                'task': solving_.student_task.task.name,
+                'status': solving_.student_task.student_task_status.name,
+                'id': solving_.id
+            })
+        return render_template('solving.html', tasks=tasks_)
+
 
 
 @app.route('/student_task/<int:id_>', endpoint='student_task_id', methods=['POST', 'GET'])
