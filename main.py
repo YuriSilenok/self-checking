@@ -225,7 +225,7 @@ def sign_in():
                         session['user_type'].append('student')
                     if Teacher.query.filter_by(user_id=user.id).all():
                         session['user_type'].append('teacher')
-                    return redirect('/')
+                    return redirect('/solving')
                 else:
                     return redirect('sign-in?mess=Пароль не верный')
             else:
