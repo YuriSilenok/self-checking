@@ -31,7 +31,7 @@ def login_is_required(function):
 @app.route('/files/<path:filename>', endpoint='files')
 @login_is_required
 def files(filename):
-    return send_file(os.path.join(UPLOAD_FOLDER, filename.replace('/', '\\')), as_attachment=True)
+    return send_file(os.path.join(UPLOAD_FOLDER, filename), as_attachment=True)
 
 
 @app.context_processor
@@ -84,7 +84,6 @@ def solving_id(id_):
             review__.student_id = session['user_id']
         db.session.add(review__)
         db.session.commit()
-        # review = Review.query.
         for key in request.form:
             if request.form[key]:
                 review__.review_status_id = 2
@@ -107,6 +106,7 @@ def solving_id(id_):
     task_ = {
         'name': task__.name,
         'text': task__.text,
+        'file_path': solving__.file_path + '/' + solving__.file_name,
         'requirement': [],
     }
     for requirement_ in requirement__:
@@ -126,7 +126,7 @@ def solving():
         query = query.join(StudentTask, StudentTask.id == Solving.student_task_id)
         query = query.filter(
             (StudentTask.student_task_status_id == 3) & (StudentTask.student_id.isnot(session['user_id'])))
-        query = query .group_by(Solving.student_task_id)
+        query = query.group_by(Solving.student_task_id)
         for solving__, _ in query.all():
             tasks_.append({
                 'discipline': solving__.student_task.task.theme.discipline.name,
