@@ -335,7 +335,7 @@ class StudentTask(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    completed_at = db.Column(db.DateTime)
+    score = db.Column(db.Integer, default=1)
 
     student_task_status_id = db.Column(db.Integer, db.ForeignKey('StudentTaskStatus.id'), default=1, nullable=False)
     student_task_status = db.relationship('StudentTaskStatus')
