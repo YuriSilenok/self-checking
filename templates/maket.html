@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="container">
-    <div class="row">v0.4.2.1</div>
+    <div class="row">{% version() %}</div>
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             {% if 'student' in user_type() %}
