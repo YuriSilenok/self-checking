@@ -5,9 +5,4 @@
 - Flask=['2.0.1']
 - Flask-SQLAlchemy=['2.5.1']
 
-## Наша документация
-
-- [Требования](documentation/requirements.md)
-- [Диаграммы](/documentation)
-- Пользовательские истории
-- Пользовательская документация
+[Наша документация](documentation)
