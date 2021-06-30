@@ -4,7 +4,7 @@ import hashlib
 import os
 import subprocess
 
-from flask_sqlalchemy import SQLAlchemy
+import flask_sqlalchemy
 from sqlalchemy import func
 
 UPLOAD_FOLDER = 'files'
@@ -16,7 +16,7 @@ app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-db = SQLAlchemy(app)
+db = flask_sqlalchemy.SQLAlchemy(app)
 
 
 def login_is_required(function):
