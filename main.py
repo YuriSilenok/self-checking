@@ -42,7 +42,10 @@ def global_data():
     def user_type():
         return session.get('user_type', [])
 
-    return dict(first_name=first_name, user_type=user_type)
+    def version():
+        return 'v0.4.2.2'
+
+    return dict(first_name=first_name, user_type=user_type, version=version)
 
 
 @app.route('/logout')
