@@ -1,15 +1,15 @@
-from flask import Flask, render_template, session, redirect, request, send_file
 from datetime import datetime
 import hashlib
 import os
 import subprocess
 
+import flask
 import flask_sqlalchemy
 from sqlalchemy import func
 
 UPLOAD_FOLDER = 'files'
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super secret key'
@@ -21,10 +21,10 @@ db = flask_sqlalchemy.SQLAlchemy(app)
 
 def login_is_required(function):
     def wrapper(*args, **kwargs):
-        if "user_id" in session:
+        if "user_id" in flask.session:
             return function(*args, **kwargs)
         else:
-            return redirect('/sign-in')
+            return flask.redirect('/sign-in')
 
     return wrapper
 
@@ -32,16 +32,16 @@ def login_is_required(function):
 @app.route('/files/<path:filename>', endpoint='files')
 @login_is_required
 def files(filename):
-    return send_file(os.path.join(UPLOAD_FOLDER, filename), as_attachment=True)
+    return flask.send_file(os.path.join(UPLOAD_FOLDER, filename), as_attachment=True)
 
 
 @app.context_processor
 def global_data():
     def first_name():
-        return session.get('first_name', 'Гость')
+        return flask.session.get('first_name', 'Гость')
 
     def user_type():
-        return session.get('user_type', [])
+        return flask.session.get('user_type', [])
 
     def version():
         return subprocess.check_output(['git', 'describe']).decode("utf-8")
@@ -51,26 +51,26 @@ def global_data():
 
 @app.route('/logout')
 def logout():
-    if 'user_id' in session:
-        session.pop('user_id')
-    if 'first_name' in session:
-        session.pop('first_name')
-    if 'user_type' in session:
-        session.pop('user_type')
+    if 'user_id' in flask.session:
+        flask.session.pop('user_id')
+    if 'first_name' in flask.session:
+        flask.session.pop('first_name')
+    if 'user_type' in flask.session:
+        flask.session.pop('user_type')
 
-    return redirect('sign-in')
+    return flask.redirect('sign-in')
 
 
 @app.route('/discipline', endpoint='discipline')
 @login_is_required
 def discipline():
-    return render_template('solving.html')
+    return flask.render_template('solving.html')
 
 
 @app.route('/', endpoint='index')
 @login_is_required
 def index():
-    return render_template('index.html')
+    return flask.render_template('index.html')
 
 
 @app.route('/solving/<int:id_>', endpoint='solving_id', methods=['GET', 'POST'])
@@ -80,28 +80,28 @@ def solving_id(id_):
     task__ = solving__.student_task.task
     requirement__ = Requirement.query.filter_by(task_id=task__.id).all()
 
-    if request.method == 'POST':
+    if flask.request.method == 'POST':
         review__ = Review(review_status_id=1, solving_id=id_)
-        if 'teacher' in session['user_type']:
-            review__.teacher_id = session['user_id']
-        if 'student' in session['user_type']:
-            review__.student_id = session['user_id']
+        if 'teacher' in flask.session['user_type']:
+            review__.teacher_id = flask.session['user_id']
+        if 'student' in flask.session['user_type']:
+            review__.student_id = flask.session['user_id']
         db.session.add(review__)
         db.session.commit()
-        for key in request.form:
-            if request.form[key]:
+        for key in flask.request.form:
+            if flask.request.form[key]:
                 review__.review_status_id = 2
                 if 'requirement.' in key:
                     requirement_id = int(key.replace('requirement.', ''))
                     review_comment__ = ReviewComment(review_id=review__.id, requirement_id=requirement_id,
-                                                     message=request.form[key])
+                                                     message=flask.request.form[key])
                     db.session.add(review_comment__)
                 if 'common' in key:
-                    review__.message = request.form[key]
+                    review__.message = flask.request.form[key]
         solving__.review_count += 1
         if review__.review_status_id == 2:
             solving__.student_task.student_task_status_id = 2
-        elif 'teacher' in session['user_type']:
+        elif 'teacher' in flask.session['user_type']:
             solving__.student_task.student_task_status_id = 5
         elif solving__.review_count >= solving__.student_task.task.review_count:
             solving__.student_task.student_task_status_id = 4
@@ -118,18 +118,18 @@ def solving_id(id_):
             'id': requirement_.id,
             'text': requirement_.text,
         })
-    return render_template('solving_id.html', task=task_)
+    return flask.render_template('solving_id.html', task=task_)
 
 
 @app.route('/solving', endpoint='solving')
 @login_is_required
 def solving():
-    if 'student' in session['user_type']:
+    if 'student' in flask.session['user_type']:
         tasks_ = []
         query = db.session.query(Solving, func.max(Solving.id).label('id'))
         query = query.join(StudentTask, StudentTask.id == Solving.student_task_id)
         query = query.filter(
-            (StudentTask.student_task_status_id == 3) & (StudentTask.student_id.isnot(session['user_id'])))
+            (StudentTask.student_task_status_id == 3) & (StudentTask.student_id.isnot(flask.session['user_id'])))
         query = query.group_by(Solving.student_task_id)
         for solving__, _ in query.all():
             tasks_.append({
@@ -139,8 +139,8 @@ def solving():
                 'status': solving__.student_task.student_task_status.name,
                 'id': solving__.id
             })
-        return render_template('solving.html', tasks=tasks_)
-    if 'teacher' in session['user_type']:
+        return flask.render_template('solving.html', tasks=tasks_)
+    if 'teacher' in flask.session['user_type']:
         tasks_ = []
         for solving_ in db.session.query(Solving).join(StudentTask, StudentTask.id == Solving.student_task_id).filter(
                 (StudentTask.student_task_status_id == 4)).all():
@@ -151,16 +151,16 @@ def solving():
                 'status': solving_.student_task.student_task_status.name,
                 'id': solving_.id
             })
-        return render_template('solving.html', tasks=tasks_)
+        return flask.render_template('solving.html', tasks=tasks_)
 
 
 @app.route('/student_task/<int:id_>', endpoint='student_task_id', methods=['POST', 'GET'])
 @login_is_required
 def student_task_id(id_):
     student_task__ = StudentTask.query.filter_by(id=id_).first()
-    if request.method == 'POST':
-        if 'zip' in request.files:
-            zip_file = request.files['zip']
+    if flask.request.method == 'POST':
+        if 'zip' in flask.request.files:
+            zip_file = flask.request.files['zip']
             if zip_file.filename != '':
                 solving__ = Solving(
                     file_path='file_path',
@@ -207,7 +207,7 @@ def student_task_id(id_):
                 'id': review_.id,
             })
 
-    return render_template('student_task_id.html', student_task=student_task_)
+    return flask.render_template('student_task_id.html', student_task=student_task_)
 
 
 @app.route('/student_task', endpoint='student_task')
@@ -215,7 +215,7 @@ def student_task_id(id_):
 def student_task():
     student_task_ = []
     for student_task_status in StudentTaskStatus.query.all():
-        for student_task__ in StudentTask.query.filter_by(student_id=session['user_id'],
+        for student_task__ in StudentTask.query.filter_by(student_id=flask.session['user_id'],
                                                           student_task_status_id=student_task_status.id).all():
             student_task_.append({
                 'discipline': student_task__.task.theme.discipline.name,
@@ -224,56 +224,56 @@ def student_task():
                 'status': student_task__.student_task_status.name,
                 'id': student_task__.task.id
             })
-    return render_template('student_task.html', student_task=student_task_)
+    return flask.render_template('student_task.html', student_task=student_task_)
 
 
 @app.route('/sign-in', methods=['POST', 'GET'])
 def sign_in():
-    if request.method == 'POST':
+    if flask.request.method == 'POST':
         try:
-            user = User.query.filter_by(email=request.form['email']).first()
+            user = User.query.filter_by(email=flask.request.form['email']).first()
             if user:
-                if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
-                    session['user_id'] = user.id
-                    session['first_name'] = user.first_name
-                    session['user_type'] = []
+                if user.password_hash == hashlib.sha1(flask.request.form['password'].encode('utf-8')).hexdigest():
+                    flask.session['user_id'] = user.id
+                    flask.session['first_name'] = user.first_name
+                    flask.session['user_type'] = []
                     if Student.query.filter_by(user_id=user.id).all():
-                        session['user_type'].append('student')
+                        flask.session['user_type'].append('student')
                     if Teacher.query.filter_by(user_id=user.id).all():
-                        session['user_type'].append('teacher')
-                    return redirect('/solving')
+                        flask.session['user_type'].append('teacher')
+                    return flask.redirect('/solving')
                 else:
-                    return redirect('sign-in?mess=Пароль не верный')
+                    return flask.redirect('sign-in?mess=Пароль не верный')
             else:
-                return redirect('sign-up?mess=Нет такого пользователя')
+                return flask.redirect('sign-up?mess=Нет такого пользователя')
         except Exception as ex:
-            return redirect(f'sign-in?mess={str(ex)}')
-    return render_template('sign-in.html')
+            return flask.redirect(f'sign-in?mess={str(ex)}')
+    return flask.render_template('sign-in.html')
 
 
 @app.route('/sign-up', methods=['POST', 'GET'])
 def sign_up():
-    if request.method == 'POST':
+    if flask.request.method == 'POST':
         try:
-            user = User.query.filter_by(email=request.form['email']).first()
+            user = User.query.filter_by(email=flask.request.form['email']).first()
             if user:
-                if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
+                if user.password_hash == hashlib.sha1(flask.request.form['password'].encode('utf-8')).hexdigest():
                     return sign_in()
-                return redirect('sign-up?mess=Уже зарегистрирован')
+                return flask.redirect('sign-up?mess=Уже зарегистрирован')
             db.session.add(
                 User(
-                    email=request.form['email'],
-                    password_hash=hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest(),
-                    last_name=request.form['last_name'],
-                    first_name=request.form['first_name'],
-                    middle_name=request.form['middle_name']
+                    email=flask.request.form['email'],
+                    password_hash=hashlib.sha1(flask.request.form['password'].encode('utf-8')).hexdigest(),
+                    last_name=flask.request.form['last_name'],
+                    first_name=flask.request.form['first_name'],
+                    middle_name=flask.request.form['middle_name']
                 )
             )
             db.session.commit()
-            return redirect('/')
+            return flask.redirect('/')
         except Exception as ex:
-            return redirect(f'sign-up?mess={str(ex)}')
-    return render_template('sign-up.html')
+            return flask.redirect(f'sign-up?mess={str(ex)}')
+    return flask.render_template('sign-up.html')
 
 
 class User(db.Model):
