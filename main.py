@@ -43,7 +43,7 @@ def global_data():
         return session.get('user_type', [])
 
     def version():
-        return 'v0.4.2.2'#здесь будет функция
+        return 'v0.4.2.2'#здесь будет функци
 
     return dict(first_name=first_name, user_type=user_type, version=version)
 
