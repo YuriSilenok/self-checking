@@ -155,6 +155,8 @@ def solving():
                 'id': solving_.id
             })
         return flask.render_template('solving.html', tasks=tasks_)
+    else:
+        return flask.redirect('/')
 
 
 @app.route('/student_task/<int:id_>', endpoint='student_task_id', methods=['POST', 'GET'])
@@ -273,7 +275,7 @@ def sign_up():
                 )
             )
             db.session.commit()
-            return flask.redirect('/')
+            return sign_in()
         except Exception as ex:
             return flask.redirect(f'sign-up?mess={str(ex)}')
     return flask.render_template('sign-up.html')

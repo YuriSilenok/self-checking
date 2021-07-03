@@ -8,7 +8,9 @@
             {% if 'student' in user_type() %}
             <li><a href="/student_task" class="nav-link px-2 link-dark">Ваши работы</a></li>
             {% endif %}
+            {% if 'student' in user_type() or 'teacher' in user_type() %}
             <li><a href="/solving" class="nav-link px-2 link-dark">Нужно проверить</a></li>
+            {% endif %}
             {% if 'teacher' in user_type() %}
             <li><a href="/discipline" class="nav-link px-2 link-dark">Ваши дисциплины</a></li>
             {% endif %}
