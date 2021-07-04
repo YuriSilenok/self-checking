@@ -19,7 +19,7 @@ def browser():
     try:
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
-        bro = webdriver.Chrome(executable_path=os.path.abspath('chromedriver.exe'), options=options)
+        bro = webdriver.Chrome(options=options)
         bro.wait = 5
         bro.implicitly_wait(browser.wait)
         yield bro
