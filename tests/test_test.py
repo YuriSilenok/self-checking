@@ -2,4 +2,4 @@ import pytest
 
 
 def test_test1(browser):
-    print('test1')
+    print('test1_')
