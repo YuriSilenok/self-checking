@@ -20,10 +20,10 @@ def browser():
         options = webdriver.ChromeOptions()
         options.headless = True
         options.add_argument("--no-sandbox")
-        print(os.listdir('/home/travis/chromedriver/'))
+        print(os.getenv("CHROMEDRIVER_PATH"))
         executable_path = os.path.abspath('chromedriver')
         print(executable_path)
-        bro = webdriver.Chrome(executable_path=executable_path, options=options)
+        bro = webdriver.Chrome(executable_path=os.getenv("CHROMEDRIVER_PATH"), options=options)
         bro.wait = 5
         bro.implicitly_wait(browser.wait)
         yield bro
