@@ -34,12 +34,17 @@ db.session.add(Theme(name='Основные команды git', discipline_id=1
 db.session.add(
     Task(name='Команды git: status, add, commit, pull, push', text='Просто сделайте это', theme_id=1, review_count=5))
 db.session.add(Requirement(text='Первый коммит содержит игнорирование файлов с расширением zip', task_id=1))
+db.session.add(Discipline(name='Управление данными', author_id=1, departament_id=1))
+db.session.add(Theme(name='Нормальные формы', discipline_id=2))
+db.session.add(Task(name='1НФ', text='Просто сделайте это', theme_id=2, review_count=5))
+db.session.add(Requirement(text='Переменная отношения находится в первой нормальной форме тогда и только тогда, когда в любом допустимом значении этой переменной каждый кортеж отношения содержит только одно значение для каждого из атрибутов', task_id=2))
 db.session.add(StudentTaskStatus(name='Не начата'))
 db.session.add(StudentTaskStatus(name='Требует исправлений'))
 db.session.add(StudentTaskStatus(name='Ожидает проверки студентом'))
 db.session.add(StudentTaskStatus(name='Ожидает проверки преподавателем'))
 db.session.add(StudentTaskStatus(name='Зачтено'))
 db.session.add(StudentTask(student_id=2, task_id=1))
+db.session.add(StudentTask(student_id=3, task_id=2))
 db.session.add(ReviewStatus(name='Одобрено'))
 db.session.add(ReviewStatus(name='Переделать'))
 
