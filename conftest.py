@@ -23,7 +23,7 @@ def browser():
         executable_path = '/home/travis/chromedriver/chromedriver'
         bro = webdriver.Chrome(executable_path=executable_path, options=options)
         bro.wait = 5
-        bro.implicitly_wait(browser.wait)
+        bro.implicitly_wait(bro.wait)
         yield bro
     except Exception as ex:
         print(ex)
