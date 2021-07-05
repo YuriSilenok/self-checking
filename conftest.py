@@ -18,7 +18,8 @@ def browser():
     """Open the browser once for all tests."""
     try:
         options = webdriver.ChromeOptions()
-        options.add_argument("--start-maximized")
+        options.headless = True
+        options.add_argument("--no-sandbox")
         executable_path= os.path.abspath('chromedriver')
         print(executable_path)
         bro = webdriver.Chrome(executable_path=executable_path, options=options)
