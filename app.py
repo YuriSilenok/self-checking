@@ -64,10 +64,48 @@ def logout():
     return flask.redirect('sign-in')
 
 
-@app.route('/discipline', endpoint='discipline')
+@app.route('/discipline', endpoint='discipline', methods=['POST', 'GET'])
 @login_is_required
 def discipline():
-    return flask.render_template('solving.html')
+    if flask.request.method == 'POST':
+        discipline__ = Discipline(
+            author_id=flask.session['user_id'],
+            name=flask.request.form['name'],
+            departament_id=Teacher.query.filter_by(user_id=flask.session['user_id']).first().departament_id
+        )
+        db.session.add(discipline__)
+        db.session.commit()
+        return flask.redirect(flask.url_for('theme', discipline=discipline__.id))
+    data = []
+    for discipline__ in Discipline.query.filter_by(author_id=flask.session['user_id']):
+        data.append({
+            'id': discipline__.id,
+            'name': discipline__.name,
+        })
+    return flask.render_template('discipline.html', data=data)
+
+
+@app.route('/theme', endpoint='theme', methods=['GET', 'POST'])
+@login_is_required
+def theme():
+    if flask.request.method == 'POST':
+        pass
+    discipline__ = Discipline.query.filter_by(id=flask.request.args['discipline']).first()
+    if not discipline__:
+        return flask.redirect(flask.url_for('discipline'))
+    data = []
+    for theme__ in Theme.query.filter_by(discipline_id=discipline__.id):
+        data.append({
+            'id': theme__.id,
+            'name': theme__.name,
+        })
+    return flask.render_template('theme.html', data=data, discipline=discipline__.name)
+
+
+@app.route('/task', endpoint='task', methods=['GET', 'POST'])
+@login_is_required
+def task():
+    pass
 
 
 @app.route('/', endpoint='index')
@@ -265,15 +303,21 @@ def sign_up():
                 if user.password_hash == hashlib.sha1(flask.request.form['password'].encode('utf-8')).hexdigest():
                     return sign_in()
                 return flask.redirect('sign-up?mess=Уже зарегистрирован')
-            db.session.add(
-                User(
-                    email=flask.request.form['email'],
-                    password_hash=hashlib.sha1(flask.request.form['password'].encode('utf-8')).hexdigest(),
-                    last_name=flask.request.form['last_name'],
-                    first_name=flask.request.form['first_name'],
-                    middle_name=flask.request.form['middle_name']
-                )
+            user = User(
+                email=flask.request.form['email'],
+                password_hash=hashlib.sha1(flask.request.form['password'].encode('utf-8')).hexdigest(),
+                last_name=flask.request.form['last_name'],
+                first_name=flask.request.form['first_name'],
+                middle_name=flask.request.form['middle_name']
             )
+            db.session.add(user)
+            db.session.commit()
+            student = Student(
+                user_id=user.id,
+                group_id=1,
+                student_status_id=1,
+            )
+            db.session.add(student)
             db.session.commit()
             return sign_in()
         except Exception as ex:

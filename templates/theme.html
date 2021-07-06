@@ -2,20 +2,22 @@
 
 {% block center %}
 <div class="container">
+    <div class="row">
+        <h4>{{ discipline }}</h4>
+    </div>
     <form method="post">
         <div class="row">
-            <label class="col-lg-5" for="name">Введите название новой дисциплины</label>
+            <label class="col-lg-5" for="name">Введите название новой темы</label>
             <input class="col-lg-5" type="text" name="name" id="name">
             <input class="col-lg-1 offset-lg-1" id="submit" type="submit" value="Добавить">
         </div>
     </form>
-
     <div class="row">
-        <div class="col-lg-3">Дисциплина</div>
+        <div class="col-lg-3">Тема</div>
     </div>
-    {% for discipline in data %}
+    {% for theme in data %}
     <div class="row">
-        <div class="col-lg-12"><a href="{{ url_for('theme', discipline=discipline.id) }}">{{ discipline.name }}</a></div>
+        <div class="col-lg-12"><a href="{{ url_for('task', theme=theme.id) }}">{{ theme.name }}</a></div>
     </div>
     {% endfor %}
 </div>
