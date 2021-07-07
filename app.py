@@ -89,7 +89,10 @@ def discipline():
 @login_is_required
 def theme():
     if flask.request.method == 'POST':
-        pass
+        theme__ = Theme(name=flask.request.form['name'], discipline_id=flask.request.args['discipline'])
+        db.session.add(theme__)
+        db.session.commit()
+        return flask.redirect(flask.url_for('task', theme=theme__.id))
     discipline__ = Discipline.query.filter_by(id=flask.request.args['discipline']).first()
     if not discipline__:
         return flask.redirect(flask.url_for('discipline'))
@@ -105,6 +108,23 @@ def theme():
 @app.route('/task', endpoint='task', methods=['GET', 'POST'])
 @login_is_required
 def task():
+    if flask.request.method == 'POST':
+        pass
+    theme__ = Theme.query.filter_by(id=flask.request.args['theme']).first()
+    if not theme__:
+        return flask.redirect(flask.url_for('theme'))
+    data = []
+    for task__ in Task.query.filter_by(theme_id=theme__.id):
+        data.append({
+            'id': task__.id,
+            'name': task__.name,
+        })
+    return flask.render_template('task.html', data=data, theme=theme__.name)
+
+
+@app.route('/required', endpoint='required', methods=['GET', 'POST'])
+@login_is_required
+def required():
     pass
 
 
