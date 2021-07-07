@@ -113,7 +113,7 @@ def task():
                       review_count=int(request.form['review_count']), theme_id=request.args['theme'])
         db.session.add(task__)
         db.session.commit()
-        return redirect(url_for('required', task=task__.id))
+        return redirect(url_for('requirement', task=task__.id))
     theme__ = Theme.query.filter_by(id=request.args['theme']).first()
     if not theme__:
         return redirect(url_for('theme'))
@@ -123,16 +123,27 @@ def task():
             'id': task__.id,
             'name': task__.name,
             'link': task__.link,
-            'link': task__.link,
             'review_count': task__.review_count,
         })
     return render_template('task.html', data=data, theme=theme__.name)
 
 
-@app.route('/required', endpoint='required', methods=['GET', 'POST'])
+@app.route('/requirement', endpoint='requirement', methods=['GET', 'POST'])
 @login_is_required
-def required():
-    pass
+def requirement():
+    if request.method == 'POST':
+        requirement__ = Requirement(text=request.form['text'], task_id=request.args['task'])
+        db.session.add(requirement__)
+        db.session.commit()
+    task__ = Task.query.filter_by(id=request.args['task']).first()
+    if not task__:
+        return redirect(url_for('task'))
+    data = []
+    for requirement__ in Requirement.query.filter_by(task_id=task__.id):
+        data.append({
+            'text': requirement__.text,
+        })
+    return render_template('requirement.html', data=data, task=task__.name)
 
 
 @app.route('/', endpoint='index')
