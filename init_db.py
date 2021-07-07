@@ -16,15 +16,17 @@ db.session.add(User(
     middle_name='Викторович'
 ))
 db.session.add(Group(name='11-ИСбо-2а'))
+db.session.add(Group(name='11-ИСбо-2б'))
 for i in range(6):
     db.session.add(User(
         email=f'student{i}@test.ru',
         password_hash=hashlib.sha1('123'.encode('utf-8')).hexdigest(),
-        last_name='Силенок',
+        last_name=f'Силенок{i}',
         first_name=f'Студент{i}',
         middle_name='Викторович'
     ))
-    db.session.add(Student(user_id=i + 2, group_id=1, student_status_id=1))
+    group_id = 1 if i % 2 == 0 else 2
+    db.session.add(Student(user_id=i + 2, group_id=group_id, student_status_id=1))
 db.session.add(Departament(name='Кафедра информационных систем и технологий'))
 db.session.add(Teacher(user_id=1, departament_id=1))
 db.session.add(StudentStatus(name='Обучается'))

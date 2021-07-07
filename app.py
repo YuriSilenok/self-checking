@@ -6,7 +6,7 @@ import hashlib
 import os
 import subprocess
 
-from flask import redirect, request, send_file, render_template, session, url_for, Flask
+from flask import redirect, request, send_file, render_template, session, url_for, Flask, jsonify
 import flask_sqlalchemy
 from sqlalchemy import func
 
@@ -96,13 +96,14 @@ def theme():
     discipline__ = Discipline.query.filter_by(id=request.args['discipline']).first()
     if not discipline__:
         return redirect(url_for('discipline'))
-    data = []
+    themes = []
     for theme__ in Theme.query.filter_by(discipline_id=discipline__.id):
-        data.append({
+        themes.append({
             'id': theme__.id,
             'name': theme__.name,
         })
-    return render_template('theme.html', data=data, discipline=discipline__.name)
+    return render_template('theme.html', themes=themes, discipline=discipline__.name, groups=api_group(),
+                           students=api_student())
 
 
 @app.route('/task', endpoint='task', methods=['GET', 'POST'])
@@ -363,6 +364,45 @@ def sign_up():
     return render_template('sign-up.html')
 
 
+@app.route('/api/<request_>', endpoint='api')
+@login_is_required
+def api(request_):
+    switch = {
+        'student': api_student,
+    }
+    if request_ in switch:
+        return jsonify(switch[request_]())
+    else:
+        return jsonify(error='Нельзя сотварить здесь')
+
+
+def api_group():
+    result = []
+    for group__ in Group.query.all():
+        result.append({
+            'id': group__.id,
+            'name': group__.name,
+        })
+    return result
+
+
+def api_student():
+    result = []
+    if request.method == 'GET':
+        filter_by = {}
+        if 'group' in request.args:
+            filter_by['group_id'] = request.args['group']
+        for student__ in Student.query.filter_by(**filter_by).all():
+            result.append({
+                'id': student__.user_id,
+                'first_name': student__.user.first_name,
+                'last_name': student__.user.last_name,
+                'middle_name': student__.user.middle_name,
+            })
+        return result
+    return result
+
+
 class User(db.Model):
     __tablename__ = 'User'
 
@@ -455,6 +495,22 @@ class StudentStatus(db.Model):
 
     def __repr__(self):
         return f'<StudentStatus {self.id}>'
+
+
+class StudentDiscipline(db.Model):
+    __tablename__ = 'StudentDiscipline'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    discipline_id = db.Column(db.Integer, db.ForeignKey('Discipline.id'), nullable=False)
+    discipline = db.relationship('Discipline')
+
+    student_id = db.Column(db.Integer, db.ForeignKey('Student.user_id'), nullable=False)
+    student = db.relationship('Student')
+
+    def __repr__(self):
+        return f'<StudentDiscipline {self.id}>'
 
 
 class Departament(db.Model):
