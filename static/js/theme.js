@@ -13,9 +13,15 @@ function filterStudent(){
             student_element = document.getElementById('student');
             while(document.getElementById('student').options.length > 0){
                 document.getElementById('student').options.remove(0);}
+            var disable_option_element = document.createElement('option');
+            disable_option_element.disabled = true;
+            disable_option_element.selected = true;
+            disable_option_element.value = null;
+            disable_option_element.innerHTML = 'Не выбран';
+            student_element.appendChild(disable_option_element);
             for(var ind in json){
                 var option_element = document.createElement('option');
-                option_element.value = json[ind].id;
+                option_element.value = json[ind].user_id;
                 option_element.innerHTML = json[ind].last_name + ' ' + json[ind].first_name[0] + '.' + json[ind].middle_name[0] + '.';
                 student_element.appendChild(option_element);
             }

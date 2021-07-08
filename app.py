@@ -313,12 +313,13 @@ def student_task():
 @app.route('/student_discipline', endpoint='student_discipline', methods=['POST'])
 @login_is_required
 def student_discipline():
-    print(request.args)
-    student_discipline__ = StudentDiscipline(student_id=request.form['student'],
-                                             discipline_id=request.form['discipline'])
-    db.session.add(student_discipline__)
-    db.session.commit()
-    return redirect(url_for('theme', discipline=request.form['discipline']))
+    if 'student' in request.form:
+        print(request.form)
+        student_discipline__ = StudentDiscipline(student_id=request.form['student'],
+                                                 discipline_id=request.form['discipline'])
+        db.session.add(student_discipline__)
+        db.session.commit()
+    return redirect(url_for('theme', discipline=request.form['discipline'], not_discipline=''))
 
 
 @app.route('/sign-in', endpoint='sign_in', methods=['POST', 'GET'])
@@ -400,7 +401,6 @@ def api_group():
 
 def api_student():
     student_ = []
-    print(request.args)
     if request.method == 'GET':
         student__ = db.session.query(Student)
         if 'not_discipline' in request.args:
@@ -408,7 +408,6 @@ def api_student():
             student__ = student__.filter(StudentDiscipline.student_id.is_(None))
         if 'group' in request.args:
             student__ = student__.filter(Student.group_id == request.args['group'])
-        print(str(student__))
         for student__ in student__.all():
             student_.append({
                 'user_id': student__.user_id,

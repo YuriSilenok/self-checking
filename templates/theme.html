@@ -22,6 +22,7 @@
             </select>
             <label class="col-lg-1" for="student">Студент</label>
             <select class="col-lg-3" class="form-select" name="student" id="student">
+                <option disabled selected value>Не выбран</option>
                 {% for student in students %}
                 <option value="{{ student.user_id }}">{{ student.last_name + ' ' + student.first_name[0] + '.' +
                     student.middle_name[0] + '.' }}
