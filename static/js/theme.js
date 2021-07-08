@@ -4,13 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
 function filterStudent(){
     group_id = document.getElementById('group').value
     var xhr = new XMLHttpRequest();
-    var url = "api/student?group="+group_id
+    var url = "api/student?group="+group_id+"&not_discipline"
     xhr.open("GET", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var json = JSON.parse(xhr.responseText);
-
             student_element = document.getElementById('student');
             while(document.getElementById('student').options.length > 0){
                 document.getElementById('student').options.remove(0);}

@@ -8,7 +8,7 @@ import subprocess
 
 from flask import redirect, request, send_file, render_template, session, url_for, Flask, jsonify
 import flask_sqlalchemy
-from sqlalchemy import func
+from sqlalchemy import func, and_
 
 UPLOAD_FOLDER = 'files'
 
@@ -102,7 +102,8 @@ def theme():
             'id': theme__.id,
             'name': theme__.name,
         })
-    return render_template('theme.html', themes=themes, discipline=discipline__.name, groups=api_group(),
+    discipline_ = {'name': discipline__.name, 'id': discipline__.id}
+    return render_template('theme.html', themes=themes, discipline=discipline_, groups=api_group(),
                            students=api_student())
 
 
@@ -309,7 +310,18 @@ def student_task():
     return render_template('student_task.html', student_task=student_task_)
 
 
-@app.route('/sign-in', methods=['POST', 'GET'])
+@app.route('/student_discipline', endpoint='student_discipline', methods=['POST'])
+@login_is_required
+def student_discipline():
+    print(request.args)
+    student_discipline__ = StudentDiscipline(student_id=request.form['student'],
+                                             discipline_id=request.form['discipline'])
+    db.session.add(student_discipline__)
+    db.session.commit()
+    return redirect(url_for('theme', discipline=request.form['discipline']))
+
+
+@app.route('/sign-in', endpoint='sign_in', methods=['POST', 'GET'])
 def sign_in():
     if request.method == 'POST':
         try:
@@ -333,7 +345,7 @@ def sign_in():
     return render_template('sign-in.html')
 
 
-@app.route('/sign-up', methods=['POST', 'GET'])
+@app.route('/sign-up', endpoint='sign_up', methods=['POST', 'GET'])
 def sign_up():
     if request.method == 'POST':
         try:
@@ -387,20 +399,26 @@ def api_group():
 
 
 def api_student():
-    result = []
+    student_ = []
+    print(request.args)
     if request.method == 'GET':
-        filter_by = {}
+        student__ = db.session.query(Student)
+        if 'not_discipline' in request.args:
+            student__ = student__.join(StudentDiscipline, Student.user_id == StudentDiscipline.student_id, isouter=True)
+            student__ = student__.filter(StudentDiscipline.student_id.is_(None))
         if 'group' in request.args:
-            filter_by['group_id'] = request.args['group']
-        for student__ in Student.query.filter_by(**filter_by).all():
-            result.append({
-                'id': student__.user_id,
+            student__ = student__.filter(Student.group_id == request.args['group'])
+        print(str(student__))
+        for student__ in student__.all():
+            student_.append({
+                'user_id': student__.user_id,
                 'first_name': student__.user.first_name,
                 'last_name': student__.user.last_name,
                 'middle_name': student__.user.middle_name,
+                'group_id': student__.group_id
             })
-        return result
-    return result
+        return student_
+    return student_
 
 
 class User(db.Model):
@@ -509,8 +527,12 @@ class StudentDiscipline(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('Student.user_id'), nullable=False)
     student = db.relationship('Student')
 
+    __table_args__ = (
+        db.UniqueConstraint('discipline_id', 'student_id'),
+    )
+
     def __repr__(self):
-        return f'<StudentDiscipline {self.id}>'
+        return f'<StudentDiscipline {self.student_id} {self.discipline_id}>'
 
 
 class Departament(db.Model):
