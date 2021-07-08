@@ -8,11 +8,13 @@ import subprocess
 
 from flask import redirect, request, send_file, render_template, session, url_for, Flask, jsonify
 import flask_sqlalchemy
-from sqlalchemy import func, and_
+from sqlalchemy import func
+from sqlalchemy.orm import aliased
+from sqlalchemy.sql.operators import isnot
 
 UPLOAD_FOLDER = 'files'
 
-app = Flask(__name__)
+app = Flask('app')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'super secret key'
@@ -162,7 +164,7 @@ def solving_id(id_):
     requirement__ = Requirement.query.filter_by(task_id=task__.id).all()
 
     if request.method == 'POST':
-        review__ = Review(review_status_id=1, solving_id=id_)
+        review__ = Review(solving_id=id_)
         if 'teacher' in session['user_type']:
             review__.teacher_id = session['user_id']
         if 'student' in session['user_type']:
@@ -172,6 +174,7 @@ def solving_id(id_):
         for key in request.form:
             if request.form[key]:
                 review__.review_status_id = 2
+
                 if 'requirement.' in key:
                     requirement_id = int(key.replace('requirement.', ''))
                     review_comment__ = ReviewComment(review_id=review__.id, requirement_id=requirement_id,
@@ -187,10 +190,10 @@ def solving_id(id_):
         elif solving__.review_count >= solving__.student_task.task.review_count:
             solving__.student_task.student_task_status_id = 4
         db.session.commit()
-
+        return redirect(url_for('solving'))
     task_ = {
         'name': task__.name,
-        'text': task__.text,
+        'link': task__.link,
         'file_path': solving__.file_path + '/' + solving__.file_name,
         'requirement': [],
     }
@@ -207,12 +210,20 @@ def solving_id(id_):
 def solving():
     if 'student' in session['user_type']:
         tasks_ = []
-        query = db.session.query(Solving, func.max(Solving.id).label('id'))
-        query = query.join(StudentTask, StudentTask.id == Solving.student_task_id)
-        query = query.filter(
-            (StudentTask.student_task_status_id == 3) & (StudentTask.student_id.isnot(session['user_id'])))
-        query = query.group_by(Solving.student_task_id)
-        for solving__, _ in query.all():
+
+        query__ = db.session.query(Solving)
+        query__ = query__.join(StudentTask, Solving.student_task_id == StudentTask.id)
+        query__ = query__.join(Review, Review.solving_id == Solving.id, isouter=True)
+        query__ = query__.where(
+            (StudentTask.student_task_status_id == 3) & (StudentTask.student_id != session['user_id']))
+        query__ = query__.group_by(Solving.student_task_id)
+
+        exists__ = db.session.query(Solving)
+        exists__ = exists__.join(StudentTask, Solving.student_task_id == StudentTask.id)
+        exists__ = exists__.join(Review, Review.solving_id == Solving.id, isouter=True)
+        exists__ = exists__.where((StudentTask.student_task_status_id == 3) & (Review.student_id == session['user_id']))
+
+        for solving__ in query__.where(~exists__.exists()).all():
             tasks_.append({
                 'discipline': solving__.student_task.task.theme.discipline.name,
                 'theme': solving__.student_task.task.theme.name,
@@ -223,14 +234,19 @@ def solving():
         return render_template('solving.html', tasks=tasks_)
     if 'teacher' in session['user_type']:
         tasks_ = []
-        for solving_ in db.session.query(Solving).join(StudentTask, StudentTask.id == Solving.student_task_id).filter(
-                (StudentTask.student_task_status_id == 4)).all():
+
+        query__ = db.session.query(Solving)
+        query__ = query__.join(StudentTask, Solving.student_task_id == StudentTask.id)
+        query__ = query__.where(StudentTask.student_task_status_id == 4)
+        query__ = query__.group_by(Solving.student_task_id)
+
+        for solving__ in query__.all():
             tasks_.append({
-                'discipline': solving_.student_task.task.theme.discipline.name,
-                'theme': solving_.student_task.task.theme.name,
-                'task': solving_.student_task.task.name,
-                'status': solving_.student_task.student_task_status.name,
-                'id': solving_.id
+                'discipline': solving__.student_task.task.theme.discipline.name,
+                'theme': solving__.student_task.task.theme.name,
+                'task': solving__.student_task.task.name,
+                'status': solving__.student_task.student_task_status.name,
+                'id': solving__.id
             })
         return render_template('solving.html', tasks=tasks_)
     else:
@@ -266,15 +282,15 @@ def student_task_id(id_):
     student_task_ = {
         'id': student_task__.task.id,
         'name': student_task__.task.name,
-        'text': student_task__.task.text,
+        'link': student_task__.task.link,
         'count_review': student_task__.task.review_count,
         'load_file': student_task__.student_task_status_id != 5,
         'requirement': [],
         'solving': [],
     }
 
-    for requirement_ in Requirement.query.filter_by(task_id=student_task__.task_id).all():
-        student_task_['requirement'].append(requirement_.text)
+    for requirement__ in Requirement.query.filter_by(task_id=student_task__.task_id).all():
+        student_task_['requirement'].append(requirement__.text)
 
     for solving_ in Solving.query.filter_by(student_task_id=student_task__.id).all():
         student_task_['solving'].append({
@@ -297,16 +313,17 @@ def student_task_id(id_):
 @login_is_required
 def student_task():
     student_task_ = []
-    for student_task_status in StudentTaskStatus.query.all():
-        for student_task__ in StudentTask.query.filter_by(student_id=session['user_id'],
-                                                          student_task_status_id=student_task_status.id).all():
-            student_task_.append({
-                'discipline': student_task__.task.theme.discipline.name,
-                'theme': student_task__.task.theme.name,
-                'task': student_task__.task.name,
-                'status': student_task__.student_task_status.name,
-                'id': student_task__.task.id
-            })
+    query__ = db.session.query(StudentTask)
+    query__ = query__.where(StudentTask.student_id == session['user_id'])
+    query__ = query__.order_by(StudentTask.student_task_status_id)
+    for student_task__ in query__.all():
+        student_task_.append({
+            'discipline': student_task__.task.theme.discipline.name,
+            'theme': student_task__.task.theme.name,
+            'task': student_task__.task.name,
+            'status': student_task__.student_task_status.name,
+            'id': student_task__.id
+        })
     return render_template('student_task.html', student_task=student_task_)
 
 
@@ -318,6 +335,12 @@ def student_discipline():
         student_discipline__ = StudentDiscipline(student_id=request.form['student'],
                                                  discipline_id=request.form['discipline'])
         db.session.add(student_discipline__)
+        task__ = db.session.query(Task)
+        task__ = task__.join(Theme, Theme.id == Task.theme_id)
+        task__ = task__.filter(Theme.discipline_id == request.form['discipline'])
+        for task__ in task__.all():
+            db.session.add(
+                StudentTask(student_id=student_discipline__.student_id, task_id=task__.id))
         db.session.commit()
     return redirect(url_for('theme', discipline=request.form['discipline'], not_discipline=''))
 
@@ -590,6 +613,7 @@ class Review(db.Model):
     __tablename__ = 'Review'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     teacher_id = db.Column(db.Integer, db.ForeignKey('Teacher.user_id'))
     teacher = db.relationship("Teacher")
@@ -597,7 +621,7 @@ class Review(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('Student.user_id'))
     student = db.relationship("Student")
 
-    review_status_id = db.Column(db.Integer, db.ForeignKey('ReviewStatus.id'), nullable=False)
+    review_status_id = db.Column(db.Integer, db.ForeignKey('ReviewStatus.id'), default=1, nullable=False)
     review_status = db.relationship("ReviewStatus")
 
     solving_id = db.Column(db.Integer, db.ForeignKey('Solving.id'), nullable=False)

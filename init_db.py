@@ -43,7 +43,6 @@ db.session.add(StudentTaskStatus(name='Требует исправлений'))
 db.session.add(StudentTaskStatus(name='Ожидает проверки студентом'))
 db.session.add(StudentTaskStatus(name='Ожидает проверки преподавателем'))
 db.session.add(StudentTaskStatus(name='Зачтено'))
-db.session.add(StudentTask(student_id=2, task_id=1))
 db.session.add(ReviewStatus(name='Одобрено'))
 db.session.add(ReviewStatus(name='Переделать'))
 
