@@ -6,8 +6,10 @@
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             {% if 'student' in user_type() %}
+<!--            Ваши работы. Нужно добавить цвет. Или заменить на кнопки.-->
             <li><a href="/student_task" class="nav-link px-2 link-dark">Ваши работы</a></li>
             {% endif %}
+<!--            Ваши работы. Нужно добавить цвет. Или заменить на кнопки.-->
             <li><a href="/solving" class="nav-link px-2 link-dark">Нужно проверить</a></li>
             {% if 'teacher' in user_type() %}
             <li><a href="/discipline" class="nav-link px-2 link-dark">Ваши дисциплины</a></li>
