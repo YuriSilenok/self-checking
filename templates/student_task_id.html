@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+{% extends 'maket.html' %}
 
 {% block center %}
 <div class="container">
@@ -14,10 +14,7 @@
         <div class="col-lg-10">{{ student_task.count_review }}</div>
     </div>
     <div class="row">
-        <h4>Ход работы</h4>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">{{ student_task.text}}</div>
+        <div class="col-lg-12"><a href="{{ student_task.link }}">Ссылка</a></div>
     </div>
     <div class="row">
         <h4>Требования</h4>
@@ -36,7 +33,7 @@
             <div class="form-group">
                 <label for="zip">Прикрепите архив zip</label>
                 <input type="file" id="zip" class="form-control" name="zip" accept="application/zip"
-                       required="required">
+                       required="required" size="20971520">
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary btn-lg" value="Загрузить">
