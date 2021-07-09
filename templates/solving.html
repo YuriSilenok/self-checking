@@ -1,18 +1,18 @@
-{% extends 'index.html' %}
+{% extends 'maket.html' %}
 
 {% block center %}
 <div class="container">
-  <div class="row">
-      <div class="col-lg-3">Дисциплина</div>
-      <div class="col-lg-3">Тема</div>
-      <div class="col-lg-3">Задача</div>
-  </div>
-  {% for task in tasks %}
-  <div class="row">
-      <div class="col-lg-3">{{ task.discipline }}</div>
-      <div class="col-lg-3">{{ task.theme }}</div>
-      <div class="col-lg-3"><a href="/solving/{{ task.id }}">{{ task.task }}</a></div>
-  </div>
-{% endfor %}
+    <div class="row">
+        <div class="col-lg-3">Дисциплина</div>
+        <div class="col-lg-3">Тема</div>
+        <div class="col-lg-3">Задача</div>
+    </div>
+    {% for task in tasks %}
+    <div class="row">
+        <div class="col-lg-3">{{ task.discipline }}</div>
+        <div class="col-lg-3">{{ task.theme }}</div>
+        <div class="col-lg-3"><a href="/solving/{{ task.id }}">{{ task.task }}</a></div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

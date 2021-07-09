@@ -150,10 +150,7 @@ def requirement():
     return render_template('requirement.html', data=data, task=task__.name)
 
 
-@app.route('/', endpoint='index')
-@login_is_required
-def index():
-    return render_template('index.html')
+
 
 
 @app.route('/solving/<int:id_>', endpoint='solving_id', methods=['GET', 'POST'])
@@ -206,6 +203,7 @@ def solving_id(id_):
 
 
 @app.route('/solving', endpoint='solving')
+@app.route('/')
 @login_is_required
 def solving():
     if 'student' in session['user_type']:
