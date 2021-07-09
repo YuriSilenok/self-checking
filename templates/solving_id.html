@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+{% extends 'maket.html' %}
 
 {% block center %}
 <div class="container">
@@ -10,10 +10,7 @@
         <div class="col-lg-10">{{ task.name }}</div>
     </div>
     <div class="row">
-        <h4>Ход работы</h4>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">{{ task.text}}</div>
+        <div class="col-lg-12"><a href="{{ task.link }}">Ссылка</a></div>
     </div>
     <div class="row">
         <h4>Решение</h4>
