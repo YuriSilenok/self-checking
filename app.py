@@ -6,7 +6,7 @@ import hashlib
 import os
 import subprocess
 
-from flask import redirect, request, send_file, render_template, session, url_for, Flask, jsonify
+from flask import redirect, request, send_file, render_template, session, url_for, Flask, jsonif, send_from_directory
 import flask_sqlalchemy
 from sqlalchemy import func
 from sqlalchemy.orm import aliased
@@ -32,6 +32,12 @@ def login_is_required(function):
             return redirect('/sign-in')
 
     return wrapper
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/files/<path:filename>', endpoint='files')
@@ -148,9 +154,6 @@ def requirement():
             'text': requirement__.text,
         })
     return render_template('requirement.html', data=data, task=task__.name)
-
-
-
 
 
 @app.route('/solving/<int:id_>', endpoint='solving_id', methods=['GET', 'POST'])
