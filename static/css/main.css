@@ -87,12 +87,12 @@ form .button input{
 .svg-background {
     width: 80px;
     height: 80px;
-    background: url('favicon.ico') no-repeat;
+    background: url('/favicon.ico') no-repeat;
     background-size: contain;}
 .pred{
     font-weight: normal;
     font-size: 30px;
-    line-height: 35px;7
+    line-height: 35px;
     text-align: center;}
 a{
     text-decoration:none;

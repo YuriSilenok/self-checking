@@ -347,7 +347,7 @@ def student_discipline():
     return redirect(url_for('theme', discipline=request.form['discipline'], not_discipline=''))
 
 
-@app.route('/sign-in', endpoint='sign_in', methods=['POST', 'GET'])
+@app.route('/sign-in', endpoint='sign-in', methods=['POST', 'GET'])
 def sign_in():
     if request.method == 'POST':
         try:
@@ -371,7 +371,7 @@ def sign_in():
     return render_template('sign-in.html')
 
 
-@app.route('/sign-up', endpoint='sign_up', methods=['POST', 'GET'])
+@app.route('/sign-up', endpoint='sign-up', methods=['POST', 'GET'])
 def sign_up():
     if request.method == 'POST':
         try:
