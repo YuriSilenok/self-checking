@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container">
+    <div class="input-box">
+        <div class="svg-background"></div>
+        <p class="pred">Горизонтальная<br>проверка</p>
+    </div>
+    <div class="title">{% block formtitel %}{% endblock %}
+    </div>
+    <div class="content">
+        {% block formcontent %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

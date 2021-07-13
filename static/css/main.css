@@ -1,0 +1,115 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body{
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: #F0F8FF;
+  }
+  .container{
+    width: 477px;
+    height: 664px;
+    background-color: #fff;
+    padding: 25px 30px;
+    border: 1px solid rgba(122, 201, 226, 0.52);
+    box-shadow: 0px 0px 100px rgba(44, 73, 127, 0.21);
+    border-radius: 10px;
+  }
+  .container .title{
+    margin-bottom: 53px;
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 42px;
+    letter-spacing: 0.05em;
+    color: #153C60;
+  }
+
+  .content form .user-details{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 20px 0 12px 0;
+  }
+ .input-box{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 45px;
+    width: calc(100% - 20px);
+  }
+  form .input-box span.details, p{
+    display: block;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: 0.05em;
+    color: #153C60;
+  }
+  .user-details .input-box input{
+    width: 252px;
+    height: 40px;
+    outline: none;
+    font-size: 16px;
+    padding-left: 10px;
+    background: #DADADA;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border:1px solid #DADADA;
+    border-radius: 10px;
+    margin-left: auto;
+  }
+   form .button{
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: center;
+    width: 285px;
+    height: 61px;
+     margin: 0 auto;
+     margin-bottom: 18px;}
+
+form .button input{
+     height: 100%;
+     width: 100%;
+     border-radius: 5px;
+     border: none;
+     color: #3B5165;
+     font-size: 18px;
+     font-weight: 500;
+     border: 1px solid #3B5165;
+     background-color: #fff;}
+.svg-background {
+    width: 80px;
+    height: 80px;
+    background: url('Group 32.svg') no-repeat;
+    background-size: contain;}
+.pred{
+    font-weight: normal;
+    font-size: 30px;
+    line-height: 35px;
+    text-align: center;}
+a{
+    text-decoration:none;
+    color:#0670D1;
+    margin-top: 5px;}
+.registrbutton{
+    width: 226px;
+    height: 61px;
+    background: #F0F8FF;
+    border: 2px solid #F0F8FF;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 20px;}
+.otstup29{
+  margin-top: 60px;}
+.prof{
+font-size: 20px;
+line-height: 28px;
+color: #3B5165;
+margin-right: auto;}
