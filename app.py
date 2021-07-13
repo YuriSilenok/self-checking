@@ -37,9 +37,8 @@ def login_is_required(function):
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico',
+                               mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/files/<path:filename>', endpoint='files')
@@ -156,9 +155,6 @@ def requirement():
             'text': requirement__.text,
         })
     return render_template('requirement.html', data=data, task=task__.name)
-
-
-
 
 
 @app.route('/solving/<int:id_>', endpoint='solving_id', methods=['GET', 'POST'])
