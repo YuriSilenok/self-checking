@@ -6,12 +6,10 @@ import hashlib
 import os
 import subprocess
 
-from flask import redirect, request, send_file, render_template, session, url_for, Flask, send_from_directory
+from flask import redirect, request, send_file, render_template, session, url_for, Flask, send_from_directory, jsonify
 
 import flask_sqlalchemy
 from sqlalchemy import func
-from sqlalchemy.orm import aliased
-from sqlalchemy.sql.operators import isnot
 
 UPLOAD_FOLDER = 'files'
 
@@ -212,27 +210,30 @@ def solving_id(id_):
 def solving():
     if 'student' in session['user_type']:
         tasks_ = []
+        my_st__ = db.session.query(StudentTask)\
+            .where((StudentTask.student_id == session['user_id']) & (StudentTask.student_task_status_id != 5))\
+            .subquery('t')
+        query__ = db.session.query(StudentTask, Solving, func.max(Solving.id))\
+            .join(Solving, Solving.student_task_id == StudentTask.id)\
+            .join(Review, Review.solving_id == Solving.id, isouter=True)\
+            .join(my_st__, my_st__.c.task_id == StudentTask.task_id)\
+            .where((StudentTask.student_task_status_id == 3) & (StudentTask.student_id != session['user_id']))\
+            .group_by(StudentTask.id)
 
-        # query__ = db.session.query(Solving)
-        # query__ = query__.join(StudentTask, Solving.student_task_id == StudentTask.id)
-        # query__ = query__.join(Review, Review.solving_id == Solving.id, isouter=True)
-        # query__ = query__.where(
-        #     (StudentTask.student_task_status_id == 3) & (StudentTask.student_id != session['user_id']))
-        # query__ = query__.group_by(Solving.student_task_id)
-        #
-        # exists__ = db.session.query(Solving)
-        # exists__ = exists__.join(StudentTask, Solving.student_task_id == StudentTask.id)
-        # exists__ = exists__.join(Review, Review.solving_id == Solving.id, isouter=True)
-        # exists__ = exists__.where((StudentTask.student_task_status_id == 3) & (Review.student_id == session['user_id']))
-        #
-        # for solving__ in query__.where(~exists__.exists()).all():
-        #     tasks_.append({
-        #         'discipline': solving__.student_task.task.theme.discipline.name,
-        #         'theme': solving__.student_task.task.theme.name,
-        #         'task': solving__.student_task.task.name,
-        #         'status': solving__.student_task.student_task_status.name,
-        #         'id': solving__.id
-        #     })
+        for query__ in query__.all():
+            not_my = True
+            for r__ in db.session.query(Review).where(query__[1].id == Review.solving_id).all():
+                if r__.student.user.id == session['user_id']:
+                    not_my = False
+                    break
+            if not_my:
+                tasks_.append({
+                    'discipline': query__[0].task.theme.discipline.name,
+                    'theme': query__[0].task.theme.name,
+                    'task': query__[0].task.name,
+                    'status': query__[0].student_task_status.name,
+                    'id': query__[1].id,
+                })
         return render_template('solving.html', tasks=tasks_)
     if 'teacher' in session['user_type']:
         tasks_ = []
