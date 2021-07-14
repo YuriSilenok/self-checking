@@ -213,26 +213,26 @@ def solving():
     if 'student' in session['user_type']:
         tasks_ = []
 
-        query__ = db.session.query(Solving)
-        query__ = query__.join(StudentTask, Solving.student_task_id == StudentTask.id)
-        query__ = query__.join(Review, Review.solving_id == Solving.id, isouter=True)
-        query__ = query__.where(
-            (StudentTask.student_task_status_id == 3) & (StudentTask.student_id != session['user_id']))
-        query__ = query__.group_by(Solving.student_task_id)
-
-        exists__ = db.session.query(Solving)
-        exists__ = exists__.join(StudentTask, Solving.student_task_id == StudentTask.id)
-        exists__ = exists__.join(Review, Review.solving_id == Solving.id, isouter=True)
-        exists__ = exists__.where((StudentTask.student_task_status_id == 3) & (Review.student_id == session['user_id']))
-
-        for solving__ in query__.where(~exists__.exists()).all():
-            tasks_.append({
-                'discipline': solving__.student_task.task.theme.discipline.name,
-                'theme': solving__.student_task.task.theme.name,
-                'task': solving__.student_task.task.name,
-                'status': solving__.student_task.student_task_status.name,
-                'id': solving__.id
-            })
+        # query__ = db.session.query(Solving)
+        # query__ = query__.join(StudentTask, Solving.student_task_id == StudentTask.id)
+        # query__ = query__.join(Review, Review.solving_id == Solving.id, isouter=True)
+        # query__ = query__.where(
+        #     (StudentTask.student_task_status_id == 3) & (StudentTask.student_id != session['user_id']))
+        # query__ = query__.group_by(Solving.student_task_id)
+        #
+        # exists__ = db.session.query(Solving)
+        # exists__ = exists__.join(StudentTask, Solving.student_task_id == StudentTask.id)
+        # exists__ = exists__.join(Review, Review.solving_id == Solving.id, isouter=True)
+        # exists__ = exists__.where((StudentTask.student_task_status_id == 3) & (Review.student_id == session['user_id']))
+        #
+        # for solving__ in query__.where(~exists__.exists()).all():
+        #     tasks_.append({
+        #         'discipline': solving__.student_task.task.theme.discipline.name,
+        #         'theme': solving__.student_task.task.theme.name,
+        #         'task': solving__.student_task.task.name,
+        #         'status': solving__.student_task.student_task_status.name,
+        #         'id': solving__.id
+        #     })
         return render_template('solving.html', tasks=tasks_)
     if 'teacher' in session['user_type']:
         tasks_ = []
