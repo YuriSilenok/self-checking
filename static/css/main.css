@@ -22,7 +22,7 @@
     border-radius: 10px;
   }
   .container .title{
-    margin-bottom: 53px;
+    margin-bottom: 60px;
     position: relative;
     text-align: center;
     font-weight: bold;
@@ -45,6 +45,15 @@
     margin-bottom: 45px;
     width: calc(100% - 20px);
   }
+.input-boxreg{
+    display: flex;
+     flex-direction: column;
+     row-gap: 15px;
+    justify-content: space-around;
+    align-items: center;
+    width: calc(100% - 20px);
+    margin-bottom:5px;
+  }
   form .input-box span.details, p{
     display: block;
     font-weight: 500;
@@ -53,7 +62,7 @@
     letter-spacing: 0.05em;
     color: #153C60;
   }
-  .user-details .input-box input{
+  .user-details  input{
     width: 100%;
     height: 40px;
     outline: none;
@@ -106,10 +115,11 @@ a{
     box-sizing: border-box;
     border-radius: 10px;
     font-size: 20px;}
-.otstup29{
-  margin-top: 60px;}
+.otstup90{
+  margin-top: 80px;}
 .prof{
 font-size: 20px;
 line-height: 28px;
 color: #3B5165;
-margin-right: auto;}
+margin: auto;
+}

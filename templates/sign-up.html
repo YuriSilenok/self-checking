@@ -1,60 +1,22 @@
-{% extends 'base.html' %}
-
+{% extends 'sign.html' %}
+{% block formtitel %}Регистрация{% endblock %}
+{% block formcontent %}
 {% block scripts %}
 <script language="JavaScript" type="text/javascript" src={{url_for('static', filename='js/registration.js' )}}></script>
 {% endblock %}
-
-
-{% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4">
-            <form method="POST">
-                <div class="form-group">
-                    <label for="last_name">Ваша фамилия</label>
-                    <input type="text" class="form-control" id="last_name" name="last_name"
-                           placeholder="Введите Вашу фамилию" required="required">
-                </div>
-                <div class="form-group">
-                    <label for="first_name">Ваше имя</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name"
-                           placeholder="Введите Ваше имя" required="required">
-                </div>
-                <div class="form-group">
-                    <label for="middle_name">Адрес электронной почты</label>
-                    <input type="text" class="form-control" id="middle_name" name="middle_name"
-                           placeholder="Введите Ваше отчество">
-                </div>
-                <div class="form-group">
-                    <label for="email">Адрес электронной почты</label>
-                    <input type="email" class="form-control" id="email" name="email" aria-describedby="email_help"
-                           placeholder="Введите адрес электнно почты" required="required">
-                    <small id="email_help" class="from-text text-muted">Мы никогда никому не передадим вашу электронную
-                        почту.</small>
-                </div>
-                <div class="form-group">
-                    <label for="password1">Пароль</label>
-                    <input type="password" class="form-control" id="password1" name="password"
-                           placeholder="Введите пароль" required="required">
-                </div>
-                <div class="form-group">
-                    <label for="password2">Повторите пароль</label>
-                    <input type="password" class="form-control" id="password2" placeholder="Повторите пароль"
-                           required="required">
-                </div>
-                <div class="form-group">
-                    <label class="form-check-label"><input type="checkbox" required="required"> Я подверждаю что меня
-                        принудили зарегистрироваться здесь</label>
-                </div>
-                <div class="form-group">
-                    <button disabled="True" type="submit" id="btn_reg" class="btn btn-primary btn-lg">
-                        Зарегистрироваться
-                    </button>
-                </div>
-
-            </form>
+ <form action="#">
+        <div class="user-details">
+          <div class="input-boxreg">
+            <input type="text" placeholder="Введите Имя" required id="first_name" name="first_name">
+            <input type="text" placeholder="Введите Фамилию" required id="last_name" name="last_name">
+            <input type="text" placeholder="Введите Отчество" required id="middle_name" name="middle_name">
+            <input type="email" placeholder="Введите почту" id="email" name="email" aria-describedby="email_help" required>
+            <input type="password" placeholder="Придумайте пароль" required id="password1" name="password">
+            <input type="password" placeholder="Повторите пароль" required id="password2" >
+          </div>
         </div>
-    </div>
-</div>
+        <div class="button">
+          <input type="submit" value= "Создать профиль" id="btn_reg">
+        </div>
+      </form>
 {% endblock %}
