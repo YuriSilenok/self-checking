@@ -38,12 +38,14 @@ db.session.add(
          link='https://docs.google.com/document/d/12eNIkKQMNFFMKclngzeCvHl3nISay9R6UvPJLdhQeQQ/edit?usp=sharing',
          theme_id=1, review_count=5))
 db.session.add(Requirement(text='Первый коммит содержит игнорирование файлов с расширением zip', task_id=1))
+db.session.add(Requirement(text='Второй коммит содержит игнорирование файлов с расширением zip', task_id=1))
 db.session.add(StudentTaskStatus(name='Не начата'))
 db.session.add(StudentTaskStatus(name='Требует исправлений'))
 db.session.add(StudentTaskStatus(name='Ожидает проверки студентом'))
 db.session.add(StudentTaskStatus(name='Ожидает проверки преподавателем'))
 db.session.add(StudentTaskStatus(name='Зачтено'))
 db.session.add(StudentTask(student_id=2, task_id=1))
+db.session.add(StudentDiscipline(student_id=2, discipline_id=1))
 db.session.add(ReviewStatus(name='Одобрено'))
 db.session.add(ReviewStatus(name='Переделать'))
 

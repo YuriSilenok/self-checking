@@ -179,8 +179,8 @@ def solving_id(id_):
                     review_comment__ = ReviewComment(review_id=review__.id, requirement_id=requirement_id,
                                                      message=request.form[key])
                     db.session.add(review_comment__)
-                if 'common' in key:
-                    review__.message = request.form[key]
+            if 'common' in key:
+                review__.message = request.form[key]
         solving__.review_count += 1
         if review__.review_status_id == 2:
             solving__.student_task.student_task_status_id = 2
@@ -210,29 +210,29 @@ def solving_id(id_):
 def solving():
     if 'student' in session['user_type']:
         tasks_ = []
-        my_st__ = db.session.query(StudentTask)\
-            .where((StudentTask.student_id == session['user_id']) & (StudentTask.student_task_status_id != 5))\
+        my_st__ = db.session.query(StudentTask) \
+            .where((StudentTask.student_id == session['user_id']) & (StudentTask.student_task_status_id != 5)) \
             .subquery('t')
-        query__ = db.session.query(StudentTask, Solving, func.max(Solving.id))\
-            .join(Solving, Solving.student_task_id == StudentTask.id)\
-            .join(Review, Review.solving_id == Solving.id, isouter=True)\
-            .join(my_st__, my_st__.c.task_id == StudentTask.task_id)\
-            .where((StudentTask.student_task_status_id == 3) & (StudentTask.student_id != session['user_id']))\
+        st__ = db.session.query(StudentTask, Solving, func.max(Solving.id)) \
+            .join(Solving, Solving.student_task_id == StudentTask.id) \
+            .join(Review, Review.solving_id == Solving.id, isouter=True) \
+            .join(my_st__, my_st__.c.task_id == StudentTask.task_id) \
+            .where((StudentTask.student_task_status_id == 3) & (StudentTask.student_id != session['user_id'])) \
             .group_by(StudentTask.id)
 
-        for query__ in query__.all():
+        for st__ in st__.all():
             not_my = True
-            for r__ in db.session.query(Review).where(query__[1].id == Review.solving_id).all():
+            for r__ in db.session.query(Review).where(st__[1].id == Review.solving_id).all():
                 if r__.student.user.id == session['user_id']:
                     not_my = False
                     break
             if not_my:
                 tasks_.append({
-                    'discipline': query__[0].task.theme.discipline.name,
-                    'theme': query__[0].task.theme.name,
-                    'task': query__[0].task.name,
-                    'status': query__[0].student_task_status.name,
-                    'id': query__[1].id,
+                    'discipline': st__[0].task.theme.discipline.name,
+                    'theme': st__[0].task.theme.name,
+                    'task': st__[0].task.name,
+                    'status': st__[0].student_task_status.name,
+                    'id': st__[1].id,
                 })
         return render_template('solving.html', tasks=tasks_)
     if 'teacher' in session['user_type']:
@@ -254,6 +254,22 @@ def solving():
         return render_template('solving.html', tasks=tasks_)
     else:
         return redirect('/')
+
+
+@app.route('/review/<int:id_>', endpoint='review_id')
+@login_is_required
+def review_id(id_):
+    review__ = db.session.query(Review).where(Review.id == id_).first()
+    data = {
+        'message': review__.message,
+        'requirement': [],
+    }
+    for review_comment__ in db.session.query(ReviewComment).where(ReviewComment.review_id == review__.id).all():
+        data['requirement'].append({
+            'text': review_comment__.requirement.text,
+            'message': review_comment__.message,
+        })
+    return render_template('review_id.html', review=data)
 
 
 @app.route('/student_task/<int:id_>', endpoint='student_task_id', methods=['POST', 'GET'])
@@ -301,13 +317,15 @@ def student_task_id(id_):
             'file_path': solving_.file_path,
             'review_count': solving_.review_count,
             'created_at': solving_.created_at,
-            'review': []
         })
-        for review_ in Review.query.filter_by(solving_id=solving_.id).all():
-            student_task_['solving'][:1].append({
-                'status': review_.review_status.name,
-                'id': review_.id,
-            })
+        review__ = Review.query.where((Review.solving_id == solving_.id) & (Review.review_status_id == 2)).first()
+        review_ = {}
+        if review__:
+            review_ = {
+                'status': review__.review_status.name,
+                'id': review__.id,
+            }
+        student_task_['solving'][-1]['review'] = review_
 
     return render_template('student_task_id.html', student_task=student_task_)
 
@@ -617,6 +635,7 @@ class Review(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    message = db.Column(db.String(256))
 
     teacher_id = db.Column(db.Integer, db.ForeignKey('Teacher.user_id'))
     teacher = db.relationship("Teacher")

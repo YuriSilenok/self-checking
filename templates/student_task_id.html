@@ -47,17 +47,15 @@
     <div class="row">
         <div class="col-lg-3"> Загружено</div>
         <div class="col-lg-3"> Количество проверок</div>
-        <div class="col-lg-3"> Проверки</div>
+        <div class="col-lg-3"> Замечание</div>
     </div>
     {% for solving in student_task.solving %}
     <div class="row">
         <div class="col-lg-3">{{ solving.created_at }}</div>
         <div class="col-lg-3">{{ solving.review_count }}</div>
-        <div class="col-lg-6">
-            {% for review in solving.review %}
-            {{ review.status }}
-            {% endfor %}
-        </div>
+        {% if solving.review %}
+        <div class="col-lg-6"><a href="{{ url_for('review_id', id_=solving.review.id) }}">{{ solving.review.status }}</a></div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
