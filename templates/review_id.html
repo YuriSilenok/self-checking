@@ -1,0 +1,17 @@
+{% extends 'maket.html' %}
+
+{% block center %}
+<div class="container">
+    {% for requirement in review.requirement %}
+    <div class="row">
+        <div class="col-lg-6">{{ requirement.text }}</div>
+        <div class="col-lg-6">{{ requirement.message }}</div>
+    </div>
+    {% endfor %}
+    {% if review.message %}
+    <div class="row">
+        <div class="col-lg-6">{{ review.message }}</div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
