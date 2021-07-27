@@ -1,18 +1,20 @@
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        {% if 'student' in user_type() %}
-        <li><a href="/student_task" class="nav-link px-2 link-dark">Ваши работы</a></li>
-        {% endif %}
-        {% if 'student' in user_type() or 'teacher' in user_type() %}
-        <li><a href="/solving" class="nav-link px-2 link-dark">Нужно проверить</a></li>
-        {% endif %}
-        {% if 'teacher' in user_type() %}
-        <li><a href="/discipline" class="nav-link px-2 link-dark">Ваши дисциплины</a></li>
-        {% endif %}
-    </ul>
-    <div class="col-md-8 text-end">
+<header>
+    <div class="pointsinheader">
+        <div class="points">
+            {% if 'student' in user_type() %}
+            <a href="/student_task" class="onepoint">Мои работы</a>
+            {% endif %}
+            {% if 'student' in user_type() or 'teacher' in user_type() %}
+            <a href="/solving" class="onepoint active">Ожидает проверки</a>
+            {% endif %}
+            {% if 'teacher' in user_type() %}
+            <a href="/discipline" class="onepoint">Мои дисциплины</a>
+            {% endif %}
+        </div>
+    <div class="helloandbye">
         Добро пожаловать, {{ first_name() }} <a href="/logout">
-        <button type="button" class="btn btn-outline-primary me-2">Logout</button>
+        <button type="button" class="logoutbutton">Выход</button>
     </a>
     </div>
+    </div>>
 </header>
