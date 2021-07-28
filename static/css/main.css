@@ -33,6 +33,11 @@ background-color:white;
 .points{
 margin-left:160px;
 }
+@media screen and (max-width: 1200px) {
+.points{
+margin-left:20px;
+}
+}
 .helloandbye{
 margin-right:40px;
 margin-left:auto;
@@ -51,13 +56,13 @@ text-decoration:none;
 .logoutbutton{
 margin-left:60px;
 font-size:22px;
-font-style:bold;
 height:45px;
 width:130px;
 background-color:#DAE6E5;
 border-radius:10px;
 border:2px solid #DAE6E5;
-font-weight:300;
+font-weight:400;
+color: #153C60;
 }
 .active{
 font-weight:700;
