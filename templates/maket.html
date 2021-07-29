@@ -2,7 +2,7 @@
 {% block head %}<link rel="stylesheet" href={{url_for('static', filename='css/main.css' )}} integrity="undefined" crossorigin="anonymous">{% endblock %}
 {% block body %}
 <div class="container">
-    <div class="row novisible">{{ version() }}</div>
+    <div class="row no-visible">{{ version() }}</div>
     {% include 'header.html' %}
 </div>
 <div class="container">

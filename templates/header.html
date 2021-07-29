@@ -3,18 +3,18 @@
         <div class="points">
             {% if 'student' in user_type() %}
             <a href="/student_task"
-               class="onepoint {% if url_for(request.endpoint) == '/student_task' %}active{% endif %}">Мои работы</a>
+               class="one-point {% if url_for(request.endpoint) == '/student_task' %}active{% endif %}">Мои работы</a>
             {% endif %}
             {% if 'student' in user_type() or 'teacher' in user_type() %}
-            <a href="/solving" class="onepoint {% if url_for(request.endpoint) == '/solving' %}active{% endif %}">Ожидает
+            <a href="/solving" class="one-point {% if url_for(request.endpoint) == '/solving' %}active{% endif %}">Ожидает
                 проверки</a>
             {% endif %}
             {% if 'teacher' in user_type() %}
-            <a href="/discipline" class="onepoint {% if url_for(request.endpoint) == '/discipline' %}active{% endif %}">Мои
+            <a href="/discipline" class="one-point {% if url_for(request.endpoint) == '/discipline' %}active{% endif %}">Мои
                 дисциплины</a>
             {% endif %}
         </div>
-        <div class="helloandbye">
+        <div class="hello-and-bye">
             Добро пожаловать, {{ first_name() }} <a href="/logout">
             <button type="button" class="common-button logout">Выход</button>
         </a>
