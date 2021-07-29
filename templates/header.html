@@ -1,10 +1,6 @@
 <header>
     <div class="points-in-header">
         <div class="points">
-            {% if 'student' in user_type() %}
-            <a href="/student_task"
-               class="onepoint {% if url_for(request.endpoint) == '/student_task' %}active{% endif %}">Мои работы</a>
-            {% endif %}
             {% if 'student' in user_type() or 'teacher' in user_type() %}
             <a href="/solving" class="onepoint {% if url_for(request.endpoint) == '/solving' %}active{% endif %}">Ожидает
                 проверки</a>
@@ -12,6 +8,10 @@
             {% if 'teacher' in user_type() %}
             <a href="/discipline" class="onepoint {% if url_for(request.endpoint) == '/discipline' %}active{% endif %}">Мои
                 дисциплины</a>
+            {% endif %}
+            {% if 'student' in user_type() %}
+            <a href="/student_task"
+               class="onepoint {% if url_for(request.endpoint) == '/student_task' %}active{% endif %}">Мои работы</a>
             {% endif %}
         </div>
         <div class="helloandbye">
