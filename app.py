@@ -48,7 +48,7 @@ def files(filename):
 @app.context_processor
 def global_data():
     def first_name():
-        return session.get('first_name', 'Гость')
+        return f"{session.get('first_name', 'Гость')} {session.get('last_name', '')}"
 
     def user_type():
         return session.get('user_type', [])
@@ -65,6 +65,8 @@ def logout():
         session.pop('user_id')
     if 'first_name' in session:
         session.pop('first_name')
+    if 'last_name' in session:
+        session.pop('last_name')
     if 'user_type' in session:
         session.pop('user_type')
 
@@ -375,6 +377,7 @@ def sign_in():
                 if user.password_hash == hashlib.sha1(request.form['password'].encode('utf-8')).hexdigest():
                     session['user_id'] = user.id
                     session['first_name'] = user.first_name
+                    session['last_name'] = user.last_name
                     session['user_type'] = []
                     if Student.query.filter_by(user_id=user.id).all():
                         session['user_type'].append('student')
