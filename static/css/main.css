@@ -23,7 +23,7 @@ header{
     width:100%;
     background-color:white;
 }
-.pointsinheader{
+.points-in-header{
     min-height:65px;
     display:flex;
     align-items:center;
@@ -51,15 +51,19 @@ header{
 a{
     text-decoration:none;
 }
-.logoutbutton{
+.logout{
     margin-left:60px;
     font-size:22px;
     height:45px;
     width:130px;
     background-color:#DAE6E5;
-    border-radius:10px;
     border:2px solid #DAE6E5;
     font-weight:400;
+}
+.common-button{
+    height:40px;
+    width:150px;
+    border-radius:10px;
     color: #153C60;
 }
 .active{
