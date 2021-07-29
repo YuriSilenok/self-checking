@@ -430,7 +430,7 @@ def api(request_):
     if request_ in switch:
         return jsonify(switch[request_]())
     else:
-        return jsonify(error='Нельзя сотварить здесь')
+        return jsonify(error='Нельзя сотворить здесь')
 
 
 def api_group():
