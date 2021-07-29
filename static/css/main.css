@@ -8,7 +8,7 @@
     width:100%;
     margin:0;
 }
-.novisible{
+.no-visible{
     visibility: hidden;
     position:absolute;
 }
@@ -36,13 +36,13 @@ header{
 @media screen and (max-width: 1200px) {
     .points{margin-left:20px;}
 }
-.helloandbye{
+.hello-and-bye{
     margin-right:40px;
     margin-left:auto;
     margin-top:auto;
     margin-bottom:auto;
 }
-.onepoint{
+.one-point{
     margin-right:70px;
     display:inline-block;
     color: #3B5165;
