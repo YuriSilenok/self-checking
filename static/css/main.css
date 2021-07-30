@@ -1,6 +1,5 @@
  body{
     font-family: 'Roboto', sans-serif;
-    height: 100vh;
     padding: 0px;
     background: #F0F8FF;
 }
@@ -17,6 +16,12 @@
     margin:0px;
     padding:0px;
     width:100%;
+}
+.container-screen{
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding:40px 0px;
 }
 header{
     height:65px;
@@ -69,3 +74,62 @@ a{
 .active{
     font-weight:700;
 }
+/* Стили для таблиц         */
+
+.table {
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    gap: 1px;
+    margin: auto;
+    border-radius: 10px;
+    width:auto;
+    box-shadow: 0 0 100px 0 rgba(44, 73, 127, 0.21);
+}
+
+.cell {
+    min-height: 50px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    overflow: hidden;
+    text-align: center;
+    padding:10px;
+}
+.cell:first-of-type, .cell:nth-of-type(2), .cell:nth-of-type(3){
+  transform: translate(0px,-0.5px);
+  background-color: #3b5165;
+  color: white;
+  font-size: 24px;
+  padding:0px;
+}
+.cell:first-of-type{
+border-top-left-radius: 10px;
+}
+.cell:last-of-type{
+border-bottom-right-radius: 10px;
+}
+.cell:nth-of-type(3){
+border-top-right-radius: 10px;
+}
+.cell:nth-last-of-type(3){
+border-bottom-left-radius: 10px;
+}
+.notification {
+  width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  font-size: 18px;
+  margin: auto;
+  border: 1px solid none;
+  background-color: white;
+  box-shadow: 0 0 100px 0 rgba(44, 73, 127, 0.21);
+  border-radius: 10px;
+  font-size: 22px;
+  color: #3b5165;
+}
+
+
