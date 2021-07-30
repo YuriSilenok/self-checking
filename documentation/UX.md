@@ -16,6 +16,6 @@
   - Проверка работы студента преподавателем (https://github.com/YuriSilenok/self-checking/issues/13)
   - Загрузка решения на проверку (https://github.com/YuriSilenok/self-checking/issues/16)
   - Проверка работы студента студентом (https://github.com/YuriSilenok/self-checking/issues/17)
-4. **Страницы, чьи названия являются пунктами меню, который находится в *Header* :**
+4. **Страницы, чьи названия являются пунктами меню, которое находится в *Header* :**
   - Просмотр списка "Нужно проверить" (https://github.com/YuriSilenok/self-checking/issues/34)
   - Список дисциплин (https://github.com/YuriSilenok/self-checking/issues/49)
