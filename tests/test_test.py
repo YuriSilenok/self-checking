@@ -1,5 +1,5 @@
 import pytest
 
 
-def test_test1(browser):
-    print('test1_')
+def test_test1():
+    assert True

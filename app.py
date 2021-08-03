@@ -254,8 +254,7 @@ def solving():
                 'id': solving__.id
             })
         return render_template('solving.html', tasks=tasks_)
-    else:
-        return redirect('/')
+    return redirect('/')
 
 
 @app.route('/review/<int:id_>', endpoint='review_id')
@@ -714,4 +713,5 @@ class Requirement(db.Model):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()
