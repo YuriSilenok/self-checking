@@ -77,15 +77,16 @@ a{
 /* Стили для таблиц         */
 
 .table {
-    display: grid;
-    grid-template-columns: 300px 300px 300px;
     gap: 1px;
     margin: auto;
     border-radius: 10px;
     width:auto;
     box-shadow: 0 0 100px 0 rgba(44, 73, 127, 0.21);
 }
-
+.tree-columns{
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+}
 .cell {
     min-height: 50px;
     background-color: white;
@@ -116,19 +117,41 @@ a{
 .cell:nth-last-of-type(3){
     border-bottom-left-radius: 10px;
 }
-.notification {
+.mini-form {
     width: 900px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     min-height: 50px;
     margin: auto;
     border: 1px solid none;
-    background-color: white;
     box-shadow: 0 0 100px 0 rgba(44, 73, 127, 0.21);
     border-radius: 10px;
+    padding:10px 20px;
+}
+.notification{
+    background-color: white;
     font-size: 22px;
     color: #3b5165;
+}
+.add-form{
+     background-color: #3B5165;
+     min-height: 70px;
+}
+.textbox{
+    height: 35px;
+    width: 82%;
+    border-radius: 10px;
+    border: 1px solid white;
+}
+.add-button{
+    height:35px;
+    width: 140px;
+    border-radius: 10px;
+    border: 1px solid #DADADA;
+    background-color: #DADADA;
+    color: #3B5165;
+    font-size: medium;
 }
 
 

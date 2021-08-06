@@ -2,7 +2,7 @@
 
 {% block center %}
 <div class="container-screen">
-    <div class="table">
+    <div class="table tree-columns">
         <div class="cell">Дисциплина</div>
         <div class="cell">Тема</div>
         <div class="cell">Название задачи</div>
@@ -15,6 +15,6 @@
         <div class="col-lg-3"><a href="/solving/{{ task.id }}">{{ task.task }}</a></div>
         {% endfor %}
     </div>
-    <div class="notification no-visible">На данный момент работы, требующей вашей проверки, нет. Отдыхайте.</div>
+    <div class="notification mini-form no-visible">На данный момент работы, требующей вашей проверки, нет. Отдыхайте.</div>
 </div>
 {% endblock %}

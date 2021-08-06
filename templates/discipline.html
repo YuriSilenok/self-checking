@@ -1,13 +1,11 @@
 {% extends 'maket.html' %}
 
 {% block center %}
-<div class="container">
+<div class="container-screen">
     <form method="post">
-        <h4>Добавить дисциплину</h4>
-        <div class="row">
-            <label class="col-lg-5" for="name">Название</label>
-            <input class="col-lg-5" type="text" name="name" id="name">
-            <input class="col-lg-1 offset-lg-1" id="submit" type="submit" value="Добавить">
+        <div class="mini-form add-form">
+            <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
+            <input class="add-button" id="submit" type="submit" value="Добавить">
         </div>
     </form>
 
