@@ -83,6 +83,10 @@ a{
     width:auto;
     box-shadow: 0 0 100px 0 rgba(44, 73, 127, 0.21);
 }
+.one-column{
+    display: grid;
+    grid-template-columns: 900px;
+}
 .tree-columns{
     display: grid;
     grid-template-columns: 300px 300px 300px;
@@ -98,12 +102,19 @@ a{
     text-align: center;
     padding:10px;
 }
-.cell:first-of-type, .cell:nth-of-type(2), .cell:nth-of-type(3){
+.tree-columns > .cell:first-of-type, .tree-columns > .cell:nth-of-type(2), .tree-columns > .cell:nth-of-type(3),
+.one-column > .cell:first-of-type {
   transform: translate(0,-0.5px);
   background-color: #3b5165;
   color: white;
   font-size: 24px;
   padding:0;
+}
+.one-column .cell:first-of-type{
+    border-top-right-radius: 10px;
+}
+.one-column .cell:last-of-type{
+    border-bottom-left-radius: 10px;
 }
 .cell:first-of-type{
     border-top-left-radius: 10px;
@@ -111,10 +122,10 @@ a{
 .cell:last-of-type{
     border-bottom-right-radius: 10px;
 }
-.cell:nth-of-type(3){
+.tree-columns .cell:nth-of-type(3){
     border-top-right-radius: 10px;
 }
-.cell:nth-last-of-type(3){
+.tree-columns .cell:nth-last-of-type(3){
     border-bottom-left-radius: 10px;
 }
 .mini-form {
@@ -133,6 +144,12 @@ a{
     background-color: white;
     font-size: 22px;
     color: #3b5165;
+}
+.add{
+margin:auto auto 20px auto;
+}
+.after-add{
+margin:10px auto auto auto;
 }
 .add-form{
      background-color: #3B5165;

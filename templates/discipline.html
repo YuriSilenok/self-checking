@@ -2,20 +2,23 @@
 
 {% block center %}
 <div class="container-screen">
-    <form method="post">
+    <form method="post" class="add">
         <div class="mini-form add-form">
             <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
             <input class="add-button" id="submit" type="submit" value="Добавить">
         </div>
     </form>
 
-    <div class="row">
-        <div class="col-lg-3">Дисциплина</div>
+    <div class="table one-column after-add">
+        <div class="cell">Дисциплины</div>
+        <div class="cell">АИП</div>
+        <div class="cell">АИП</div>
+        <div class="cell">АИП</div>
+        <div class="cell">АИП</div>
+        {% for discipline in data %}
+        <div class="cell"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
+            discipline.name }}</a></div>
+        {% endfor %}
     </div>
-    {% for discipline in data %}
-    <div class="row">
-        <div class="col-lg-12"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{ discipline.name }}</a></div>
-    </div>
-    {% endfor %}
+    {% endblock %}
 </div>
-{% endblock %}
