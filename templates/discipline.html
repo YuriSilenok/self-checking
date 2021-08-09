@@ -11,12 +11,10 @@
 
     <div class="table one-column after-add">
         <div class="cell">Дисциплины</div>
-        <div class="cell">АИП</div>
-        <div class="cell">АИП</div>
-        <div class="cell">АИП</div>
-        <div class="cell">АИП</div>
+        <div class="cell justify-left">АИП</div>
+        <div class="cell justify-left">АИП</div>
         {% for discipline in data %}
-        <div class="cell"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
+        <div class="cell justify-left"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
             discipline.name }}</a></div>
         {% endfor %}
     </div>

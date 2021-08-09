@@ -162,6 +162,7 @@ margin-top:10px;
     width: 82%;
     border-radius: 10px;
     border: 1px solid white;
+    outline:none;
 }
 .add-button{
     height:35px;
@@ -171,6 +172,9 @@ margin-top:10px;
     background-color: #DADADA;
     color: #3B5165;
     font-size: medium;
+}
+.justify-left{
+justify-content: start;
 }
 
 
