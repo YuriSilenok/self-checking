@@ -104,7 +104,6 @@ a{
 }
 .tree-columns > .cell:first-of-type, .tree-columns > .cell:nth-of-type(2), .tree-columns > .cell:nth-of-type(3),
 .one-column > .cell:first-of-type {
-  transform: translate(0,-0.5px);
   background-color: #3b5165;
   color: white;
   font-size: 24px;
@@ -144,6 +143,7 @@ a{
     background-color: white;
     font-size: 22px;
     color: #3b5165;
+    justify-content:center;
 }
 .add{
 margin:auto;

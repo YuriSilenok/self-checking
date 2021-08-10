@@ -11,12 +11,12 @@
 
     <div class="table one-column after-add">
         <div class="cell">Дисциплины</div>
-        <div class="cell justify-left">АИП</div>
-        <div class="cell justify-left">АИП</div>
         {% for discipline in data %}
         <div class="cell justify-left"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
             discipline.name }}</a></div>
         {% endfor %}
     </div>
+    <div class="mini-form notification after-add no-visible">Вы еще не добавили ни одной дисциплины.<br>
+    Вверхняя панель поможет вам это сделать.</div>
     {% endblock %}
 </div>
