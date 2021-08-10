@@ -206,8 +206,12 @@ def solving_id(id_):
     return render_template('solving_id.html', task=task_)
 
 
-@app.route('/solving', endpoint='solving')
 @app.route('/')
+def index():
+    return redirect(url_for('solving'))
+
+
+@app.route('/solving', endpoint='solving')
 @login_is_required
 def solving():
     if 'student' in session['user_type']:
