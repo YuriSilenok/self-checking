@@ -102,6 +102,8 @@ a{
     text-align: center;
     padding:10px;
 }
+.four-columns > .cell:first-of-type, .four-columns > .cell:nth-of-type(2), .four-columns > .cell:nth-of-type(3),
+.four-columns > .cell:nth-of-type(4),
 .tree-columns > .cell:first-of-type, .tree-columns > .cell:nth-of-type(2), .tree-columns > .cell:nth-of-type(3),
 .one-column > .cell:first-of-type {
   background-color: #3b5165;
@@ -125,6 +127,12 @@ a{
     border-top-right-radius: 10px;
 }
 .tree-columns .cell:nth-last-of-type(3){
+    border-bottom-left-radius: 10px;
+}
+.four-columns .cell:nth-of-type(4){
+    border-top-right-radius: 10px;
+}
+.four-columns .cell:nth-last-of-type(4){
     border-bottom-left-radius: 10px;
 }
 .mini-form {
