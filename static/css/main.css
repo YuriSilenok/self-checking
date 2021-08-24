@@ -130,5 +130,9 @@ a{
     font-size: 22px;
     color: #3b5165;
 }
+.four-columns{
+    display: grid;
+    grid-template-columns: 225px 225px 225px 225px;
+}
 
 
