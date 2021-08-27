@@ -2,18 +2,23 @@
 
 {% block center %}
 <div class="container-screen">
-    <form method="post" class="add">
-        <div class="mini-form add-form">
-            <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
-            <input class="add-button" id="submit" type="submit" value="Добавить">
-        </div>
-    </form>
+    <div class="col-lg-8">
+      <form method="post" class="add">
+          <div class="row mini-form add-form">
+              <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
+              <input class="add-button" id="submit" type="submit" value="Добавить">
+          </div>
+      </form>
+    </div>
 
-    <div class="table one-column after-add">
-        <div class="cell">Дисциплины</div>
+     <div class="col-lg-8 after-add">
+      <div class="row thead">
+        <div class="col">Дисциплины</div>
+      </div>
         {% for discipline in data %}
-        <div class="cell justify-left"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
-            discipline.name }}</a></div>
+        <div class="row">
+        <div class="col cell border-radius-left border-radius-right"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
+            discipline.name }}</a></div></div>
         {% endfor %}
     </div>
     <div class="mini-form notification after-add no-visible">Вы еще не добавили ни одной дисциплины.<br>
