@@ -134,12 +134,6 @@ a{
   flex-direction: column;
   row-gap: 15px;
 }
-.notification{
-  background-color: white;
-  font-size: 22px;
-  color: #3b5165;
-  justify-content:center;
-}
 .add-form{
   background-color: #3B5165;
   min-height: 70px;
