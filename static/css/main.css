@@ -184,9 +184,5 @@ p{
 .justify-left{
 justify-content: start;
 }
-.four-columns{
-    display: grid;
-    grid-template-columns: 225px 225px 225px 225px;
-}
 
 

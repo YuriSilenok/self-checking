@@ -2,18 +2,19 @@
 
 {% block center %}
 <div class="container-screen">
-    <div class="table four-columns">
-        <div class="cell">Дисциплина</div>
-        <div class="cell">Тема</div>
-        <div class="cell">Задача</div>
-        <div class="cell">Статус</div>
+    <div class="col-lg-8">
+      <div class="row thead">
+        <div class="col">Дисциплина</div>
+        <div class="col">Тема</div>
+        <div class="col">Задача</div>
+        <div class="col">Статус</div>
     </div>
     {% for student_task_item in student_task %}
     <div class="row">
-        <div class="cell">{{ student_task_item.discipline }}</div>
-        <div class="cell">{{ student_task_item.theme }}</div>
-        <div class="cell"><a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a></div>
-        <div class="cell">{{ student_task_item.status }}</div>
+        <div class="col cell border-radius-left">{{ student_task_item.discipline }}</div>
+        <div class="col cell">{{ student_task_item.theme }}</div>
+        <div class="col cell"><a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a></div>
+        <div class="col cell border-radius-right">{{ student_task_item.status }}</div>
     </div>
     {% endfor %}
     <div class="notification mini-form no-visible"> На данный момент вы не загрузили ни одной работы.<br>
