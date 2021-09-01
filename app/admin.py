@@ -1,0 +1,20 @@
+from django.contrib import admin
+from .models import *
+
+admin.site.register(User)
+admin.site.register(Group)
+admin.site.register(StudentStatus)
+admin.site.register(Student)
+admin.site.register(StudentTaskStatus)
+admin.site.register(Departament)
+admin.site.register(Teacher)
+admin.site.register(Discipline)
+admin.site.register(Theme)
+admin.site.register(Task)
+admin.site.register(StudentTask)
+admin.site.register(StudentDiscipline)
+admin.site.register(ReviewStatus)
+admin.site.register(Solving)
+admin.site.register(Review)
+admin.site.register(Requirement)
+admin.site.register(ReviewComment)
