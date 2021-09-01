@@ -3,6 +3,7 @@
 {% block center %}
 <div class="container-screen">
     <div class="col-lg-8 ">
+        {% if student_task %}
         <div class="row table-head">
             <div class="col">Дисциплина</div>
             <div class="col">Тема</div>
@@ -18,8 +19,9 @@
             <div class="col cell border-radius-right">{{ student_task_item.status }}</div>
         </div>
         {% endfor %}
-        <div class="notification mini-form no-visible"> На данный момент Вы не получили ни одной работы.
-        </div>
+        {% else %}
+        <div class="notification mini-form"> На данный момент Вы не получили ни одной работы.</div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
