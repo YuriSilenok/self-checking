@@ -3,25 +3,31 @@
 {% block center %}
 <div class="container-screen">
     <div class="col-lg-8">
-      <form method="post" class="add">
-          <div class="row mini-form add-form flex-in-line">
-              <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
-              <input class="add-button" id="submit" type="submit" value="Добавить">
-          </div>
-      </form>
+        <form method="post" class="add">
+            <div class="row mini-form add-form flex-in-line">
+                <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
+                <input class="add-button" id="submit" type="submit" value="Добавить">
+            </div>
+        </form>
     </div>
 
-     <div class="col-lg-8 after-add">
-      <div class="row thead">
-        <div class="col">Дисциплины</div>
-      </div>
+    {% if data %}
+    <div class="col-lg-8 after-add">
+        <div class="row thead">
+            <div class="col">Дисциплины</div>
+        </div>
         {% for discipline in data %}
         <div class="row">
-        <div class="col cell border-radius-left border-radius-right"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
-            discipline.name }}</a></div></div>
+            <div class="col cell border-radius-left border-radius-right"><a
+                    href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
+                discipline.name }}</a></div>
+        </div>
         {% endfor %}
     </div>
-    <div class="mini-form notification after-add no-visible">Вы еще не добавили ни одной дисциплины.<br>
-    Верхняя панель поможет Вам это сделать.</div>
+    {% else %}
+    <div class="mini-form notification after-add">Вы еще не добавили ни одной дисциплины.<br>
+        Верхняя панель поможет Вам это сделать.
     </div>
-    {% endblock %}
+    {% endif %}
+</div>
+{% endblock %}
