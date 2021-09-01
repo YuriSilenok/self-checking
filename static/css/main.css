@@ -71,7 +71,7 @@ a{
 }
 /* HEADER FINISH*/
 /* TABLE START*/
-.thead{
+.table-head{
   background-color: #3B5165;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -92,17 +92,17 @@ a{
   overflow: hidden;
   padding:10px;
 }
-.thead [class|="col"]{
+.table-head [class|="col"]{
   border-right: 1px solid #F0F8FF ;
   border-left: 1px solid #F0F8FF ;
   display:flex;
   justify-content: center;
   font-size: 24px;
 }
-.thead .col:first-child{
+.table-head .col:first-child{
   border-left-color: none;
 }
-.thead .col:last-child{
+.table-head .col:last-child{
   border-right-color: none;
 }
 .col-lg-8{
