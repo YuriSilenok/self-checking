@@ -54,9 +54,56 @@
         <div class="col-lg-3">{{ solving.created_at }}</div>
         <div class="col-lg-3">{{ solving.review_count }}</div>
         {% if solving.review %}
-        <div class="col-lg-6"><a href="{{ url_for('review_id', id_=solving.review.id) }}">{{ solving.review.status }}</a></div>
+        <div class="col-lg-6"><a href="{{ url_for('review_id', id_=solving.review.id) }}">{{ solving.review.status
+            }}</a></div>
         {% endif %}
     </div>
     {% endfor %}
+</div>
+
+<div class="container-screen">
+    <div class="col-lg-8 after-add">
+        <div class="row table-head task-head">
+            <div class="col form-list without-center padding-in-form-10">
+                <H4>Название задания</H4>
+                <H6>Количество проверок</H6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col cell bordered">
+                <div class="form-list without-center add padding-in-form">
+                    <H4>Требования</H4>
+                    <p>1/fjbdjkbvjd</p>
+                    <H4>Загрузить новое решение</H4>
+                    <form method="post" class="form-list">
+                        <input class="file-add" type="file">
+                        <input class="add-button download" id="submit" type="submit" value="Загрузить">
+                        <div class="flex-in-line form-for-add">
+                            <input class="add-button add color-white" type="button" value="Выбрать файл">
+                            <p>Файл не выбран</p>
+                        </div>
+                    </form>
+                    <H4 class="after-add">История решений</H4>
+                    <div class="add">
+                        <div class="row table-head">
+                            <div class="col">Загружено</div>
+                            <div class="col">Количество проверок</div>
+                            <div class="col">Статус</div>
+                        </div>
+                        <div class="row">
+                            <div class="col cell">fgh</div>
+                            <div class="col cell">fgh</div>
+                            <div class="col cell">fgh</div>
+                        </div>
+                        <div class="row">
+                            <div class="col cell border-radius-left">fgh</div>
+                            <div class="col cell">fgh</div>
+                            <div class="col cell border-radius-right">fgh</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
