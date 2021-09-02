@@ -2,7 +2,7 @@
     <div class="points-in-header">
         <div class="points">
             {% if 'student' in user_type() or 'teacher' in user_type() %}
-            <a href="/solving" class="one-point {% if request.endpoint == '/solving'%}active{% endif %}">Ожидает
+            <a href="/solving" class="one-point {% if request.endpoint == '/solving' %}active{% endif %}">Ожидает
                 проверки</a>
             {% endif %}
             {% if 'teacher' in user_type() %}

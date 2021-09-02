@@ -18,6 +18,6 @@
 </form>
 <div class="input-box otstup90">
     <p class="prof">Нет профиля?</p>
-    <button class="registrbutton" onclick="window.location.href='{{ url_for('sign-up') }}'">Регистрация</button>
+    <button class="registrbutton" onclick="window.location.href='{% url 'app:sign_up' %}'">Регистрация</button>
 </div>
 {% endblock %}
