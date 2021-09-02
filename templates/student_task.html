@@ -12,14 +12,14 @@
         </div>
         {% for student_task_item in student_task %}
         <div class="row">
-            <div class="col cell {% if student_task[-1::] == student_task_item %}border-radius-left{% endif%}">
+            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-left{% endif%}">
                 {{ student_task_item.discipline }}
             </div>
             <div class="col cell">{{ student_task_item.theme }}</div>
             <div class="col cell">
                 <a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a>
             </div>
-            <div class="col cell {% if student_task[-1::] == student_task_item %}border-radius-right{% endif%}">
+            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-right{% endif%}">
                 {{ student_task_item.status }}
             </div>
         </div>

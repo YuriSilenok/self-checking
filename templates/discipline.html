@@ -18,7 +18,7 @@
         </div>
         {% for discipline in data %}
         <div class="row">
-            <div class="col cell {% if data[-1::] == discipline %}border-radius-left border-radius-right{% endif %}">
+            <div class="col cell{% if data[data|length-1] == discipline %} border-radius-left border-radius-right{% endif %}">
                 <a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{discipline.name }}</a>
             </div>
         </div>
