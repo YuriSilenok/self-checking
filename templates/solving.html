@@ -2,19 +2,23 @@
 
 {% block center %}
 <div class="container-screen">
-    {% if tasks %}
-    <div class="table">
-        <div class="cell">Дисциплина</div>
-        <div class="cell">Тема</div>
-        <div class="cell">Название задачи</div>
+    <div class="col-lg-8 ">
+        {% if tasks %}
+        <div class="row table-head">
+            <div class="col">Дисциплина</div>
+            <div class="col">Тема</div>
+            <div class="col">Название задачи</div>
+        </div>
         {% for task in tasks %}
-        <div class="cell">{{ task.discipline }}</div>
-        <div class="cell">{{ task.theme }}</div>
-        <div class="cell"><a href="/solving/{{ task.id }}">{{ task.task }}</a></div>
+        <div class="row">
+            <div class="col cell border-radius-left">{{ task.discipline }}</div>
+            <div class="col cell">{{ task.theme }}</div>
+            <div class="col cell border-radius-right"><a href="/solving/{{ task.id }}">{{ task.task }}</a></div>
+        </div>
         {% endfor %}
     </div>
     {% else %}
-    <div class="notification">На данный момент работы, требующей вашей проверки, нет. Отдыхайте.</div>
+    <div class="notification mini-form">На данный момент работы, требующей Вашей проверки, нет. Отдыхайте.</div>
     {% endif %}
 </div>
 {% endblock %}

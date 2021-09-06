@@ -1,23 +1,33 @@
 {% extends 'maket.html' %}
 
 {% block center %}
-<div class="container">
-    <form method="post">
-        <h4>Добавить дисциплину</h4>
-        <div class="row">
-            <label class="col-lg-5" for="name">Название</label>
-            <input class="col-lg-5" type="text" name="name" id="name">
-            <input class="col-lg-1 offset-lg-1" id="submit" type="submit" value="Добавить">
-        </div>
-    </form>
+<div class="container-screen">
+    <div class="col-lg-8">
+        <form method="post" class="add">
+            <div class="row mini-form add-form flex-in-line">
+                <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
+                <input class="add-button" id="submit" type="submit" value="Добавить">
+            </div>
+        </form>
+    </div>
 
-    <div class="row">
-        <div class="col-lg-3">Дисциплина</div>
+    {% if data %}
+    <div class="col-lg-8 after-add">
+        <div class="row table-head">
+            <div class="col">Дисциплины</div>
+        </div>
+        {% for discipline in data %}
+        <div class="row">
+            <div class="col cell border-radius-left border-radius-right"><a
+                    href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{
+                discipline.name }}</a></div>
+        </div>
+        {% endfor %}
     </div>
-    {% for discipline in data %}
-    <div class="row">
-        <div class="col-lg-12"><a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{ discipline.name }}</a></div>
+    {% else %}
+    <div class="mini-form notification after-add">Вы еще не добавили ни одной дисциплины.<br>
+        Верхняя панель поможет Вам это сделать.
     </div>
-    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}
