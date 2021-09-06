@@ -225,10 +225,10 @@ border-radius: 10px;
   justify-content:center;
 }
 .active{
-font-weight:700;
+  font-weight:700;
 }
 .start-at-left{
-justify-content:flex-start;
+  justify-content:flex-start;
 }
 
 
