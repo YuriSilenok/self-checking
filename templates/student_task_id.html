@@ -54,7 +54,9 @@
         <div class="col-lg-3">{{ solving.created_at }}</div>
         <div class="col-lg-3">{{ solving.review_count }}</div>
         {% if solving.review %}
-        <div class="col-lg-6"><a href="{{ url_for('review_id', id_=solving.review.id) }}">{{ solving.review.status }}</a></div>
+        <div class="col-lg-6">
+            <a href="{{ url_for('review_id', id_=solving.review.id) }}">{{ solving.review.status }}</a>
+        </div>
         {% endif %}
     </div>
     {% endfor %}
