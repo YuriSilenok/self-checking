@@ -11,7 +11,7 @@ UPLOAD_FOLDER = 'files'
 
 
 def sign_in(request):
-    if request.method == 'POST':
+    if request.POST:
         try:
             user = User.objects.get(email=request.form['email'])
             if user:
@@ -31,7 +31,7 @@ def sign_in(request):
                 return redirect('sign-up?mess=Нет такого пользователя')
         except Exception as ex:
             return redirect(f'sign-in?mess={str(ex)}')
-    return render(request, 'sign-in.html', content_type='application/xhtml+xml')
+    return render(request, 'sign-in.html')
 
 
 def sign_up(request):
@@ -76,6 +76,7 @@ def login_is_required(function):
 
 def favicon(request):
     return HttpResponse(open(os.path.join(os.getcwd(), 'static', 'favicon.ico'), "rb").read())
+
 # @login_is_required
 # def solving(request):
 #     if 'student' in request.session['user_type']:
