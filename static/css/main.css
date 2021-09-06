@@ -209,13 +209,16 @@ p{
   align-items: flex-start;
 }
 .bordered{
-border-radius: 10px;
+  border-radius: 10px;
 }
 .task-head{
   justify-content: center;
-  width: 99,9%;
-  height: 100px;
+  width: 98%;
+  height: 135px;
   margin: 0 auto;
+}
+.task-head a{
+    color:white;
 }
 .notification{
   align-items: center;
