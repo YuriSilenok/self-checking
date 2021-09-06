@@ -16,7 +16,8 @@
                            placeholder="Ссылка на задачу">
                     <div class="flex-in-line flex-for-quantity">
                         <p>Количество проверок</p>
-                        <input class="textbox text-on-white little" type="text" name="review_count" id="review_count">
+                        <input class="textbox text-on-white little" type="text" name="review_count" id="review_count"
+                               pattern="[0-9]{1,4}">
                         <input class="add-button" id="submit" type="submit" value="Добавить">
                     </div>
                 </form>
@@ -28,7 +29,8 @@
         </div>
         {% for task in data %}
         <div class="row">
-            <div class="col cell border-radius-left"><a href="{{ url_for('requirement', task=task.id) }}">{{ task.name }}</a></div>
+            <div class="col cell border-radius-left"><a href="{{ url_for('requirement', task=task.id) }}">{{ task.name
+                }}</a></div>
             <div class="col-lg-4 cell border-radius-right"></div>
         </div>
         {% endfor %}
