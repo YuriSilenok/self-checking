@@ -3,6 +3,7 @@
 {% block center %}
 <div class="container-screen">
     <div class="col-lg-8 ">
+        {% if student_task %}
         <div class="row table-head">
             <div class="col">Дисциплина</div>
             <div class="col">Тема</div>
@@ -11,15 +12,21 @@
         </div>
         {% for student_task_item in student_task %}
         <div class="row">
-            <div class="col cell border-radius-left">{{ student_task_item.discipline }}</div>
-            <div class="col cell">{{ student_task_item.theme }}</div>
-            <div class="col cell"><a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a>
+            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-left{% endif%}">
+                {{ student_task_item.discipline }}
             </div>
-            <div class="col cell border-radius-right">{{ student_task_item.status }}</div>
+            <div class="col cell">{{ student_task_item.theme }}</div>
+            <div class="col cell">
+                <a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a>
+            </div>
+            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-right{% endif%}">
+                {{ student_task_item.status }}
+            </div>
         </div>
         {% endfor %}
-        <div class="notification mini-form no-visible"> На данный момент Вы не получили ни одной работы.
-        </div>
+        {% else %}
+        <div class="notification mini-form"> На данный момент Вы не получили ни одной работы.</div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
