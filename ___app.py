@@ -47,10 +47,10 @@ def files(filename):
 
 @app.context_processor
 def global_data():
-    def first_name():
+    def first_name:
         return f"{session.get('first_name', 'Гость')} {session.get('last_name', '')}"
 
-    def user_type():
+    def user_type:
         return session.get('user_type', [])
 
     def version():

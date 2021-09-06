@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
-{% block head %}<link rel="stylesheet" href={% url 'static', filename='css/main.css' %} integrity="undefined" crossorigin="anonymous">{% endblock %}
+
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'app:css/main.css' %}" integrity="undefined" crossorigin="anonymous">
+{% endblock %}
+
 {% block body %}
 <div class="container">
-    <div class="row no-visible">{{ version() }}</div>
+    <div class="row no-visible">{{ version }}</div>
     {% include 'header.html' %}
 </div>
 <div class="container">

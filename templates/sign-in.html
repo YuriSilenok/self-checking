@@ -1,7 +1,8 @@
 {% extends 'sign.html' %}
 {% block formtitel %}Авторизация{% endblock %}
 {% block formcontent %}
-<form method="POST" active="#">
+<form method="POST">
+    {% csrf_token %}
     <div class="user-details">
         <div class="input-box">
             <input type="email" placeholder="Введите почту" id="email" name="email" aria-describedby="email_help"
