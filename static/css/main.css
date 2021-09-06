@@ -227,5 +227,8 @@ border-radius: 10px;
 .active{
 font-weight:700;
 }
+.start-at-left{
+justify-content:flex-start;
+}
 
 
