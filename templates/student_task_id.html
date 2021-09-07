@@ -1,71 +1,6 @@
 {% extends 'maket.html' %}
 
 {% block center %}
-<div class="container">
-    <div class="row">
-        <h4>Задача</h4>
-    </div>
-    <div class="row">
-        <div class="col-lg-2">Название</div>
-        <div class="col-lg-10">{{ student_task.name }}</div>
-    </div>
-    <div class="row">
-        <div class="col-lg-2">Количество проверок</div>
-        <div class="col-lg-10">{{ student_task.count_review }}</div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12"><a href="{{ student_task.link }}">Ссылка</a></div>
-    </div>
-
-
-    <div class="row">
-        <h4>Требования</h4>
-    </div>
-    <div class="row">
-        <ul>
-            {% for requirement in student_task.requirement %}
-            <li>{{ requirement }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-
-    {% if student_task.load_file %}
-    <div class="row">
-        <h4>Загрузить новое решение</h4>
-        <form method="post" class="col-lg-3" enctype=multipart/form-data>
-            <div class="form-group">
-                <label for="zip">Прикрепите архив zip</label>
-                <input type="file" id="zip" class="form-control" name="zip" accept="application/zip"
-                       required="required" size="20971520">
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary btn-lg" value="Загрузить">
-            </div>
-        </form>
-    </div>
-    {% endif %}
-    <div class="row">
-        <h4>История решений</h4>
-    </div>
-    <div class="row">
-        <div class="col-lg-3"> Загружено</div>
-        <div class="col-lg-3"> Количество проверок</div>
-        <div class="col-lg-3"> Замечание</div>
-    </div>
-    {% for solving in student_task.solving %}
-    <div class="row">
-        <div class="col-lg-3">{{ solving.created_at }}</div>
-        <div class="col-lg-3">{{ solving.review_count }}</div>
-        {% if solving.review %}
-        <div class="col-lg-6"><a href="{{ url_for('review_id', id_=solving.review.id) }}">{{ solving.review.status
-            }}</a></div>
-        {% endif %}
-    </div>
-    {% endfor %}
-</div>
-
-
 <div class="container-screen">
     <div class="col-lg-8 after-add">
         <div class="row table-head task-head">
@@ -82,13 +17,12 @@
                     {% for requirement in student_task.requirement %}
                     <p>{{ requirement }}</p>
                     {% endfor %}
-
+                    <div class="add mini-form focus bordered notification after-add">Пока эта задача не имеет требований</div>
                     {% if student_task.load_file %}
-                    <H4>Загрузить новое решение</H4>
+                    <H4 class="after-add">Загрузить новое решение</H4>
                     <form method="post" class="form-list" enctype=multipart/form-data>
                         <label for="zip">Прикрепите архив zip</label>
-                        <input class="file-add" type="file" id="zip" name="zip" accept="application/zip"
-                               required="required" size="20971520">
+                        <input class="file-add" type="file" id="zip" name="zip" accept="application/zip" required="required" size="20971520">
                         <input class="add-button download" id="submit" type="submit" value="Загрузить">
                         <div class="flex-in-line form-for-add">
                             <input class="add-button add color-white" type="button"
@@ -98,7 +32,6 @@
                         </div>
                     </form>
                     {% endif %}
-
                     <H4 class="after-add">История решений</H4>
                     <div class="add">
                         <div class="row table-head">
@@ -108,22 +41,19 @@
                         </div>
                         {% for solving in student_task.solving %}
                         <div class="row">
-                            <div class="col cell">{{ solving.created_at }}</div>
+                            <div class="col cell border-radius-left">{{ solving.created_at }}</div>
                             <div class="col cell">{{ solving.review_count }}</div>
                             {% if solving.review %}
-                            <div class="col cell"><a href="{{ url_for('review_id', id_=solving.review.id) }}">{{
-                                solving.review.status
-                                }}</a></div>
+                            <div class="col cell border-radius-right"><a href="{{ url_for('review_id', id_=solving.review.id) }}">
+                                {{ solving.review.status }}</a></div>
                             {% endif %}
-                            <div class="row">
-                                <div class="col cell border-radius-left">fgh</div>
-                                <div class="col cell">fgh</div>
-                                <div class="col cell border-radius-right">fgh</div>
-                            </div>
                         </div>
+                        {% endfor %}
+                        <div class="add mini-form focus bordered notification after-add">История загрузки решений пуста</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}

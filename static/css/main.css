@@ -230,5 +230,8 @@ p{
 .active{
 font-weight:700;
 }
+.focus{
+border: 1px solid #3b5165;
+}
 
 
