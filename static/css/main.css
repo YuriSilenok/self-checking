@@ -218,6 +218,7 @@ border-radius: 10px;
   margin: 0 auto;
 }
 .notification{
+  display:flex;
   align-items: center;
   background-color: white;
   font-size: 18px;
@@ -225,7 +226,10 @@ border-radius: 10px;
   justify-content:center;
 }
 .active{
-font-weight:700;
+  font-weight:700;
+}
+.start-at-left{
+  justify-content:flex-start;
 }
 
 
