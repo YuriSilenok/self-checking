@@ -1,12 +1,13 @@
 import hashlib
 import os
-import subprocess
+
 
 from django.http import HttpResponse
 
 from app.models import *
 from django.shortcuts import render, redirect
 from django import template
+from django.template.defaultfilters import stringfilter
 
 register = template.Library()
 UPLOAD_FOLDER = 'files'
@@ -22,9 +23,9 @@ def sign_in(request):
                     request.session['first_name'] = user.first_name
                     request.session['last_name'] = user.last_name
                     request.session['user_type'] = []
-                    if Student.objects.filter(user_id=user.id):
+                    if Student.objects.filter(user_id=user.id).first():
                         request.session['user_type'].append('student')
-                    if Teacher.objects.filter(user_id=user.id):
+                    if Teacher.objects.filter(user_id=user.id).first():
                         request.session['user_type'].append('teacher')
                     return redirect('/')
                 else:
@@ -88,14 +89,6 @@ def login_is_required(function):
     return wrapper
 
 
-def favicon(request):
-    return HttpResponse(open(os.path.join(os.getcwd(), 'static', 'favicon.ico'), "rb").read())
-
-
-@register.inclusion_tag('maket.html')
-def version():
-    return subprocess.check_output(['git', 'describe']).decode("utf-8")
-
 
 @register.inclusion_tag('header.html')
 def user_type(request):
@@ -109,45 +102,50 @@ def first_name(request):
 
 @login_is_required
 def solving(request):
-    if 'student' in request.session['user_type']:
-        tasks_ = []
-        student_tasks__ = StudentTask.objects \
-            .filter(student_id=request.session['user_id']) \
-            .exclude(student_task_status_id=5)
-        for student_task__ in student_tasks__.all():
-            print(student_task__)
-            # tasks_.append({
-            #     'discipline': student_task__.task.theme.discipline.name,
-            #     'theme': student_task__.task.theme.name,
-            #     'task': student_task__.task.name,
-            #     'status': student_task__.student_task_status.name,
-            #     'id': student_task__.id,
-            # })
+    # if 'student' in request.session['user_type']:
+    data = []
+    query = StudentTask.objects \
+        .exclude(student_id=request.session['user_id']) \
+        .exclude(student_task_status_id=5)
+    for row in query.all():
+        print(row)
+        data.append({
+            'discipline': row.task.theme.discipline.name,
+            'theme': row.task.theme.name,
+            'task': row.task.name,
+        })
+    return render(request, 'solving.html', {'data': data})
+    # tasks_.append({
+    #     'discipline': student_task__.task.theme.discipline.name,
+    #     'theme': student_task__.task.theme.name,
+    #     'task': student_task__.task.name,
+    #     'status': student_task__.student_task_status.name,
+    #     'id': student_task__.id,
+    # })
 
-        return render(request, 'solving.html', {'tasks': tasks_})
-        # , student_task_status_id != 5)) \
-        #     .subquery('t')
-        # st__ = StudentTask, Solving, func.max(Solving.id).objects \
-        #     .join(Solving, Solving.student_task_id == StudentTask.id) \
-        #     .join(Review, Review.solving_id == Solving.id, isouter=True) \
-        #     .join(my_st__, my_st__.c.task_id == StudentTask.task_id) \
-        #     .filter((StudentTask.student_task_status_id == 3) & (StudentTask.student_id != request.session['user_id'])) \
-        #     .group_by(StudentTask.id)
+    # , student_task_status_id != 5)) \
+    #     .subquery('t')
+    # st__ = StudentTask, Solving, func.max(Solving.id).objects \
+    #     .join(Solving, Solving.student_task_id == StudentTask.id) \
+    #     .join(Review, Review.solving_id == Solving.id, isouter=True) \
+    #     .join(my_st__, my_st__.c.task_id == StudentTask.task_id) \
+    #     .filter((StudentTask.student_task_status_id == 3) & (StudentTask.student_id != request.session['user_id'])) \
+    #     .group_by(StudentTask.id)
 
-        # for student_task__ in student_tasks__:
-        #     not_my = True
-        #     for r__ in Review).filter(st__[1].id == Review.solving_id.objects:
-        #         if r__.student.user.id == request.session['user_id']:
-        #             not_my = False
-        #             break
-        #     if not_my:
-        #         tasks_.append({
-        #             'discipline': st__[0].task.theme.discipline.name,
-        #             'theme': st__[0].task.theme.name,
-        #             'task': st__[0].task.name,
-        #             'status': st__[0].student_task_status.name,
-        #             'id': st__[1].id,
-        #         })
+    # for student_task__ in student_tasks__:
+    #     not_my = True
+    #     for r__ in Review).filter(st__[1].id == Review.solving_id.objects:
+    #         if r__.student.user.id == request.session['user_id']:
+    #             not_my = False
+    #             break
+    #     if not_my:
+    #         tasks_.append({
+    #             'discipline': st__[0].task.theme.discipline.name,
+    #             'theme': st__[0].task.theme.name,
+    #             'task': st__[0].task.name,
+    #             'status': st__[0].student_task_status.name,
+    #             'id': st__[1].id,
+    #         })
 
     # if 'teacher' in request.session['user_type']:
     #     tasks_ = []
@@ -166,7 +164,7 @@ def solving(request):
     #             'id': solving__.id
     #         })
     #     return render(request, 'solving.html', tasks=tasks_)
-    return redirect('/')
+    return redirect('/logout')
 
 
 #
