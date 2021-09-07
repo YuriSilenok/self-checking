@@ -106,20 +106,24 @@
                             <div class="col">Количество проверок</div>
                             <div class="col">Статус</div>
                         </div>
+                        {% for solving in student_task.solving %}
                         <div class="row">
-                            <div class="col cell">fgh</div>
-                            <div class="col cell">fgh</div>
-                            <div class="col cell">fgh</div>
-                        </div>
-                        <div class="row">
-                            <div class="col cell border-radius-left">fgh</div>
-                            <div class="col cell">fgh</div>
-                            <div class="col cell border-radius-right">fgh</div>
+                            <div class="col cell">{{ solving.created_at }}</div>
+                            <div class="col cell">{{ solving.review_count }}</div>
+                            {% if solving.review %}
+                            <div class="col cell"><a href="{{ url_for('review_id', id_=solving.review.id) }}">{{
+                                solving.review.status
+                                }}</a></div>
+                            {% endif %}
+                            <div class="row">
+                                <div class="col cell border-radius-left">fgh</div>
+                                <div class="col cell">fgh</div>
+                                <div class="col cell border-radius-right">fgh</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
