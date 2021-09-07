@@ -1,35 +1,40 @@
 {% extends 'maket.html' %}
 
 {% block center %}
-<div class="container">
-    <div class="row">
-        <h4>{{ theme }}</h4>
+<div class="container-screen">
+    <div class="col-lg-8">
+        <div class="row table-head">
+            <div class="col">{{ theme }}</div>
+        </div>
+        <div class="row">
+            <div class="col cell border-radius-left border-radius-right">
+                <form method="post" class="add form-list">
+                    <p>Новая задача</p>
+                    <input class="textbox text-on-white" type="text" name="name" id="name"
+                           placeholder="Название задачи">
+                    <input class="textbox text-on-white" type="text" name="link" id="link"
+                           placeholder="Ссылка на задачу">
+                    <div class="flex-in-line flex-for-quantity">
+                        <p>Количество проверок</p>
+                        <input class="textbox text-on-white little" type="text" name="review_count" id="review_count"
+                               pattern="[0-9]{1,4}">
+                        <input class="add-button" id="submit" type="submit" value="Добавить">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row table-head after-add">
+            <div class="col">Задачи</div>
+            <div class="col-lg-4">Количество проверок</div>
+        </div>
+        {% for task in data %}
+        <div class="row">
+            <div class="col cell border-radius-left"><a href="{{ url_for('requirement', task=task.id) }}">{{ task.name
+                }}</a></div>
+            <div class="col-lg-4 cell border-radius-right"></div>
+        </div>
+        {% endfor %}
+        <div class="mini-form notification after-add">На данный момент не создано ни одной задачи.</div>
     </div>
-    <form method="post">
-        <h4>Новая задача</h4>
-        <div class="row">
-            <label class="col-lg-2" for="name">Название</label>
-            <input class="col-lg-10" type="text" name="name" id="name">
-        </div>
-        <div class="row">
-            <label class="col-lg-2" for="link">Ссылка на задание</label>
-            <input class="col-lg-10" type="text" name="link" id="link">
-        </div>
-        <div class="row">
-            <label class="col-lg-2" for="review_count">Количество проверок</label>
-            <input class="col-lg-10" type="text" name="review_count" id="review_count">
-        </div>
-        <div class="row">
-            <input class="col-lg-1" id="submit" type="submit" value="Добавить">
-        </div>
-    </form>
-    <div class="row">
-        <div class="col-lg-3">Тема</div>
-    </div>
-    {% for task in data %}
-    <div class="row">
-        <div class="col-lg-12"><a href="{{ url_for('requirement', task=task.id) }}">{{ task.name }}</a></div>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %}
