@@ -221,6 +221,7 @@ p{
     color:white;
 }
 .notification{
+  display:flex;
   align-items: center;
   background-color: white;
   font-size: 18px;
@@ -228,7 +229,10 @@ p{
   justify-content:center;
 }
 .active{
-font-weight:700;
+  font-weight:700;
+}
+.start-at-left{
+  justify-content:flex-start;
 }
 .focus{
 border: 1px solid #3b5165;
