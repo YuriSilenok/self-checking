@@ -1,7 +1,6 @@
 import hashlib
 import os
 
-
 from django.http import HttpResponse
 
 from app.models import *
@@ -29,11 +28,11 @@ def sign_in(request):
                         request.session['user_type'].append('teacher')
                     return redirect('/')
                 else:
-                    return redirect('sign-in?mess=Пароль не верный')
+                    return redirect('/sign-in?mess=Пароль не верный')
             else:
-                return redirect('sign-up?mess=Нет такого пользователя')
+                return redirect('/sign-up?mess=Нет такого пользователя')
         except Exception as ex:
-            return redirect(f'sign-in?mess={str(ex)}')
+            return redirect(f'/sign-in?mess={str(ex)}')
     return render(request, 'sign-in.html')
 
 
@@ -44,7 +43,7 @@ def sign_up(request):
             if user:
                 if user.password_hash == hashlib.sha1(request.POST['password'].encode('utf-8')).hexdigest():
                     return sign_in()
-                return redirect('sign-up?mess=Уже зарегистрирован')
+                return redirect('/sign-up?mess=Уже зарегистрирован')
             user = User(
                 email=request.POST['email'],
                 password_hash=hashlib.sha1(request.POST['password'].encode('utf-8')).hexdigest(),
@@ -84,10 +83,9 @@ def login_is_required(function):
         if "user_id" in args[0].session:
             return function(*args, **kwargs)
         else:
-            return redirect('sign-in')
+            return redirect('/sign-in')
 
     return wrapper
-
 
 
 @register.inclusion_tag('header.html')
@@ -102,7 +100,6 @@ def first_name(request):
 
 @login_is_required
 def solving(request):
-    # if 'student' in request.session['user_type']:
     data = []
     query = StudentTask.objects \
         .exclude(student_id=request.session['user_id']) \
@@ -115,56 +112,6 @@ def solving(request):
             'task': row.task.name,
         })
     return render(request, 'solving.html', {'data': data})
-    # tasks_.append({
-    #     'discipline': student_task__.task.theme.discipline.name,
-    #     'theme': student_task__.task.theme.name,
-    #     'task': student_task__.task.name,
-    #     'status': student_task__.student_task_status.name,
-    #     'id': student_task__.id,
-    # })
-
-    # , student_task_status_id != 5)) \
-    #     .subquery('t')
-    # st__ = StudentTask, Solving, func.max(Solving.id).objects \
-    #     .join(Solving, Solving.student_task_id == StudentTask.id) \
-    #     .join(Review, Review.solving_id == Solving.id, isouter=True) \
-    #     .join(my_st__, my_st__.c.task_id == StudentTask.task_id) \
-    #     .filter((StudentTask.student_task_status_id == 3) & (StudentTask.student_id != request.session['user_id'])) \
-    #     .group_by(StudentTask.id)
-
-    # for student_task__ in student_tasks__:
-    #     not_my = True
-    #     for r__ in Review).filter(st__[1].id == Review.solving_id.objects:
-    #         if r__.student.user.id == request.session['user_id']:
-    #             not_my = False
-    #             break
-    #     if not_my:
-    #         tasks_.append({
-    #             'discipline': st__[0].task.theme.discipline.name,
-    #             'theme': st__[0].task.theme.name,
-    #             'task': st__[0].task.name,
-    #             'status': st__[0].student_task_status.name,
-    #             'id': st__[1].id,
-    #         })
-
-    # if 'teacher' in request.session['user_type']:
-    #     tasks_ = []
-    #
-    #     query__ = Solving.objects
-    #     query__ = query__.join(StudentTask, Solving.student_task_id == StudentTask.id)
-    #     query__ = query__.filter(StudentTask.student_task_status_id == 4)
-    #     query__ = query__.group_by(Solving.student_task_id)
-    #
-    #     for solving__ in query__:
-    #         tasks_.append({
-    #             'discipline': solving__.student_task.task.theme.discipline.name,
-    #             'theme': solving__.student_task.task.theme.name,
-    #             'task': solving__.student_task.task.name,
-    #             'status': solving__.student_task.student_task_status.name,
-    #             'id': solving__.id
-    #         })
-    #     return render(request, 'solving.html', tasks=tasks_)
-    return redirect('/logout')
 
 
 #
@@ -198,7 +145,7 @@ def solving(request):
 #             solving__.student_task.student_task_status_id = 5
 #         elif solving__.review_count >= solving__.student_task.task.review_count:
 #             solving__.student_task.student_task_status_id = 4
-#         return redirect('solving')
+#         return redirect('/solving')
 #     task_ = {
 #         'name': task__.name,
 #         'link': task__.link,
