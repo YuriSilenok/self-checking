@@ -7,3 +7,21 @@
 - Flask-SQLAlchemy=['2.5.1']
 
 [Наша документация](documentation)
+
+# Быстрый старт
+
+- Установите PyCharm
+- Клонируйте репозиторий
+- Создайте окружение
+- Установите пакеты
+- Создайте БД командами 
+```Shell
+python manage.py makemigrations app
+python manage.py migrate
+```
+- создайте суперпользователя командой
+```Shell
+python manage.py createsuperuser
+```
+- Настройте конфигурация для запуска сервера
+- Запустите сервер
