@@ -19,5 +19,9 @@
 python manage.py makemigrations app
 python manage.py migrate
 ```
+- создайте суперпользователя командой
+```Shell
+python manage.py createsuperuser
+```
 - Настройте конфигурация для запуска сервера
 - Запустите сервер
