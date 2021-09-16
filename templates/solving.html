@@ -1,7 +1,6 @@
 {% extends 'maket.html' %}
 
 {% block center %}
-{{ version }}
 <div class="container-screen">
     <div class="col-lg-8 ">
         {% if data %}
@@ -10,11 +9,13 @@
             <div class="col">Тема</div>
             <div class="col">Название задачи</div>
         </div>
-        {% for task in tasks %}
+        {% for row in data %}
         <div class="row">
-            <div class="col cell border-radius-left">{{ data.discipline }}</div>
-            <div class="col cell">{{ data.theme }}</div>
-            <div class="col cell border-radius-right"><a href="/solving/{{ task.id }}">{{ data.task }}</a></div>
+            <div class="col cell border-radius-left">{{ row.discipline }}</div>
+            <div class="col cell">{{ row.theme }}</div>
+            <div class="col cell border-radius-right">
+                <a href="{% url 'app:solving_id' row.id %}">{{ row.task }}</a>
+            </div>
         </div>
         {% endfor %}
     </div>

@@ -1,23 +1,23 @@
+{% load tags %}
 <header>
     <div class="points-in-header">
         <div class="points">
-            {{ user_type }}
-            {% if 'student' in user_type or 'teacher' in user_type %}
-            <a href="{% url 'solving' %}"
-               class="one-point {% if request.endpoint == 'solving'%}active{% endif %}">Ожидает проверки</a>
+            {% user_type request as ut %}
+            {% if 'student' in ut or 'teacher' in ut %}
+            <a href="{% url 'app:solving' %}"
+               class="one-point {% if request.path == '/solving'%}active{% endif %}">Ожидает проверки</a>
             {% endif %}
-            {% if 'teacher' in user_type %}
-            <a href="{% url 'discipline' %}"
-               class="one-point {% if request.endpoint == 'discipline' %}active{% endif %}">Мои дисциплины</a>
+            {% if 'teacher' in ut %}
+            <a href="{% url 'app:discipline' %}"
+               class="one-point {% if request.path == '/discipline' %}active{% endif %}">Мои дисциплины</a>
             {% endif %}
-            {% if 'student' in user_type %}
-            <a href="{% url 'student_task' %}"
-               class="one-point {% if request.endpoint == 'student_task' %}active{% endif %}">Мои работы</a>
+            {% if 'student' in ut %}
+            <a href="{% url 'app:student_task' %}"
+               class="one-point {% if request.path == '/student_task' %}active{% endif %}">Мои работы</a>
             {% endif %}
         </div>
-        <div class="hello-and-bye">Добро пожаловать, {{ first_name }}
-            <a href="/logout">
-            </a>
+        <div class="hello-and-bye">Добро пожаловать, {% first_name request %}
+            <a href="/logout">Выход</a>
         </div>
     </div>
 </header>

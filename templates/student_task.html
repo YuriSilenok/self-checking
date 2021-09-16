@@ -3,23 +3,23 @@
 {% block center %}
 <div class="container-screen">
     <div class="col-lg-8 ">
-        {% if student_task %}
+        {% if data %}
         <div class="row table-head">
             <div class="col">Дисциплина</div>
             <div class="col">Тема</div>
             <div class="col">Задача</div>
             <div class="col">Статус</div>
         </div>
-        {% for student_task_item in student_task %}
+        {% for student_task_item in data %}
         <div class="row">
-            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-left{% endif%}">
+            <div class="col cell {% if data[data|length-1] == student_task_item %}border-radius-left{% endif%}">
                 {{ student_task_item.discipline }}
             </div>
             <div class="col cell">{{ student_task_item.theme }}</div>
             <div class="col cell">
                 <a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a>
             </div>
-            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-right{% endif%}">
+            <div class="col cell {% if data[data|length-1] == student_task_item %}border-radius-right{% endif%}">
                 {{ student_task_item.status }}
             </div>
         </div>

@@ -7,26 +7,26 @@
     </div>
     <div class="row">
         <div class="col-lg-2">Название</div>
-        <div class="col-lg-10">{{ student_task.name }}</div>
+        <div class="col-lg-10">{{ name }}</div>
     </div>
     <div class="row">
         <div class="col-lg-2">Количество проверок</div>
-        <div class="col-lg-10">{{ student_task.count_review }}</div>
+        <div class="col-lg-10">{{ count_review }}</div>
     </div>
     <div class="row">
-        <div class="col-lg-12"><a href="{{ student_task.link }}">Ссылка</a></div>
+        <div class="col-lg-12"><a href="{{ link }}">Ссылка</a></div>
     </div>
     <div class="row">
         <h4>Требования</h4>
     </div>
     <div class="row">
         <ul>
-            {% for requirement in student_task.requirement %}
+            {% for requirement in requirement %}
             <li>{{ requirement }}</li>
             {% endfor %}
         </ul>
     </div>
-    {% if student_task.load_file %}
+    {% if load_file %}
     <div class="row">
         <h4>Загрузить новое решение</h4>
         <form method="post" class="col-lg-3" enctype=multipart/form-data>
@@ -49,7 +49,7 @@
         <div class="col-lg-3"> Количество проверок</div>
         <div class="col-lg-3"> Замечание</div>
     </div>
-    {% for solving in student_task.solving %}
+    {% for solving in solving %}
     <div class="row">
         <div class="col-lg-3">{{ solving.created_at }}</div>
         <div class="col-lg-3">{{ solving.review_count }}</div>

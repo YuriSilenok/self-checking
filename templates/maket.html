@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load tags %}
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
@@ -8,7 +9,7 @@
 
 {% block body %}
 <div class="container">
-    <div class="row no-visible">{{ version }}</div>
+    <div class="row no-visible">{% version %}</div>
     {% include 'header.html' %}
 </div>
 <div class="container">

@@ -45,20 +45,6 @@ def files(filename):
     return send_file(os.path.join(UPLOAD_FOLDER, filename), as_attachment=True)
 
 
-@app.context_processor
-def global_data():
-    def first_name:
-        return f"{session.get('first_name', 'Гость')} {session.get('last_name', '')}"
-
-    def user_type:
-        return session.get('user_type', [])
-
-    def version():
-        return subprocess.check_output(['git', 'describe']).decode("utf-8")
-
-    return dict(first_name=first_name, user_type=user_type, version=version)
-
-
 @app.route('/logout')
 def logout():
     if 'user_id' in session:
