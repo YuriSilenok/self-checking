@@ -1,0 +1,44 @@
+- model: app.StudentStatus
+  pk: 1
+  fields:
+    name: "Обучается"
+
+- model: app.StudentStatus
+  pk: 2
+  fields:
+    name: "Отчислен"
+
+- model: app.StudentTaskStatus
+  pk: 1
+  fields:
+    name: "Не начата"
+
+- model: app.StudentTaskStatus
+  pk: 2
+  fields:
+    name: "Требует исправлений"
+
+- model: app.StudentTaskStatus
+  pk: 3
+  fields:
+    name: "Ожидает проверки студентом"
+
+- model: app.StudentTaskStatus
+  pk: 4
+  fields:
+    name: "Ожидает проверки преподавателем"
+
+- model: app.StudentTaskStatus
+  pk: 5
+  fields:
+    name: "Зачтено"
+
+- model: app.ReviewStatus
+  pk: 1
+  fields:
+    name: "Одобрено"
+
+- model: app.ReviewStatus
+  pk: 2
+  fields:
+    name: "Переделать"

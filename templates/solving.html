@@ -11,8 +11,8 @@
         </div>
         {% for row in data %}
         <div class="row">
-            <div class="col cell border-radius-left">{{ row.discipline }}</div>
-            <div class="col cell">{{ row.theme }}</div>
+            <div class="col cell border-radius-left">{{ row.task.theme.discipline }}</div>
+            <div class="col cell">{{ row.task.theme }}</div>
             <div class="col cell border-radius-right">
                 <a href="{% url 'app:solving_id' row.id %}">{{ row.task }}</a>
             </div>

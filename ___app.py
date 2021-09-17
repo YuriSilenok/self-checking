@@ -98,7 +98,7 @@ def theme():
             'name': theme__.name,
         })
     discipline_ = {'name': discipline__.name, 'id': discipline__.id}
-    return render_template('theme.html', themes=themes, discipline=discipline_, groups=api_group(),
+    return render_template('discipline_id.html', themes=themes, discipline=discipline_, groups=api_group(),
                            students=api_student())
 
 
@@ -122,7 +122,7 @@ def task():
             'link': task__.link,
             'review_count': task__.review_count,
         })
-    return render_template('task.html', data=data, theme=theme__.name)
+    return render_template('theme_id.html', data=data, theme=theme__.name)
 
 
 @app.route('/requirement', endpoint='requirement', methods=['GET', 'POST'])
@@ -140,7 +140,7 @@ def requirement():
         data.append({
             'text': requirement__.text,
         })
-    return render_template('requirement.html', data=data, task=task__.name)
+    return render_template('task_id.html', data=data, task=task__.name)
 
 
 @app.route('/solving/<int:id_>', endpoint='solving_id', methods=['GET', 'POST'])

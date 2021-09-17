@@ -97,7 +97,6 @@ class Teacher(models.Model):
     __tablename__ = 'Teacher'
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    departament = models.ForeignKey(Departament, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.user)
@@ -114,8 +113,6 @@ class Discipline(models.Model):
     name = models.CharField(max_length=256)
 
     author = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-
-    departament = models.ForeignKey(Departament, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.name)
@@ -164,9 +161,9 @@ class StudentTask(models.Model):
 
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(default=datetime.utcnow)
-    score = models.IntegerField(default=1)
+    score = models.IntegerField(default=0)
 
-    student_task_status = models.ForeignKey(StudentTaskStatus, on_delete=models.CASCADE)
+    student_task_status = models.ForeignKey(StudentTaskStatus, default=1, on_delete=models.CASCADE)
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
@@ -220,7 +217,7 @@ class Solving(models.Model):
     created_at = models.DateTimeField(default=datetime.utcnow)
     file_name = models.CharField(max_length=256)
     file_path = models.CharField(max_length=256)
-    review_count = models.IntegerField()
+    review_count = models.IntegerField(default=0)
 
     student_task = models.ForeignKey(StudentTask, on_delete=models.CASCADE)
 

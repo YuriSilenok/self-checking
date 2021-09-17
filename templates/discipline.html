@@ -4,6 +4,7 @@
 <div class="container-screen">
     <div class="col-lg-8">
         <form method="post" class="add">
+            {% csrf_token %}
             <div class="row mini-form add-form flex-in-line">
                 <input class="textbox" type="text" name="name" id="name" placeholder="Название дисциплины">
                 <input class="add-button" id="submit" type="submit" value="Добавить">
@@ -18,8 +19,8 @@
         </div>
         {% for discipline in data %}
         <div class="row">
-            <div class="col cell{% if data[data|length-1] == discipline %} border-radius-left border-radius-right{% endif %}">
-                <a href="{{ url_for('theme', discipline=discipline.id, not_discipline='') }}">{{discipline.name }}</a>
+            <div class="col cell{% if data|last == discipline %} border-radius-left border-radius-right{% endif %}">
+                <a href="{% url 'app:discipline_id' discipline.id %}">{{discipline.name }}</a>
             </div>
         </div>
         {% endfor %}
