@@ -17,14 +17,16 @@
                     {% for requirement in student_task.requirement %}
                     <p>{{ requirement }}</p>
                     {% endfor %}
-                    <div class="add mini-form focus bordered notification after-add">Пока эта задача не имеет требований</div>
+                    <div class="add mini-form focus bordered notification after-add">Пока эта задача не имеет
+                        требований
+                    </div>
                     {% if student_task.load_file %}
                     <H4 class="after-add">Загрузить новое решение</H4>
                     <form method="post" class="form-list" enctype=multipart/form-data>
                         <label for="zip">Прикрепите архив zip</label>
                         <div class="flex-in-line form-for-add">
                             <input class="add-button add color-white" type="button"
-                                   type="file" id="zip" name="zip" accept="application/zip"
+                                   id="zip" name="zip" accept="application/zip"
                                    required="required" size="20971520" value="Выбрать файл">
                             <p>Файл не выбран</p>
                         </div>
@@ -58,12 +60,15 @@
                             <div class="col cell border-radius-left">{{ solving.created_at }}</div>
                             <div class="col cell">{{ solving.review_count }}</div>
                             {% if solving.review %}
-                            <div class="col cell border-radius-right"><a href="{{ url_for('review_id', id_=solving.review.id) }}">
+                            <div class="col cell border-radius-right"><a
+                                    href="{{ url_for('review_id', id_=solving.review.id) }}">
                                 {{ solving.review.status }}</a></div>
                             {% endif %}
                         </div>
                         {% endfor %}
-                        <div class="add mini-form focus bordered notification after-add">История загрузки решений пуста</div>
+                        <div class="add mini-form focus bordered notification after-add">История загрузки решений
+                            пуста
+                        </div>
                     </div>
                 </div>
             </div>
