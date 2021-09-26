@@ -22,14 +22,13 @@
                     <H4 class="after-add">Загрузить новое решение</H4>
                     <form method="post" class="form-list" enctype=multipart/form-data>
                         <label for="zip">Прикрепите архив zip</label>
-                        <input class="file-add" type="file" id="zip" name="zip" accept="application/zip" required="required" size="20971520">
-                        <input class="add-button download" id="submit" type="submit" value="Загрузить">
                         <div class="flex-in-line form-for-add">
                             <input class="add-button add color-white" type="button"
                                    type="file" id="zip" name="zip" accept="application/zip"
                                    required="required" size="20971520" value="Выбрать файл">
                             <p>Файл не выбран</p>
                         </div>
+                        <input class="add-button download" id="submit" type="submit" value="Загрузить">
                     </form>
                     {% endif %}
                     <H4 class="after-add">История решений</H4>
@@ -38,6 +37,21 @@
                             <div class="col">Загружено</div>
                             <div class="col">Количество проверок</div>
                             <div class="col">Статус</div>
+                        </div>
+                        <div class="row">
+                            <div class="col cell">Мяу</div>
+                            <div class="col cell">Мяу</div>
+                            <div class="col cell">Мяу</div>
+                        </div>
+                        <div class="row">
+                            <div class="col cell">Мяу</div>
+                            <div class="col cell">Мяу</div>
+                            <div class="col cell">Мяу</div>
+                        </div>
+                        <div class="row">
+                            <div class="col cell">Мяу</div>
+                            <div class="col cell">Мяу</div>
+                            <div class="col cell">Мяу</div>
                         </div>
                         {% for solving in student_task.solving %}
                         <div class="row">
