@@ -1,27 +1,30 @@
 {% extends 'maket.html' %}
 
 {% block center %}
-<div class="container">
-    <div class="row">
-        <h4>{{ task }}</h4>
-    </div>
-    <form method="post">
-        <h4>Новое требование</h4>
-        <div class="row">
-            <label class="col-lg-2" for="text">Описание</label>
-            <input class="col-lg-10" type="text" name="text" id="text">
+<div class="container-screen">
+    <div class="col-lg-8">
+        <div class="row table-head after-add">
+            <div class="col">{{ task }}</div>
         </div>
         <div class="row">
-            <input class="col-lg-1" id="submit" type="submit" value="Добавить">
+            <div class="col cell border-radius-left border-radius-right">
+                <form method="post" class="add form-list">
+                    <p>Новое требование</p>
+                    <input class="textbox text-on-white" type="text" name="text" id="text"
+                           placeholder="Новое требование">
+                    <input class="add-button" id="submit" type="submit" value="Добавить">
+                </form>
+            </div>
         </div>
-    </form>
-    <div class="row">
-        <div class="col-lg-3">Требование</div>
+        <div class="row table-head after-add">
+            <div class="col">Требования</div>
+        </div>
+        {% for requirement in data %}
+        <div class="row">
+            <div class="start-at-left col cell border-radius-left border-radius-right">{{ requirement.text }}</div>
+        </div>
+        {% endfor %}
+         <div class="mini-form notification after-add">У этой задачи пока нет никаких требований.</div>
     </div>
-    {% for requirement in data %}
-    <div class="row">
-        <div class="col-lg-12">{{ requirement.text }}</div>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %}
