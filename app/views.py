@@ -25,10 +25,8 @@ def sign_in(request):
                     if Teacher.objects.filter(user_id=user.id).first():
                         request.session['user_type'].append('teacher')
                     return redirect('/')
-                else:
-                    return redirect('/sign-in?mess=Пароль не верный')
-            else:
-                return redirect('/sign-up?mess=Нет такого пользователя')
+                return redirect('/sign-in?mess=Пароль не верный')
+            return redirect('/sign-up?mess=Нет такого пользователя')
         except Exception as ex:
             return redirect(f'/sign-in?mess={str(ex)}')
     return render(request, 'sign-in.html')
@@ -79,8 +77,7 @@ def login_is_required(function):
     def wrapper(*args, **kwargs):
         if "user_id" in args[0].session:
             return function(*args, **kwargs)
-        else:
-            return redirect('/sign-in')
+        return redirect('/sign-in')
 
     return wrapper
 
