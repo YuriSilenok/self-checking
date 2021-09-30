@@ -20,3 +20,4 @@ urlpatterns = [
     path('discipline/<int:id_>/student_discipline', views.student_discipline, name='student_discipline'),
     path('review_id/<int:id_>/', views.student_task_id, name='review_id'),
 ]
+# хочется умереть, но программирование дает возможность мне об этом не думать.
