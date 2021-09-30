@@ -101,8 +101,8 @@ def solving(request):
     if 'student' in request.session['user_type']:
         data = StudentTask.objects.exclude(student_id=request.session['user_id']).filter(student_task_status_id=3)
     if 'teacher' in request.session['user_type']:
-        data = StudentTask.objects.filter(student_task_status_id=4).filter(
-            task_theme_disipline_author_id=request.session['user_id'])
+        data = StudentTask.objects.filter(student_task_status__id=4).filter(
+            task__theme__discipline__author__user__id=request.session['user_id'])
     return render(request, 'solving.html', {'data': data})
 
 
