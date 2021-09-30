@@ -213,3 +213,6 @@ def student_task_id(request, id_):
                    'load_file': student_task_.student_task_status.id != 5,
                    'solving': Solving.objects.filter(student_task=student_task_)
                    })
+
+
+
