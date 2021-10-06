@@ -235,7 +235,17 @@ p{
   justify-content:flex-start;
 }
 .focus{
-border: 1px solid #3b5165;
+  border: 1px solid #3b5165;
+}
+.color-blue{
+  border-color: #8FB6DA;
+}
+.margin-right{
+ margin-right:auto;
+}
+.remark{
+height:150px;
+ resize: none;
 }
 
 
