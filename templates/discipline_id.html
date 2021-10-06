@@ -1,54 +1,54 @@
 {% extends 'maket.html' %}
 
-{% load static %}
-
 {% block scripts %}
-<script language="JavaScript" type="text/javascript" src="{% static 'js/theme.js' %}"></script>
+<script language="JavaScript" type="text/javascript" src={{url_for('static', filename='js/theme.js' )}}></script>
 {% endblock %}
 
 {% block center %}
-<div class="container">
-    <div class="row">
-        <h4>{{ discipline.name }}</h4>
-    </div>
-    <form action="student_discipline" method="post">
-        {% csrf_token %}
-        <h4>Добавить студента к дисциплине</h4>
-        <div class="row">
-            <label class="col-lg-1" for="group">Группа</label>
-            <select class="col-lg-3" class="form-select" name="group" id="group">
-                <option disabled selected value>Не выбрана</option>
-                {% for row in groups %}
-                <option value="{{ row.id }}">{{ row.name }}</option>
-                {% endfor %}
-            </select>
-            <label class="col-lg-1" for="student">Студент</label>
-            <select class="col-lg-3" class="form-select" name="student" id="student">
-                <option disabled selected value>Не выбран</option>
-                {% for row in students %}
-                <option value="{{ row.user.id }}">{{ row.user.last_name }} {{ row.user.first_name.0 }}.{{ row.user.middle_name.0 }}.</option>
-                {% endfor %}
-            </select>
-            <input class=" offset-lg-1 col-lg-3" id="add_student_discipline" type="submit"
-                   value="Записать на дисциплину">
+<div class="container-screen">
+    <div class="col-lg-8">
+        <div class="row table-head">
+            <div class="col">{{ discipline.name }}</div>
         </div>
-    </form>
-    <form method="post">
-        {% csrf_token %}
-        <h4>Добавить тему</h4>
         <div class="row">
-            <label class="col-lg-5" for="name">Введите название новой темы</label>
-            <input class="col-lg-5" type="text" name="name" id="name">
-            <input class="col-lg-1 offset-lg-1" id="add_theme" type="submit" value="Добавить">
+            <div class="col cell border-radius-left border-radius-right">
+                <form method="post" class="add mini-form flex-in-line">
+                    <input type="hidden" value="{{ discipline.id }}" name="discipline">
+                    <p>Добавить студента</p>
+                    <select name="group" id="group">
+                        <option disabled selected>Группа</option>
+                        {% for group in groups %}
+                        <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="student" id="student">
+                        <option disabled selected>Студент</option>
+                        {% for student in students %}
+                        <option value="{{ student.user_id }}">{{ student.last_name + ' ' + student.first_name[0] + '.' +
+                            student.middle_name[0] + '.' }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <input class="add-button" id="add_student_discipline" type="submit" value="Добавить">
+                </form>
+            </div>
         </div>
-    </form>
-    <div class="row">
-        <div class="col-lg-3">Тема</div>
+        <form method="post" class="add after-add">
+            <div class="row mini-form flex-in-line add-form">
+                <input class="textbox" type="text" name="name" id="name" placeholder="Название добавляемой темы">
+                <input class="add-button" id="add_theme" type="submit" value="Добавить">
+            </div>
+        </form>
+        <div class="row table-head after-add">
+            <div class="col">Темы</div>
+        </div>
+        {% for theme in themes %}
+        <div class="row">
+            <div class="col cell border-radius-left border-radius-right"><a
+                    href="{{ url_for('task', theme=theme.id) }}">{{ theme.name }}</a></div>
+        </div>
+        {% endfor %}
+        <div class="mini-form notification after-add">На данный момент не создано ни одной темы</div>
     </div>
-    {% for row in data %}
-    <div class="row">
-        <div class="col-lg-12"><a href="{% url 'app:theme_id' row.id %}">{{ row.name }}</a></div>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %}
