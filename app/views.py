@@ -109,7 +109,7 @@ def index(request):
 
 @login_is_required
 def solving_id(request, id_):
-    return redirect('/solving')
+    return render(request, 'solving_id.html')
 
 
 @login_is_required
