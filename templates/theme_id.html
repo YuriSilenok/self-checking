@@ -29,7 +29,7 @@
         </div>
         {% for task in data %}
         <div class="row">
-            <div class="col cell border-radius-left"><a href="{{ url_for('requirement', task=task.id) }}">{{ task.name
+            <div class="col cell border-radius-left"><a href="{% url 'requirement' task.id %}">{{ task.name
                 }}</a></div>
             <div class="col-lg-4 cell border-radius-right"></div>
         </div>
