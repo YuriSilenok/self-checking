@@ -61,7 +61,7 @@
                             <div class="col cell">{{ solving.review_count }}</div>
                             {% if solving.review %}
                             <div class="col cell border-radius-right"><a
-                                    href="{{ url_for('review_id', id_=solving.review.id) }}">
+                                    href="{% url 'app:review_id' solving.review.id %}">
                                 {{ solving.review.status }}</a></div>
                             {% endif %}
                         </div>

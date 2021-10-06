@@ -2,9 +2,8 @@
 {% block formtitel %}Регистрация{% endblock %}
 {% block formcontent %}
 {% block scripts %}
-<script language="JavaScript" type="text/javascript" src={{url_for('static', filename='js/registration.js' )}}></script>
 {% endblock %}
- <form action="#">
+ <form method="POST" >
         <div class="user-details">
           <div class="input-boxreg">
             <input type="text" placeholder="Введите Имя" required id="first_name" name="first_name">

@@ -3,24 +3,24 @@
 {% block center %}
 <div class="container-screen">
     <div class="col-lg-8 ">
-        {% if student_task %}
+        {% if data %}
         <div class="row table-head">
             <div class="col">Дисциплина</div>
             <div class="col">Тема</div>
             <div class="col">Задача</div>
             <div class="col">Статус</div>
         </div>
-        {% for student_task_item in student_task %}
+        {% for row in data %}
         <div class="row">
-            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-left{% endif%}">
-                {{ student_task_item.discipline }}
+            <div class="col cell {% if data|last == student_task_item %}border-radius-left{% endif%}">
+                {{ row.task.theme.discipline }}
             </div>
-            <div class="col cell">{{ student_task_item.theme }}</div>
+            <div class="col cell">{{ row.task.theme }}</div>
             <div class="col cell">
-                <a href="/student_task/{{ student_task_item.id }}">{{ student_task_item.task }}</a>
+                <a href="{% url 'app:student_task_id' row.id %}">{{ row.task }}</a>
             </div>
-            <div class="col cell {% if student_task[student_task|length-1] == student_task_item %}border-radius-right{% endif%}">
-                {{ student_task_item.status }}
+            <div class="col cell {% if data|last == student_task_item %}border-radius-right{% endif%}">
+                {{ row.student_task_status }}
             </div>
         </div>
         {% endfor %}
