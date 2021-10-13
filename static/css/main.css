@@ -214,6 +214,7 @@ p{
 .task-head{
   justify-content: center;
   width: 98%;
+  min-height:135px;
   margin: 0 auto;
 }
 .task-head a{
