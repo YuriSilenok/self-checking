@@ -190,13 +190,34 @@ p{
   height: 35px;
   width: 300px;
   border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.form-for-add input {
+    display: none;
+}
+
+.form-for-add label {
+    background: #fff;
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+    flex: 0 0 53%;
+    height: 35px;
+    border-radius: 10px;
+    border: 1px solid #3B5165;
+    color: #3B5165;
+    font-size: medium;
+}
+
 .color-white{
   background-color: white;
-  border: 1[x solid black];
+  border: 1px solid black;
 }
 .form-for-add p{
-  width: 300px;
+  flex: 0 0 45%;
   font-size: 16px;
 }
 .padding-in-form{
