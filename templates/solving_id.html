@@ -1,7 +1,7 @@
 {% extends 'maket.html' %}
 
 {% block center %}
-<div class="container">
+<div class="container-screen">
     <div class="row">
         <h4>Задача</h4>
     </div>
@@ -18,24 +18,51 @@
     <div class="row">
         <div class="col-lg-12"><a href="/files/{{ task.file_path }}">Скачать</a></div>
     </div>
-    <div class="row">
-        <h4>Требования</h4>
+
+    <div class="col-lg-8 after-add">
+        <div class="row table-head task-head">
+            <div class="col form-list without-center padding-in-form-10">
+                <H4>{{ task.name }}</H4>
+                <H6>Количество проверок: {{ student_task.count_review }}</H6>
+                <H6><a href="{{ task.link }}">Ссылка</a></H6>
+                <H6><a href="/files/{{ task.file_path }}">Решение</a></H6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col cell bordered">
+                <form method="post" class="form-list add padding-in-form">
+                    <H4 class="margin-right">Требования</H4>
+                     <div class="row form-list">
+                        <p class="margin-right">1.Блаблаблаблаблаблаблаблаблаблаблаблабла</p>
+                        <input type="text" class="textbox color-blue text-on-white"
+                               name="requirement.{{ requirement.id }}">
+                    </div>
+                    <div class="row form-list">
+                        <p class="margin-right">1.Блаблаблаблаблаблаблаблаблаблаблаблабла</p>
+                        <input type="text" class="textbox color-blue text-on-white"
+                               name="requirement.{{ requirement.id }}">
+                    </div>
+                    {% for requirement in task.requirement %}
+                    <div class="row">
+                        <p class="margin-right">{{ requirement.text }}</p>
+                        <input type="text" class="textbox color-blue text-on-white"
+                               name="requirement.{{ requirement.id }}">
+                    </div>
+                    {% endfor %}
+                    <div class="add mini-form focus bordered notification after-add">Пока эта задача не имеет
+                        требований
+                    </div>
+                    <H4 class="margin-right after-add">Общее замечание</H4>
+                    <textarea class="textbox color-blue text-on-white remark"
+                              name="text" id="text1" placeholder="
+                                  Заполните только те поля, к которым у вас есть замечания
+                                   Если имеется общее замечание, заполните это поле">
+
+                        </textarea>
+                    <input class="add-button download" id="submit" type="submit" value="Отправить">
+                </form>
+            </div>
+        </div>
     </div>
-    <form method="post">
-        {% for requirement in task.requirement %}
-        <div class="row">
-            <div class="col-lg-6">{{ requirement.text }}</div>
-            <input type="text" class="col-lg-6" name="requirement.{{ requirement.id }}">
-        </div>
-        {% endfor %}
-        <div class="row">
-            <label for="common">Если имеется общее замечание, заполните это поле</label>
-            <input type="text" name="common" id="common">
-        </div>
-        <div class="row">
-            <label for="submit">Заполните только те поля, к которым есть замечания</label>
-            <input class="col-lg-4 offset-lg-4" id="submit" type="submit" value="Отправить">
-        </div>
-    </form>
 </div>
 {% endblock %}

@@ -214,7 +214,6 @@ p{
 .task-head{
   justify-content: center;
   width: 98%;
-  height: 135px;
   margin: 0 auto;
 }
 .task-head a{
@@ -246,6 +245,9 @@ p{
 .remark{
 height:150px;
  resize: none;
+}
+.center{
+margin: 0 auto;
 }
 
 

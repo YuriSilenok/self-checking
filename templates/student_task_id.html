@@ -74,32 +74,5 @@
             </div>
         </div>
     </div>
-
-    <div class="col-lg-8 after-add">
-        <div class="row table-head task-head">
-            <div class="col form-list without-center padding-in-form-10">
-                <H4>{{ student_task.name }}</H4>
-                <H6>Количество проверок: {{ student_task.count_review }}</H6>
-                <H6><a href="{{ student_task.link }}">Ссылка</a></H6>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col cell bordered">
-                <div class="form-list add padding-in-form">
-                    <H4 class="margin-right">Требования</H4>
-                    {% for requirement in student_task.requirement %}
-                    <p class="margin-right">{{ requirement }}</p>
-                    <input class="textbox color-blue text-on-white" type="text" name="text" id="text">
-                    {% endfor %}
-                    <div class="add mini-form focus bordered notification after-add">Пока эта задача не имеет
-                        требований
-                    </div>
-                    <H4 class="margin-right after-add">Общее замечание</H4>
-                    <textarea class="textbox color-blue text-on-white remark" type="text"
-                              name="text" id="text1" placeholder="   Заполните только те поля,к которым у вас есть замечания"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}
