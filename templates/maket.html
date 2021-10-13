@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
-{% block head %}<link rel="stylesheet" href={{url_for('static', filename='css/main.css' )}} integrity="undefined" crossorigin="anonymous">{% endblock %}
+
+{% load static %}
+{% load tags %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+{% endblock %}
+
 {% block body %}
 <div class="container">
-    <div class="row no-visible">{{ version() }}</div>
+    <div class="row no-visible">{% version %}</div>
     {% include 'header.html' %}
 </div>
 <div class="container">
