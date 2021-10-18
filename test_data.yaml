@@ -1,0 +1,129 @@
+- model: app.User
+  pk: 1
+  fields:
+    email: student1@test.ru
+    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    last_name: 'Студент1'
+    first_name: 'Студень'
+    middle_name: 'Отчество'
+
+- model: app.User
+  pk: 2
+  fields:
+    email: student2@test.ru
+    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    last_name: 'Студент2'
+    first_name: 'Студень'
+    middle_name: 'Отчество'
+
+- model: app.User
+  pk: 3
+  fields:
+    email: student3@test.ru
+    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    last_name: 'Студент3'
+    first_name: 'Студень'
+    middle_name: 'Отчество'
+
+- model: app.User
+  pk: 4
+  fields:
+    email: student4@test.ru
+    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    last_name: 'Студент4'
+    first_name: 'Студень'
+    middle_name: 'Отчество'
+
+- model: app.User
+  pk: 5
+  fields:
+    email: student5@test.ru
+    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    last_name: 'Студент5'
+    first_name: 'Студень'
+    middle_name: 'Отчество'
+
+- model: app.User
+  pk: 6
+  fields:
+    email: student6@test.ru
+    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    last_name: 'Студент6'
+    first_name: 'Студень'
+    middle_name: 'Отчество'
+
+- model: app.User
+  pk: 7
+  fields:
+    email: teacher1@test.ru
+    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    last_name: 'Преподаватель1'
+    first_name: 'Препод'
+    middle_name: 'Отчество'
+
+- model: app.Group
+  pk: 1
+  fields:
+    - name: '11-ИСбо-2а'
+
+- model: app.Group
+  pk: 2
+  fields:
+    - name: '11-ИСбо-2б'
+
+- model: app.Student
+  fields:
+    user: 1
+    group: 1
+    student_status: 1
+
+- model: app.Student
+  fields:
+    user: 2
+    group: 2
+    student_status: 1
+
+- model: app.Student
+  fields:
+    user: 3
+    group: 1
+    student_status: 1
+
+- model: app.Student
+  fields:
+    user: 4
+    group: 2
+    student_status: 1
+
+- model: app.Student
+  fields:
+    user: 5
+    group: 1
+    student_status: 1
+
+- model: app.Student
+  fields:
+    user: 6
+    group: 2
+    student_status: 1
+
+- model: app.Teacher
+  fields:
+    user: 7
+
+- model: app.Departament
+  pk: 1
+  fields:
+    name: 'Кафедра информационных систем и технологий'
+
+- model: app.Discipline
+  pk: 1
+  fields:
+    name: 'Технологии разработки программного обеспечения'
+    author: 7
+    departament: 1
+
+- model: app.Theme
+  pk: 1
+  fields:
+    name: 'Команды git: status, add, commit, pull, push'
