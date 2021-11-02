@@ -1,115 +1,122 @@
-- model: app.User
-  pk: 1
+- model: auth.user
+  pk: 2
   fields:
-    email: student1@test.ru
-    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    username: 'student1'
+    email: 'student1@test.ru'
+    password: '123'
     last_name: 'Студент1'
     first_name: 'Студень'
-    middle_name: 'Отчество'
 
-- model: app.User
-  pk: 2
-  fields:
-    email: student2@test.ru
-    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
-    last_name: 'Студент2'
-    first_name: 'Студень'
-    middle_name: 'Отчество'
-
-- model: app.User
+- model: auth.user
   pk: 3
   fields:
-    email: student3@test.ru
-    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
-    last_name: 'Студент3'
+    username: 'student2'
+    email: 'student2@test.ru'
+    password: '123'
+    last_name: 'Студент2'
     first_name: 'Студень'
-    middle_name: 'Отчество'
 
-- model: app.User
+- model: auth.user
   pk: 4
   fields:
-    email: student4@test.ru
-    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
-    last_name: 'Студент4'
+    username: 'student3'
+    email: 'student3@test.ru'
+    password: '123'
+    last_name: 'Студент3'
     first_name: 'Студень'
-    middle_name: 'Отчество'
 
-- model: app.User
+- model: auth.user
   pk: 5
   fields:
-    email: student5@test.ru
-    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
-    last_name: 'Студент5'
+    username: 'student4'
+    email: 'student4@test.ru'
+    password: '123'
+    last_name: 'Студент4'
     first_name: 'Студень'
-    middle_name: 'Отчество'
 
-- model: app.User
+- model: auth.user
   pk: 6
   fields:
-    email: student6@test.ru
-    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
-    last_name: 'Студент6'
+    username: 'student5'
+    email: 'student5@test.ru'
+    password: '123'
+    last_name: 'Студент5'
     first_name: 'Студень'
-    middle_name: 'Отчество'
 
-- model: app.User
+- model: auth.user
   pk: 7
   fields:
-    email: teacher1@test.ru
-    password_hash: '40bd001563085fc35165329ea1ff5c5ecbdbbeef'
+    username: 'student6'
+    email: 'student6@test.ru'
+    password: '123'
+    last_name: 'Студент6'
+    first_name: 'Студень'
+
+- model: auth.user
+  pk: 8
+  fields:
+    username: 'teacher1'
+    email: 'teacher1@test.ru'
+    password: '123'
     last_name: 'Преподаватель1'
     first_name: 'Препод'
-    middle_name: 'Отчество'
 
 - model: app.Group
   pk: 1
   fields:
-    - name: '11-ИСбо-2а'
+    name: '11-ИСбо-2а'
 
 - model: app.Group
   pk: 2
   fields:
-    - name: '11-ИСбо-2б'
+    name: '11-ИСбо-2б'
 
 - model: app.Student
-  fields:
-    user: 1
-    group: 1
-    student_status: 1
-
-- model: app.Student
+  pk: 1
   fields:
     user: 2
-    group: 2
+    group: 1
     student_status: 1
 
 - model: app.Student
+  pk: 2
   fields:
     user: 3
-    group: 1
-    student_status: 1
-
-- model: app.Student
-  fields:
-    user: 4
     group: 2
     student_status: 1
 
 - model: app.Student
+  pk: 3
   fields:
-    user: 5
+    user: 4
     group: 1
     student_status: 1
 
 - model: app.Student
+  pk: 4
+  fields:
+    user: 5
+    group: 2
+    student_status: 1
+
+- model: app.Student
+  pk: 5
   fields:
     user: 6
+    group: 1
+    student_status: 1
+
+- model: app.Student
+  pk: 6
+  fields:
+    user: 7
     group: 2
     student_status: 1
 
 - model: app.Teacher
+  pk: 1
   fields:
-    user: 7
+    user: 8
 
 - model: app.Departament
   pk: 1
@@ -120,8 +127,7 @@
   pk: 1
   fields:
     name: 'Технологии разработки программного обеспечения'
-    author: 7
-    departament: 1
+    author: 1
 
 - model: app.Theme
   pk: 1
@@ -148,38 +154,3 @@
   fields:
     text: 'Второй коммит содержит игнорирование файлов с расширением zip'
     task: 1
-
-- model: app.StudentTaskStatus
-  pk: 1
-  fields:
-    name: 'Не начата'
-
-- model: app.StudentTaskStatus
-  pk: 2
-  fields:
-    name: 'Требует исправлений'
-
-- model: app.StudentTaskStatus
-  pk: 3
-  fields:
-    name: 'Ожидает проверки студентом'
-
-- model: app.StudentTaskStatus
-  pk: 4
-  fields:
-    name: 'Ожидает проверки преподавателем'
-
-- model: app.StudentTaskStatus
-  pk: 5
-  fields:
-    name: 'Зачтено'
-
-- model: app.ReviewStatus
-  pk: 1
-  fields:
-    name: 'Одобрено'
-
-- model: app.ReviewStatus
-  pk: 2
-  fields:
-    name: 'Переделать'

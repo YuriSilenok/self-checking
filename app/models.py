@@ -1,25 +1,25 @@
 from datetime import datetime
-
+from django.contrib.auth.models import User
 from django.db import models
 
 
-class User(models.Model):
-    __tablename__ = 'User'
-
-    id = models.AutoField(primary_key=True)
-    email = models.CharField(max_length=100)
-    password_hash = models.CharField(max_length=64)
-    created_at = models.DateTimeField(default=datetime.utcnow)
-    last_name = models.CharField(max_length=100)
-    first_name = models.CharField(max_length=100)
-    middle_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.email)
-
-    class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+# class User(models.Model):
+#     __tablename__ = 'User'
+#
+#     # id = models.AutoField(primary_key=True)
+#     # email = models.CharField(max_length=100)
+#     # password_hash = models.CharField(max_length=64)
+#     created_at = models.DateTimeField(default=datetime.utcnow)
+#     # last_name = models.CharField(max_length=100)
+#     # first_name = models.CharField(max_length=100)
+#     middle_name = models.CharField(max_length=100)
+#
+#     def __str__(self):
+#         return str(self.email)
+#
+#     class Meta:
+#         verbose_name = 'Пользователь'
+#         verbose_name_plural = 'Пользователи'
 
 
 class Group(models.Model):
@@ -53,7 +53,7 @@ class StudentStatus(models.Model):
 class Student(models.Model):
     __tablename__ = 'Student'
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     student_status = models.ForeignKey(StudentStatus, on_delete=models.CASCADE)
 
@@ -96,7 +96,7 @@ class Departament(models.Model):
 class Teacher(models.Model):
     __tablename__ = 'Teacher'
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.user)
