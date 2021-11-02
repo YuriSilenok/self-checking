@@ -23,5 +23,13 @@ python manage.py migrate
 ```Shell
 python manage.py createsuperuser
 ```
-- Настройте конфигурация для запуска сервера
+- загрузите первичные данные
+```shell
+python manage.py loaddata initial_data.yaml
+```
+- при необходимости, загрузите тестовые данные.
+```shell
+python manage.py loaddata test_data.yaml
+```
+- Настройте конфигурацию для запуска сервера
 - Запустите сервер
