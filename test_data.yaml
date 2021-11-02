@@ -127,3 +127,59 @@
   pk: 1
   fields:
     name: 'Команды git: status, add, commit, pull, push'
+    discipline: 1
+
+- model: app.Task
+  pk: 1
+  fields:
+    name: 'Команды git: status, add, commit, pull, push'
+    link: 'https://docs.google.com/document/d/12eNIkKQMNFFMKclngzeCvHl3nISay9R6UvPJLdhQeQQ/edit?usp=sharing'
+    theme: 1
+    review_count: 5
+
+- model: app.Requirement
+  pk: 1
+  fields:
+    text: 'Первый коммит содержит игнорирование файлов с расширением zip'
+    task: 1
+
+- model: app.Requirement
+  pk: 1
+  fields:
+    text: 'Второй коммит содержит игнорирование файлов с расширением zip'
+    task: 1
+
+- model: app.StudentTaskStatus
+  pk: 1
+  fields:
+    name: 'Не начата'
+
+- model: app.StudentTaskStatus
+  pk: 2
+  fields:
+    name: 'Требует исправлений'
+
+- model: app.StudentTaskStatus
+  pk: 3
+  fields:
+    name: 'Ожидает проверки студентом'
+
+- model: app.StudentTaskStatus
+  pk: 4
+  fields:
+    name: 'Ожидает проверки преподавателем'
+
+- model: app.StudentTaskStatus
+  pk: 5
+  fields:
+    name: 'Зачтено'
+
+- model: app.ReviewStatus
+  pk: 1
+  fields:
+    name: 'Одобрено'
+
+- model: app.ReviewStatus
+  pk: 2
+  fields:
+    name: 'Переделать'
