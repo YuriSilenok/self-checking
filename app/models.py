@@ -3,25 +3,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-# class User(models.Model):
-#     __tablename__ = 'User'
-#
-#     # id = models.AutoField(primary_key=True)
-#     # email = models.CharField(max_length=100)
-#     # password_hash = models.CharField(max_length=64)
-#     created_at = models.DateTimeField(default=datetime.utcnow)
-#     # last_name = models.CharField(max_length=100)
-#     # first_name = models.CharField(max_length=100)
-#     middle_name = models.CharField(max_length=100)
-#
-#     def __str__(self):
-#         return str(self.email)
-#
-#     class Meta:
-#         verbose_name = 'Пользователь'
-#         verbose_name_plural = 'Пользователи'
-
-
 class Group(models.Model):
     __tablename__ = 'Group'
 

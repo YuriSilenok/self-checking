@@ -5,6 +5,8 @@ from app.models import *
 from django.shortcuts import render, redirect
 from django import template
 from django.db.models import F
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 register = template.Library()
 UPLOAD_FOLDER = 'files'
@@ -12,23 +14,13 @@ UPLOAD_FOLDER = 'files'
 
 def sign_in(request):
     if request.method == 'POST':
-        try:
-            user = User.objects.get(email=request.POST['email'])
-            if user:
-                if user.password_hash == hashlib.sha1(request.POST['password'].encode('utf-8')).hexdigest():
-                    request.session['user_id'] = user.id
-                    request.session['first_name'] = user.first_name
-                    request.session['last_name'] = user.last_name
-                    request.session['user_type'] = []
-                    if Student.objects.filter(user_id=user.id).first():
-                        request.session['user_type'].append('student')
-                    if Teacher.objects.filter(user_id=user.id).first():
-                        request.session['user_type'].append('teacher')
-                    return redirect('/')
-                return redirect('/sign-in?mess=Пароль не верный')
-            return redirect('/sign-up?mess=Нет такого пользователя')
-        except Exception as ex:
-            return redirect(f'/sign-in?mess={str(ex)}')
+        user = authenticate(request=request, username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect(request.GET['next'])
+            else:
+                return 'Пользователь заблокирован'
     return render(request, 'sign-in.html')
 
 
@@ -73,15 +65,6 @@ def logout(request):
     return redirect('/sign-in')
 
 
-def login_is_required(function):
-    def wrapper(*args, **kwargs):
-        if "user_id" in args[0].session:
-            return function(*args, **kwargs)
-        return redirect('/sign-in')
-
-    return wrapper
-
-
 @register.inclusion_tag('header.html')
 def user_type(request):
     return request.session.get('user_type', [])
@@ -92,7 +75,7 @@ def first_name(request):
     return f" {request.session.get('first_name', 'Гость')}  {request.session.get('last_name', '')}"
 
 
-@login_is_required
+@login_required
 def solving(request):
     data = []
     if 'student' in request.session['user_type']:
@@ -107,12 +90,12 @@ def index(request):
     return redirect('/solving')
 
 
-@login_is_required
+@login_required
 def solving_id(request, id_):
     return redirect('/solving')
 
 
-@login_is_required
+@login_required
 def discipline(request):
     if request.method == 'POST':
         user_ = User.objects.get(id=request.session['user_id'])
@@ -121,7 +104,7 @@ def discipline(request):
     return render(request, 'discipline.html', {'data': Discipline.objects.filter(author=request.session['user_id'])})
 
 
-@login_is_required
+@login_required
 def discipline_id(request, id_):
     discipline_ = Discipline.objects.get(id=id_)
     if request.method == 'POST':
@@ -133,7 +116,7 @@ def discipline_id(request, id_):
         'students': Student.objects.filter(student_status=1).exclude(studentdiscipline__student=F('user'))})
 
 
-@login_is_required
+@login_required
 def student_discipline(request, id_):
     if request.method == 'POST' and 'student' in request.POST:
         student_ = Student.objects.get(user=request.POST['student'])
@@ -145,7 +128,7 @@ def student_discipline(request, id_):
     return redirect(f'/discipline/{id_}/')
 
 
-@login_is_required
+@login_required
 def theme_id(request, id_):
     theme_ = Theme.objects.get(id=id_)
     if request.method == 'POST':
@@ -164,7 +147,7 @@ def theme_id(request, id_):
     return render(request, 'theme_id.html', {'data': data})
 
 
-@login_is_required
+@login_required
 def task_id(request, id_):
     task_ = Task.objects.get(id=id_)
     if request.method == 'POST':
@@ -178,13 +161,13 @@ def task_id(request, id_):
     return render(request, 'task_id.html', {'data': data})
 
 
-@login_is_required
+@login_required
 def student_task(request):
     return render(request, 'student_task.html',
                   {'data': StudentTask.objects.filter(student_id=request.session['user_id'])})
 
 
-@login_is_required
+@login_required
 def student_task_id(request, id_):
     student_task_ = StudentTask.objects.get(id=id_)
     if request.method == 'POST' and 'zip' in request.FILES:
@@ -213,6 +196,3 @@ def student_task_id(request, id_):
                    'load_file': student_task_.student_task_status.id != 5,
                    'solving': Solving.objects.filter(student_task=student_task_)
                    })
-
-
-

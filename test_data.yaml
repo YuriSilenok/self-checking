@@ -3,7 +3,7 @@
   fields:
     username: 'student1'
     email: 'student1@test.ru'
-    password: '123'
+    password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент1'
     first_name: 'Студень'
 
@@ -12,7 +12,7 @@
   fields:
     username: 'student2'
     email: 'student2@test.ru'
-    password: '123'
+    password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент2'
     first_name: 'Студень'
 
@@ -21,7 +21,7 @@
   fields:
     username: 'student3'
     email: 'student3@test.ru'
-    password: '123'
+    password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент3'
     first_name: 'Студень'
 
@@ -30,7 +30,7 @@
   fields:
     username: 'student4'
     email: 'student4@test.ru'
-    password: '123'
+    password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент4'
     first_name: 'Студень'
 
@@ -39,7 +39,7 @@
   fields:
     username: 'student5'
     email: 'student5@test.ru'
-    password: '123'
+    password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент5'
     first_name: 'Студень'
 
@@ -48,7 +48,7 @@
   fields:
     username: 'student6'
     email: 'student6@test.ru'
-    password: '123'
+    password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент6'
     first_name: 'Студень'
 
@@ -57,7 +57,7 @@
   fields:
     username: 'teacher1'
     email: 'teacher1@test.ru'
-    password: '123'
+    password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Преподаватель1'
     first_name: 'Препод'
 
