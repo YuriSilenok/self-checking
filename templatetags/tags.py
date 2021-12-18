@@ -7,8 +7,10 @@ register = template.Library()
 
 @register.simple_tag
 def version():
-    return subprocess.check_output(['git', 'describe']).decode("utf-8")
-
+    try:
+        return subprocess.check_output(['git', 'describe']).decode("utf-8")
+    except FileNotFoundError as ex:
+        return ex.strerror
 
 @register.simple_tag
 def user_type(request):
