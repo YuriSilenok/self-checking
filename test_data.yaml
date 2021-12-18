@@ -1,3 +1,13 @@
+- model: auth.group
+  pk: 1
+  fields:
+    name: 'Преподаватель'
+
+- model: auth.group
+  pk: 2
+  fields:
+    name: 'Студент'
+
 - model: auth.user
   pk: 2
   fields:
@@ -6,6 +16,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент1'
     first_name: 'Студень'
+    groups: [2]
 
 - model: auth.user
   pk: 3
@@ -15,6 +26,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент2'
     first_name: 'Студень'
+    groups: [2]
 
 - model: auth.user
   pk: 4
@@ -24,6 +36,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент3'
     first_name: 'Студень'
+    groups: [2]
 
 - model: auth.user
   pk: 5
@@ -33,6 +46,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент4'
     first_name: 'Студень'
+    groups: [2]
 
 - model: auth.user
   pk: 6
@@ -42,6 +56,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент5'
     first_name: 'Студень'
+    groups: [2]
 
 - model: auth.user
   pk: 7
@@ -51,6 +66,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент6'
     first_name: 'Студень'
+    groups: [2]
 
 - model: auth.user
   pk: 8
@@ -60,6 +76,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Преподаватель1'
     first_name: 'Препод'
+    groups: [1]
 
 - model: app.Group
   pk: 1
