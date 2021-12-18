@@ -1,3 +1,13 @@
+- model: auth.group
+  pk: 1
+  fields:
+    name: 'Преподаватель'
+
+- model: auth.group
+  pk: 2
+  fields:
+    name: 'Студент'
+
 - model: app.StudentStatus
   pk: 1
   fields:

@@ -1,13 +1,3 @@
-- model: auth.group
-  pk: 1
-  fields:
-    name: 'Преподаватель'
-
-- model: auth.group
-  pk: 2
-  fields:
-    name: 'Студент'
-
 - model: auth.user
   pk: 2
   fields:
@@ -16,6 +6,7 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент1'
     first_name: 'Студень'
+    is_active: True
     groups: [2]
 
 - model: auth.user
