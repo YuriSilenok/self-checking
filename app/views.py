@@ -73,13 +73,14 @@ def first_name(request):
 
 @login_required
 def solving(request):
-    data = []
+    rows = []
     if hasattr(request.user, 'student'):
-        data = StudentTask.objects.exclude(student_id=request.user.id).filter(student_task_status_id=3)
+        rows = StudentTask.objects.exclude(student_id=request.user.id).filter(student_task_status_id=3)
     if hasattr(request.user, 'teacher'):
-        data = StudentTask.objects.filter(student_task_status__id=4).filter(
+        rows = StudentTask.objects.filter(student_task_status__id=4).filter(
             task__theme__discipline__author__user__id=request.user.id)
-    return render(request, 'solving.html', {'data': data}, **request.GET)
+    data = {'data': rows}
+    return render(request, 'solving.html', data)
 
 
 def index(request):

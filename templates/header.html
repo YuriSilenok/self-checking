@@ -2,16 +2,15 @@
 <header>
     <div class="points-in-header">
         <div class="points">
-            {% user_type request as ut %}
-            {% if 'student' in ut or 'teacher' in ut %}
+            {% if request.user.student or request.user.teacher %}
             <a href="{% url 'app:solving' %}"
                class="one-point {% if request.path == '/solving'%}active{% endif %}">Ожидает проверки</a>
             {% endif %}
-            {% if 'teacher' in ut %}
+            {% if request.user.teacher %}
             <a href="{% url 'app:discipline' %}"
                class="one-point {% if request.path == '/discipline' %}active{% endif %}">Мои дисциплины</a>
             {% endif %}
-            {% if 'student' in ut %}
+            {% if request.user.student %}
             <a href="{% url 'app:student_task' %}"
                class="one-point {% if request.path == '/student_task' %}active{% endif %}">Мои работы</a>
             {% endif %}

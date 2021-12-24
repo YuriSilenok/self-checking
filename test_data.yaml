@@ -92,57 +92,57 @@
   fields:
     name: '11-ИСбо-2б'
 
-- model: app.Student
-  pk: 1
-  fields:
-    user: 2
-    group: 1
-    student_status: 1
+#- model: app.Student
+#  pk: 1
+#  fields:
+#    user: 2
+#    group: 1
+#    student_status: 1
 
-- model: app.Student
-  pk: 2
-  fields:
-    user: 3
-    group: 2
-    student_status: 1
+#- model: app.Student
+#  pk: 2
+#  fields:
+#    user: 3
+#    group: 2
+#    student_status: 1
 
-- model: app.Student
-  pk: 3
-  fields:
-    user: 4
-    group: 1
-    student_status: 1
+#- model: app.Student
+#  pk: 3
+#  fields:
+#    user: 4
+#    group: 1
+#    student_status: 1
 
-- model: app.Student
-  pk: 4
-  fields:
-    user: 5
-    group: 2
-    student_status: 1
+#- model: app.Student
+#  pk: 4
+#  fields:
+#    user: 5
+#    group: 2
+#    student_status: 1
 
-- model: app.Student
-  pk: 5
-  fields:
-    user: 6
-    group: 1
-    student_status: 1
+#- model: app.Student
+#  pk: 5
+#  fields:
+#    user: 6
+#    group: 1
+#    student_status: 1
 
-- model: app.Student
-  pk: 6
-  fields:
-    user: 7
-    group: 2
-    student_status: 1
+#- model: app.Student
+#  pk: 6
+#  fields:
+#    user: 7
+#    group: 2
+#    student_status: 1
 
-- model: app.Teacher
-  pk: 1
-  fields:
-    user: 8
+#- model: app.Teacher
+#  pk: 1
+#  fields:
+#    user: 8
 
-- model: app.Departament
-  pk: 1
-  fields:
-    name: 'Кафедра информационных систем и технологий'
+#- model: app.Departament
+#  pk: 1
+#  fields:
+#    name: 'Кафедра информационных систем и технологий'
 
 - model: app.Discipline
   pk: 1
