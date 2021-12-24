@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django import template
 from django.db.models import F
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 register = template.Library()
 UPLOAD_FOLDER = 'files'
@@ -14,14 +14,17 @@ UPLOAD_FOLDER = 'files'
 
 def sign_in(request):
     if request.method == 'POST':
-        user = authenticate(request=request, username=request.POST['username'], password=request.POST['password'])
+        user = authenticate(
+            request=request,
+            username=request.POST['username'],
+            password=request.POST['password'])
         if user is not None:
             if user.is_active:
                 login(request, user)
                 return redirect(request.GET['next'])
             else:
                 return 'Пользователь заблокирован'
-    return render(request, 'sign-in.html')
+    return render(request, 'sign-in.html', request.GET)
 
 
 def sign_up(request):
@@ -53,16 +56,9 @@ def sign_up(request):
     return render(request, 'sign-up.html')
 
 
-def logout(request):
-    if 'user_id' in request.session:
-        request.session.pop('user_id')
-    if 'first_name' in request.session:
-        request.session.pop('first_name')
-    if 'last_name' in request.session:
-        request.session.pop('last_name')
-    if 'user_type' in request.session:
-        request.session.pop('user_type')
-    return redirect('/sign-in')
+def log_out(request):
+    logout(request)
+    return redirect('/sign-in?next=/solving/')
 
 
 @register.inclusion_tag('header.html')
@@ -83,7 +79,7 @@ def solving(request):
     if hasattr(request.user, 'teacher'):
         data = StudentTask.objects.filter(student_task_status__id=4).filter(
             task__theme__discipline__author__user__id=request.user.id)
-    return render(request, 'solving.html', {'data': data})
+    return render(request, 'solving.html', {'data': data}, **request.GET)
 
 
 def index(request):

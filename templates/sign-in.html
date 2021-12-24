@@ -1,7 +1,7 @@
 {% extends 'sign.html' %}
 {% block formtitel %}Авторизация{% endblock %}
 {% block formcontent %}
-<form method="POST">
+<form method="POST" action="/admin/login/?next={{next.0}}">
     {% csrf_token %}
     <div class="user-details">
         <div class="input-box">

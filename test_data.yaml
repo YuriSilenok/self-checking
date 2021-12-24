@@ -7,6 +7,7 @@
     last_name: 'Студент1'
     first_name: 'Студень'
     is_active: True
+    is_staff: True
     groups: [2]
 
 - model: auth.user
@@ -17,6 +18,8 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент2'
     first_name: 'Студень'
+    is_active: True
+    is_staff: True
     groups: [2]
 
 - model: auth.user
@@ -27,6 +30,8 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент3'
     first_name: 'Студень'
+    is_active: True
+    is_staff: True
     groups: [2]
 
 - model: auth.user
@@ -37,6 +42,8 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент4'
     first_name: 'Студень'
+    is_active: True
+    is_staff: True
     groups: [2]
 
 - model: auth.user
@@ -47,6 +54,8 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент5'
     first_name: 'Студень'
+    is_active: True
+    is_staff: True
     groups: [2]
 
 - model: auth.user
@@ -57,6 +66,8 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Студент6'
     first_name: 'Студень'
+    is_active: True
+    is_staff: True
     groups: [2]
 
 - model: auth.user
@@ -67,6 +78,8 @@
     password: 'pbkdf2_sha256$260000$DYgbPIBD1ksMG0Ryz5pXh8$AIoapezmDHFSwkbSlVV0Df6dSzOveXYVbbEHDf+WSug='
     last_name: 'Преподаватель1'
     first_name: 'Препод'
+    is_active: True
+    is_staff: True
     groups: [1]
 
 - model: app.Group
