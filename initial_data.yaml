@@ -8,16 +8,6 @@
   fields:
     name: 'Студент'
 
-- model: app.StudentStatus
-  pk: 1
-  fields:
-    name: "Обучается"
-
-- model: app.StudentStatus
-  pk: 2
-  fields:
-    name: "Отчислен"
-
 - model: app.StudentTaskStatus
   pk: 1
   fields:
